@@ -121,124 +121,40 @@ From a computer engineering perspective, different approaches were studied:
 In this project we will focus on the method of \textbf{Knowledge-based Fake News Detection} also called \textbf{Fact-Checking}. The goal is not to implement an algorithm that scans social networks for real time fake news detection, but rather we will create a model that can assess with a degree of confidence the truthfulness or falseness of a claim given by a user as an input by exploiting Wikipedia's articles as a source of true knowledge and export evidence that validates or refutes the subjected claim.
 
 \section{Use case scenario}
-Suppose that while browsing the internet or talking to people you come across a claim that says "The former U.S president John F. Kennedy died in September 22, 1963", as it is a general truth and not a relative truth it should be easier to verify the validity of this claim as well as find evidence that proves it.\\
-With the platform we 
+Suppose that while browsing the internet or talking to people you come across a claim that says \textit{"The former U.S president John F. Kennedy died in September 22, 1963"}, as it is a general truth and not a relative truth it should be easier to verify the validity of this claim as well as find evidence that proves it.\\
+Using the platform we will create, you can simply write the claim you like to verify with no regards to a specific linguistic rule, the model will extract relevant articles from Wikipedia using an API, then it retrieves sentences relative to your claim and apply a comparison in order to assess if the claim is True, False, or Not Enough Information as well as giving a percentage of confidence and evidence of the results that were processed straight from Wikipedia's database.\\
+Combing back to our example, the model should return that \textit{"John F. Kennedy died in November 22, 1963"} so the input claim is false.
 
 \begin{figure}[H]
 	\centering
-	\includegraphics[scale=0.3]{img/general_schema.png}
-	\caption{Client-Server Processing Pipeline}
+	\includegraphics[scale=0.6]{img/use_case.png}
+	\caption{General Model Processing Pipeline}
 \end{figure}
 
-La tâche doit pouvoir être effectuée dans des milieux très perturbés sur des enregistrements de qualité médiocre, avec des échantillons de quelques secondes, en temps réel, avec peu de ressources computationnelles.
 
-\section{Objectifs du projet}
-La grande quantité de données disponibles et diffusées de manière continue sur tous les médias (radio, internet, télévision) pose le problème de l’exploitation efficace des contenus et du contrôle de sa diffusion. Dans le cadre du contrôle de flux multimédia, on cherche entres autres à identifier de manière robuste la donnée diffusée. Cette identification peut servir au contrôle des droits d’auteur, à la production de statistiques publicitaires, etc.\\\par L’identification audio a pour but d’assigner son titre à une chanson diffusée. Dans le cadre de ce rapport, on s’intéresse à une identification par fingerprinting et par mise en correspondance d’une requête audio avec un élément d’une large base de données. L’identification par fingerprinting est basée sur l’extraction de caractéristiques qui décrivent de manière concise, unique et robuste les différents titres musicaux. Cette représentation est basée sur des propriétés acoustiques.	\\
-Pour cela nous avons besoin d'utiliser les différentes techniques de traitement de signal (échantillonnage, transformée de Fourier, spectrogramme, filtres...), ainsi que l'optimisation des requêtes pour une recherche rapide dans une large base de données.\\\par
-
-L'application finale donnera une possibilité à l'utilisateur d'identifier une musique diffusée dans son entourage en utilisant le microphone de son appareil (ordinateur ou smartphone), ou bien à travers un segment audio sous forme mp3 qui servira comme un échantillon.
-
-\begin{center}
-	\includegraphics[scale=0.4]{img/general_schema1.png}
-\end{center}
-
-
-\chapter{Présentation et spécification du projet}
-\section{Fonctionnalités attendues}
-Dans ce projet nous allons réaliser l'échantillonnage d'un signal acoustique à travers un microphone voire aussi à travers un fichier \textit{mp3}, ensuite le traitement de se signal afin d'extraire ses caractéristiques importantes, puis la création d'une empreinte associée à ce signal et finalement le stockage et la recherche des différentes empreintes dans une large base de données.\\\par
-
-Une fois l'application aboutie, l'utilisateur aura la possibilité de :\\
-
-\begin{enumerate}
-	\item Reconnaître une chanson à partir du microphone.
-	\item Reconnaître une chanson à partir d'un fichier \textit{mp3}.
-    \item Traiter, Hacher, Stocker une ou plusieurs musiques dans la base de données.
-	\item Afficher les détails de la base de données.
-	\item Réinitialiser la base de données.
-\end{enumerate}
-
-\vspace{0.5cm}
-Dans notre programme, chaque chanson a une empreinte qui lui est associée. Quand on demande à notre programme de reconnaître un morceau, on décompose le son et le transforme en empreinte, puis on le compare à celles présentes dans sa base de données et on retourne une correspondance si elle existe.\\\par
-
-Tout ces opérations (échantillonnage, traitement de signal, hachage, stockage et recherche) seront réalisées d'une manière scientifique voire technique où l'on étudiera des solutions existantes en regardant leurs avantages et leurs inconvénients, puis nous allons présenter une solution détaillée à chaque problème rencontré tout en certifiant sa validité avec des tests assez exhaustifs.
-
-
-\section{Conception globale du projet}
-
-L’identification audio se déroule en plusieurs phases :\\
-\begin{enumerate}
-	
-	\item   Nous pré-calculons les empreintes digitales à partir d'une très grande base de données de morceaux de musique.
-	 Différents marqueurs peuvent être générés, mais ils sont souvent basés sur une analyse temps-fréquence du signal (\textit{spectrogramme}).
-	\item	Toutes ces empreintes digitales sont placées dans une base de données d'empreintes digitales qui est mise à jour chaque fois qu'une nouvelle chanson est ajoutée dans la base de données de chansons.
-	\item   Lorsqu'un utilisateur utilise l'application, il enregistre d'abord la musique actuelle avec le microphone de l’ordinateur.
-	\item	Pour un signal "requête", l’application applique l’algorithme d'empreinte digitale sur l'enregistrement de la même manière que pour les éléments de la base de données.
-	\item   L'application vérifie si cette empreinte digitale correspond à l'une de ses empreintes digitales déjà présentes dans la base de données de chansons. Les algorithmes de mise en correspondance sont basés sur une recherche soit exacte, soit au plus proche voisin, soit statistique.\begin{itemize}
-		\item Si non, il informe l'utilisateur que la musique ne peut pas être identifiée. 
-		\item Si oui, il recherche les métadonnées associées aux empreintes digitales (nom de la chanson, nom de l’artiste) et la restitue à l'utilisateur.
-	\end{itemize}
-\end{enumerate}
-
-\begin{figure}[H]
-	\centering
-	\includegraphics[scale=0.5]{img/general_schema2.png}
-	\caption{Processing Pipeline}
-\end{figure}
-
-\section{Problématiques identifiées et solutions envisagées}
-Les systèmes de reconnaissance musicale du monde réel doivent être robustes et efficaces sur le plan informatique, ce qui entraîne un certain nombre de défis techniques à résoudre. En particulier, les empreintes audio utilisées dans ces systèmes doivent répondre à certaines exigences, notamment une spécificité, une robustesse, une compacité et une évolutivité élevées.\\\par
+\chapter{Identified challenges and solutions}
+\section{Fact-Checking challenges}
+In order for the model to work each layer/part of the system must answer to a specific task, the combination of results made by each layer constructs a robust model that is able with a degree of confidence to fact-check a claim as well as present evidence of the assessment. Although for each layer to work as intended we must find solutions to these challenges:\\
 
 \begin{itemize}
-	\item 	\textbf{Spécificité} : Les empreintes audio doivent posséder une spécificité élevée, de sorte que même un fragment audio de quelques secondes seulement suffise à identifier de manière fiable l'enregistrement correspondant et à le distinguer de millions d'autres.
-	\item 	\textbf{Robustesse} : Pour une identification fiable, les empreintes digitales doivent être résistantes au bruit de fond et aux distorsions du signal telles que la compression avec perte, le décalage de hauteur, la mise à l'échelle temporelle, l'égalisation ou la compression dynamique.
-	\item	\textbf{Compacité} : Les empreintes audio doivent être de petite taille afin de pouvoir être transmises sur des canaux à bande passante limitée et être facilement stockées et indexées du côté de la base de données.
-	\item \textbf{Évolutivité} : Pour pouvoir s'adapter à des millions d'enregistrements, le calcul des empreintes audio doit être simple et efficace - une exigence qui s'impose également lorsque les empreintes sont calculées sur des appareils mobiles dont la puissance de traitement est limitée.
+	\item \textbf{Claims Spotting:} the model must be robust to linguistic changes, we must deal with different phrasing for the same or similar claims. For every "reasonable" input we must extract the target claim.
+	\item \textbf{Articles Retrieving:} as Wikipedia holds millions of articles, the model must look for a limited number of relative articles to the input claim with an order of degree of correlation.
+	\item \textbf{Time Recording:} relative articles in Wikipedia can be outdated, for example Britain belongs to the European Union is an outdated knowledge. The model must be sensitive to the timestamps of articles.
+	\item \textbf{Sentences Retrieving:}  in each article retrieved from Wikipedia's database we must extract sentences relative to our input claim in order to apply a "kind of" comparison as well as present the winning sentences as evidence to the user.
+	\item \textbf{Sentence Comparison:} here we must create a model or use a pre-existing natural language inferencing model in order to compare retrieved sentences from Wikipedia's articles and the input claim. 
+	\item \textbf{Credibility Evaluation:} not all informations in Wikipedia are true.
 \end{itemize}
 
-\vspace{0.5cm}
-L'amélioration d'une certaine exigence implique souvent une perte de performance dans une autre, et il faut faire face à un compromis délicat entre des principes contradictoires. Par exemple, l'amélioration de la robustesse conduit généralement à une augmentation des identifications erronées (faux positifs), ce qui détériore la précision du système d'identification. De même, même si elle est bénéfique pour des raisons de compacité et de calcul, une réduction excessive de la taille de l'empreinte digitale affecte négativement la capacité de discrimination. Inversement, les empreintes digitales d'une spécificité et d'une robustesse élevées peuvent ne pas être utilisables dans la pratique si leur calcul nécessite une puissance de traitement importante.\\\par
+These can be regarded as main challenges of our Fact-Checking project, but, evidently, other problems can be presented for example the verifiability of claims, not all claims can be verifiable, especially if it is an personal opinion or a personal belief, in this case the model must not give a True or False assessment but it should tell the user that there is not enough information (NEI) to make such an assessment.
 
-Les solutions que nous avons envisagé pour ces problématiques sont :\\
+\section{Related work and solutions}
+\subsection{Styled based fake news detection}
 
-\begin{itemize}
-	\item 	Transformation du signal en \textit{Spectrogramme}.
-	\item 	Extraction des pics spectraux et construction d'une constellation.
-	\item	Formation des paires de pics spectraux et hachage combinatoire.
-	\item 	Alignement des empreintes en utilisant un offset.
-	\item 	Amélioration des requêtes et indexation des empreintes.
-\end{itemize}
+\subsection{Propagation based fake news detection}
 
-\section{Environnement de travail}
-Nous allons utiliser le langage Python pour réaliser ce projet tout en profitant de plusieurs bibliothèques afin d'échantillonner, traiter le signal et hacher le résultat voulu.\\
-
-Nous utiliserons un répertoire GitHub pour le partage. Concrètement, Git est un système de contrôle de version distribué, ce qui signifie que l’ensemble de la base du code et de l’historique est disponible sur l’ordinateur de chaque développeur, ce qui permet des branchements et une fusion faciles.
-Le contrôle de version nous aidera (développeurs) à suivre et à gérer les modifications apportées au code du projet. Au fur et à mesure le projet prend de l’ampleur, le contrôle de version devient essentiel.\\
+\subsection{Credibility based fake news detection}
 
 
-
-\chapter{Rendu final}
-\label{rf}
-A travers ce projet nous avons réaliser une application qui permet de retrouver le titre d’une chanson et son auteur après seulement quelques secondes d’écoute par l'intermédiaire d'un microphone et aussi à travers un fichier mp3.
-Quand on demande à l’application de reconnaître un morceau, elle décompose le son et le transforme en empreintes. Puis le compare à ceux présentes dans sa base de données et trouve le résultat correspondant.\\
-Pour cela nous avons procédé par le traitement de signal pour extraire des caractéristiques importantes, et nous créons ensuite une empreinte associée à ce signal afin de le stocker et finalement faire la recherche et la comparaison des différentes empreintes dans une large base de données.
-\section{Interface utilisateur finale}
-Par souci de temps, nous nous sommes limité à une version terminale, une interface interactive permet à l'utilisateur d'interagir avec un programme informatique, grâce à l'exécution du programme. Néanmoins, notre application ne demande pas de grands besoins du côté UI, une interface web ou mobile peut être réalisée dans un petit délai de temps en utilisant des frameworks moderne comme \textit{ReactJS} ou \textit{ReactNative}.\\\par
-Au lancement du programme, six (6) options sont proposées à l'utilisateur qui sont les suivantes:\\
-
-\begin{enumerate}
-	\item Reconnaître une chanson à partir du microphone.
-	\item Reconnaître une chanson à partir d’un fichier mp3.
-	\item Traiter, Hacher, Stocker une ou plusieurs musiques dans la base de données.
-	\item Afficher les détails de la base de données.
-	\item Réinitialiser la base de données.
-	\item Quitter le programme.
-\end{enumerate}
-
-\begin{figure}[H]
-	\centering
-	\includegraphics[scale=0.8]{img/options.png}
-	\caption{Terminal Interactive Interface}
-\end{figure}
 
 
 \chapter{Conclusion}
