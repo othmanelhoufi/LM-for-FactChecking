@@ -149,7 +149,47 @@ These can be regarded as main challenges of our Fact-Checking project, but, evid
 
 \section{Related work and solutions}
 \subsection{Styled based fake news detection}
+A study done by \textit{Piotr Przybyła} named \textit{Capturing the Style of Fake News} in 2020 from Institute of Computer Science, Polish Academy of Sciences, in order to detect fake news or in other words assess the credibility of an article by looking at the style of writing rather than the meaning of the words and sentences.\\
+The purpose of this study was to prove that general-purpose text classifiers, despite their good performance when evaluating simplistically, they overfit to sources of documents in training data. In contrast to this method, a truly style-based prediction that uses an analysis of the stylometric model shows that it focuses on sensational and affective vocabulary, known to be typical for fake news.\\
 
+Fake news sources usually attempt to attract attention for short-time financial or political goal (Allcott and Gentzkow 2017) rather than to build a long-term relationship with the reader, in this perspective, the language used by these sources tend to be informal, sensational and affective (Bakir and McStay 2017). This can be used to build a classifier for indicating low credibility.\\
+
+First of all they started by gathering a corpus of 103,219 documents from 223 online sources labeled by media experts like \textit{PolitiFact} and \textit{Pew Research Center}. Then they designed two models: a neural network and a model based on features used in stylometric analysis. This has a purpose to demonstrate that the stylometric features based model captures the affective language elements.\\
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[scale=0.4]{img/documents_in_topic.png}
+	\caption{From Piotr Przybyła paper - The largest 15 LDA (Latent Dirichlet Allocation) topics in the corpus, each shown with the six most signiﬁcant keywords, an identiﬁer and bars illustrating number of credible and non-credible documents associated with it}
+\end{figure}
+
+\textbf{Stylometric classifier:} the architecture of this classifier is generally based on a collection of stylystic features followed by a linear modeling. The features are: 
+	\begin{itemize}
+	\item number of sentences, average sentence length (in words) and average word length (in characters),
+	\item number of words matching different letter case schemes (all lower case, all upper case, just first letter upper case, other), represented as counts normalized by the document length,
+	\item frequencies of POS uni-grams, bi-grams and trigrams, represented as counts normalized by the document length (if present in at least 5 documents),
+	\item frequencies of words belonging to the 182 word categories in the expanded GI dictionary, represented as counts normalized by the document length.
+	\end{itemize}
+
+\textbf{Neural network classifier:} the applied solution was BiLSTMAvg a neural network with architecture based on elements used in natural language processing, i.e. word embeddings (Mikolov et al. 2013) and bidirectional LSTM (Hochreiter and Schmidhuber 1997). The following layers are included:
+	\begin{itemize}
+	\item An embedding layer, representing each token using a 300-dimensional word2vec vector trained on Google News,
+	\item Two LSTM layers, forward and backward, representing each sentence by two 100-dimensional vectors (output of the last cell in a sequence),
+	\item A densely-connected layer, reducing the dimensionality to 2 and applying softmax to compute class probability,
+	\item An averaging layer, representing each document’s class probability scores by averaging the scores for all its sentences.
+	\end{itemize}
+The neural network is implemented and trained in TensorFlow for 10 epochs with sentence length limited to 120 tokens and document length limited to 50 sentences.\\
+
+In order to understand if general-purpose text classifiers can capture document style without overfitting to features like the source or topic of document and to compare with the two classifiers they created, they evaluated two baseline models: bag of words and BERT.\\
+
+The evaluation protocol consisted on running the model learning and prediction in a 5-fold cross validation (CV) scenario and comparing it's output to target labels. They used accuracy as a metric of evaluation rather than precision or recall.
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[scale=0.3]{img/styled_model_result.png}
+	\caption{From Piotr Przybyła paper - Classiﬁcation accuracy of our stylometric and neural classiﬁers compared to baselines in three evaluation scenarios, simulating, respectively, a new document from known sources and topics, a document from unknown topic and a document from unseen source}
+\end{figure}
+
+The obtained results shows that stylometric based classifier loses 10\% of the accuracy on unseen sources even if it has more consistent performance over evaluation scenarios. Piotr Przybyła explains this drop in accuracy by assuming that the model specialize in the style of individual sources rather than the general style of fake news. Nevertheless, he was able to prove that his model takes into account the affective words in order to classify fake news.
 \subsection{Propagation based fake news detection}
 
 \subsection{Credibility based fake news detection}
