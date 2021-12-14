@@ -190,7 +190,53 @@ The evaluation protocol consisted on running the model learning and prediction i
 \end{figure}
 
 The obtained results shows that stylometric based classifier loses 10\% of the accuracy on unseen sources even if it has more consistent performance over evaluation scenarios. Piotr Przybyła explains this drop in accuracy by assuming that the model specialize in the style of individual sources rather than the general style of fake news. Nevertheless, he was able to prove that his model takes into account the affective words in order to classify fake news.
-\subsection{Propagation based fake news detection}
+\subsection{Knowledge graph based fake news detection}
+Studying the \textit{"DEAP-FAKED"} paper published in 2021 by \textit{Mohit Mayank}, \textit{Shakshi Sharma} and \textit{Rajesh Sharma}, it turned out that by exploiting techniques related to network analysis, Natural Language Processing (NLP) and the implementation of Graph Neural Networks (GNNs) we can detect fake news with an F1 score of 88\%.\\
+
+The \textit{"DEAP-FAKED"} consists of three individual components:
+
+\begin{itemize}
+\item \textbf{News encoder:} this component performs the contextual encoding of news title. trying both unidirectional and bidirectional sequence encoders, they implemented a 2-layer stacked biLSTM as the main subcomponent the news encoder.
+\item \textbf{Entity encoder:} this component identifies the named entities present in the news title and encodes the individual entities using knowledge graph (KG).
+For example, a news title with text \textit{"US Officials See No Link Between Trump and Russia"}, contains two entities \textit{"Trump"} of person type and \textit{"Russia"} of geolocation type.
+The framework includes relevant entities in the news then encodes them. They used Wikidata, an open-source KG, as the source to match the entities and ComplEx KG embedding technique to embed entities.
+\item \textbf{Classification Layer:} this component consolidates the news encoder's and entity encoder's representations to perform the final downstream Fake News classification learning.
+In this framework, the two representations are concatenated to create a super representation of the news content and entities. This representation is then passed to further non-linear activated layers with decreasing layer dimensionality. The final layer consolidated the information into a single dimension which is activated by a sigmoid layer, where the final output represents the probability of the news as either true or fake.
+\end{itemize}
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[scale=0.45]{img/deap_fake_framework.png}
+	\caption{From DEAP-FAKED paper - Illustration of the proposed DEAP-FAKED framework. The left sub-figure shows the entity encoder module. The right sub-figure shows the news encoder module. The top sub-figure is the Fake News classifier module. The bottom shows the tokenized news as the input to the entity encoder and news encoder.}
+\end{figure}
+
+The dataset used for \textit{DEAP-FAKED} framework can be described as following:
+
+\begin{itemize}
+\item \textbf{Fake News dataset:} The first dataset is the Kaggle Fake News dataset, which consists of 20,387 news items, having a near equal combination of true and Fake News. The news covers several domains such as Politics, Business, and Technology.
+The complete pre-processing step brought down the news item count to  $\sim$14k with a distribution of 60\% - 40\% of true and Fake News classes, respectively.They called this dataset KFN-UB.\\
+The second dataset is CoAID, which contains diverse COVID-19 healthcare misinformation, including Fake News from websites and social platforms. CoAID includes 4,251 news items. After pre-processing it only 632 news item and called CoAID-UB.
+\item \textbf{Knowledge Graph:} the framework uses Wikidata5M as a knowledge graph, it is created by only considering the "valid" facts, where the validity is confirmed if all entities and relations in the fact have a Wikipedia article and long description.
+\end{itemize}
+
+As for the evaluation procedure, they chose five baseline models for comparison with \textit{DEAP-FAKED} framework:
+
+\begin{enumerate}
+\item ExtraTreeClassifier: a decision tree-based classification algorithm that fits randomized decision trees on various sub samples of the dataset. In this case they first extract the count vectorization-based feature matrix from the tokenized news items and then pass it to ExtraTreeClassifier.
+\item LSTM: Long-Short Term Memory is a gated variant of Recurrent Neural Networks. It mitigates the exploding gradient problem of the classical sequence-based neural networks. In this case they pass the title of the tokenized news items to the LSTM layer and connect the last hidden state of the LSTM with a sigmoid activated MLP layer to perform the Fake News classification.
+\item SentRoBERTa: a modification of the pre-trained RoBERTa network that uses siamese and triplet network structures to derive semantically meaningful sentence embeddings. In this case they use SentRoBERTa to generate sentence level embedding for news titles that are connected with the sigmoid activated MLP layer to perform the Fake News classification.
+\item StackedBiLSTM: a two layer stacking of the conventional bidirectional LSTM layer. In this case they pass the tokenized news title to the StackedBiLSTM layer and connect the last hidden state with sigmoid activated MLP layers to perform the Fake News classification.
+\item EntWiki-StackedBiLSTM: This model incorporates the entities along with the news title. For each news item, the news title is encoded using the StackedBiLSTM, as discussed before. They extract the Wikipedia description of the entity identified in the news item and encode that description using SentRoBERTa. The news title and entity encoding are then concatenated and passed to the sigmoid activated MLP layer to perform the Fake News classification.
+\end{enumerate}
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[scale=0.4]{img/deap_faked_evaluation.png}
+	\caption{From DEAP-FAKED paper - Performance score of the models detailed in the paper is presented here. For each of the dataset, we report F1 macro and Accuracy metric values. We present average and standard deviation of the performance observed after performing 3 trials with different starting seed. For both the datasets, DEAP-FAKED reports the best performance value.}
+\end{figure}
+
+As evident by the results, \textit{DEAP-FAKED} reports the highest score on both of the datasets.
+
 
 \subsection{Credibility based fake news detection}
 
