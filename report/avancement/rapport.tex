@@ -4,7 +4,9 @@
 
 \usepackage{float}
 
-
+\usepackage{subcaption}
+\usepackage[export]{adjustbox}
+\usepackage{wrapfig}
 %encoding
 %--------------------------------------
 \usepackage[utf8]{inputenc}
@@ -236,6 +238,44 @@ As for the evaluation procedure, they chose five baseline models for comparison 
 \end{figure}
 
 As evident by the results, \textit{DEAP-FAKED} reports the highest score on both of the datasets.
+
+
+\subsection{Hierarchical Propagation based fake news detection}
+In a paper wrote by \textit{Kai Shu}, \textit{Deepak Mahudeswaran}, \textit{Suhang Wang}, and \textit{Huan Liu} with the name of \textit{Hierarchical Propagation Networks for Fake News Detection: Investigation and Exploitation}, the detection of fake news can be done by looking at the correlation between news and the hierarchical characteristics of a social network.\\
+
+The datasets used for this study were the public fake news repository \textit{FakeNewsNet} (Shu et al. 2017) that contains data related to different fact-checking websites that offers news content, social context and dynamic information. In addition, they used the data from fact-checking websites \textit{GossipCop} and \textit{PolitiFact} that contains news articles with labels annotated by professional journalists. News content includes meta attributes of the news like body text, he social context includes the related user interactions with the news like posting, sharing, commenting on Twitter, and dynamic information contains the timestamps of user's interactions.\\
+
+After collecting all of this data, building a hierarchical propagation network was the next step. First of all they defined two major levels of the hierarchy: 
+
+\begin{itemize}
+\item \textbf{Micro-level:} involves users conversations towards news pieces on social media over time. It contains rich information of user opinions towards news pieces.
+\item \textbf{Macro-level:} encompasses information on tweets posting pattern and information sharing pattern. It represents the global propagation of information through a cascade of re-tweets.
+\end{itemize}
+
+\begin{figure}[H]%
+	\centering
+	\begin{subfigure}{.5\textwidth}
+		\includegraphics[width=.9\linewidth, height=7cm]{img/fake_news_net_content.png}
+		\caption{The statistics of FakeNewsNet}
+	\end{subfigure}%
+	\begin{subfigure}{.5\textwidth}
+		\includegraphics[width=.9\linewidth, height=7cm]{img/hierarchy_network.png}
+		\caption{An example of the hierarchical propagation network of a fake news piece fact-checked by Politifact. It consists of two types: macro-level and micro-level. The macro-level propagation network includes the news nodes, tweet nodes, and retweet nodes. The micro-level propagation network indicates the conversation tree represented by cascade of reply nodes.}
+	\end{subfigure}
+	\caption{From the \textit{Hierarchical Propagation Networks for Fake News Detection: Investigation and Exploitation} paper}%
+\end{figure}
+
+
+
+In both these levels they used \textit{Structural Analysis} to identify patterns in conversations, \textit{Temporal Analysis} to understand the exchange of opinions in terms of time. For the Micro-level they added a \textit{Linguistic Analysis} to inference the sentiment of people around news pieces, thus obtaining linguistic features for statistical comparison.\\
+
+To evaluate the performance of fake news detection of the model they choose randomly 80\% of news articles for training and the remaining 20\% for testing. The results shows high scores for both datasets:
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[scale=0.4]{img/hierarchical_evaluation_results.png}
+	\caption{From the \textit{Hierarchical Propagation Networks for Fake News Detection: Investigation and Exploitation} paper - Evaluation of the model}
+\end{figure}
 
 
 \subsection{Credibility based fake news detection}
