@@ -278,6 +278,28 @@ To evaluate the performance of fake news detection of the model they choose rand
 \end{figure}
 
 
+\subsection{Perplexity based fake news detection}
+In March 2021, \textit{Nayeon Lee}, \textit{Yejin Bang}, \textit{Andrea Madotto}, \textit{Madian Khabsa}, and \textit{Pascale Fung} published a paper called \textit{Towards Few-Shot Fact-Checking via Perplexity} where they propose a new approach of the powerful transfer learning ability of a language model via a perplexity score. Using a method called \textit{few-shot learning}, they built a model that outperforms major class baseline models by more than 10\% on the F1-Macro metric score.\\
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[scale=0.3]{img/perplexity_example.png}
+	\caption{From the \textit{Towards Few-Shot Fact-Checking via Perplexity} paper - Illustration of our simple yet effective perplexity-based approach. Few-shot data samples are used to find the optimal perplexity threshold th that separates Unsupported claims from Supported claims.}
+\end{figure}
+
+\textit{Few-Shot Learning} refers to the technique of feeding a machine learning model with a very small amount of training data to guide its predictions, like a few examples at inference time, as opposed to standard fine-tuning techniques which require a relatively large amount of training data for the pre-trained model to adapt to the desired task with accuracy.\\
+In NLP, \textit{Few-Shot Learning} can be used with Large Language Models (LMs), which have learned to perform a wide number of tasks implicitly during their pre-training on large text datasets. This enables the model to generalize, that is to understand related but previously unseen tasks, with just a few examples.\\
+
+Perplexity is a commonly used metric for measuring the performance of LMs. It is defined as the inverse of the probability of the test set normalized by the number of words:
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[scale=0.2]{img/perplexity_equation.png}
+	\caption{Perplexity score}
+\end{figure}
+
+Another way of interpreting perplexity is as a measure of the likelihood of a given test sentence with reference to the training corpus.
+
 \subsection{Credibility based fake news detection}
 
 
