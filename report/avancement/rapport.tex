@@ -134,6 +134,61 @@ Combing back to our example, the model should return that \textit{"John F. Kenne
 \end{figure}
 
 
+\chapter{Potential Datasets}
+The rise of fake news in the internet created the need of setting-up databases that contains as much claims as possible checked and approved manually by journalists and fact-checkers worldwide in order to be used as a dataset for experiments in automatic fact-checking models or just simply to be a reference to other journalists and the general public.
+
+\section{FEVER dataset \cite{Aly21Feverous}}
+\textit{FEVEROUS} (Fact Extraction and VERification Over Unstructured and Structured information) is a fact verification dataset which consists of 87,026 verified claims. Each claim is annotated with evidence in the form of sentences and/or cells from tables in Wikipedia, as well as a label indicating whether this evidence supports, refutes, or does not provide enough information to reach a verdict. The dataset also contains annotation metadata such as annotator actions (query keywords, clicks on page, time signatures), and the type of challenge each claim poses.\\
+The data (Annotations and Wikipedia pages) are distributed in the JSONL format.
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[scale=0.3]{img/fever_example.png}
+	\caption{Manually labeled claim from FEVER}
+\end{figure}
+
+\section{CREDBANK dataset \cite{mitra2015credbank}}
+The \textit{CREDBANK} corpus was collected between mid October 2014 and end of February 2015. It is a collection of streaming tweets tracked over this period, topics in this tweet stream, topics classified as events or non events, events annotated with credibility ratings.the \textit{CREDBANK} Dataset comprises more than 60M tweets grouped into 1,049 real-world events, each annotated by 30 human annotators. The label labeling of each tweet is a vector with 30 dimensions containing variable scores at five levels of veracity.
+
+\section{LIAR dataset \cite{wang2017liar}}
+\textit{LIAR} is a publicly available dataset for fake news detection. A decade-long of 12.8K manually labeled short statements were collected in various contexts from \textit{PolitiFact}, which provides detailed analysis report and links to source documents for each case. This dataset can be used for fact-checking research as well. Each statement is labeled on six levels: true, predominantly true, half-true, almost true, false, pants-fire.
+
+
+
+\section{FAKENEWSNET dataset \cite{shu2018fakenewsnet}}
+\textit{FakeNewsNet} is a multi-dimensional fake news data repository, which contains two comprehensive datasets that includes news content, social context, and dynamic information.
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[scale=0.43]{img/fake_news_net_stats.png}
+	\caption{Statistics of the FakeNewsNet repository \cite{shu2018fakenewsnet}}
+\end{figure}
+
+\begin{itemize}
+\item \textbf{News content:} reliable news content retrieved from fact-checking websites and true news such as \textit{PolitiFact} and \textit{GossipCop}.
+\item \textbf{Social context:} the user engagements related to the fake and real news pieces from fact-checking websites are collected using search application programming interfaces (API) provided by social media platforms such as the Twitter's Advanced Search API.
+\item \textbf{Spatiotemporal information:} includes spatial and temporal information. For spatial information, we obtain the locations explicitly provided in user profiles. The temporal information indicates that we record the timestamps of user engagements, which can be used to study how fake news pieces propagate on social media, and how the topics of fake news are changing over time.
+\end{itemize}
+
+The multi-demnsionality of this dataset can be regarded as its strong value against previous datasets:
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[scale=0.43]{img/fake_news_net_comparison.png}
+	\caption{Comparison with existing fake news detection datasets \cite{shu2018fakenewsnet}}
+\end{figure}
+
+\newpage
+\section{Other datasets and comparison \cite{de2021identifying}}
+Of course other datasets exits with different structures with various sources. For each dataset we can conceptualize a new way of modeling classifiers, we can also use multiple datasets in one model.\\
+ 
+\begin{figure}[H]
+	\centering
+	\includegraphics[scale=0.53]{img/datasets_comparison.png}
+	\caption{Overview of fake news datasets available \cite{de2021identifying}}
+\end{figure}
+
+
 \chapter{Identified challenges and solutions}
 \section{Fact-Checking challenges}
 In order for the model to work each layer/part of the system must answer to a specific task, the combination of results made by each layer constructs a robust model that is able with a degree of confidence to fact-check a claim as well as present evidence of the assessment. Although for each layer to work as intended we must find solutions to these challenges:\\
@@ -149,11 +204,9 @@ In order for the model to work each layer/part of the system must answer to a sp
 
 These can be regarded as main challenges of our Fact-Checking project, but, evidently, other problems can be presented for example the verifiability of claims, not all claims can be verifiable, especially if it is an personal opinion or a personal belief, in this case the model must not give a True or False assessment but it should tell the user that there is not enough information (NEI) to make such an assessment.
 
-\section{Potential Datasets}
-
 
 \section{Related work and solutions}
-\subsection{Language model based fake news detection \cite{lee2020language}}
+%\subsection{Language model based fake news detection \cite{lee2020language}}
 
 \subsection{Styled based fake news detection \cite{przybyla2020capturing}}
 A study done by \textit{Piotr Przybyła} named \textit{Capturing the Style of Fake News} in 2020 from Institute of Computer Science, Polish Academy of Sciences, in order to detect fake news or in other words assess the credibility of an article by looking at the style of writing rather than the meaning of the words and sentences.\\
