@@ -95,7 +95,7 @@
 \chapter*{Abstract}
 As false information and fake news are propagating though out the internet and social networks, the need of fact-checking operations becomes necessary in order to maintain a truthful digital environment where general information can be reliably exploited whether in politics, finance and other domains. The need of this online claim assessment comes from the fact that fake news and false information can have a big negative impact on politics, economy (2016 USA Elections) and public health (COVID-19).\\ 
 A number of solutions have been proposed to deal with this problem and limit the spread of false information, both manual and automatic. Of course the manual approaches done on websites such as \textit{PolitiFact.com}, \textit{FactCheck.org} and \textit{Snopes.com} don't construct a viable solution for the long term as the speed and scale of information propagation increase exponentially rendering this manual fact-checking operation where human fact-checkers can't scale up at the same rate limited and incapable of solving the problem.\\
-Here, we present our contribution in this regard: an automated solution for fact-checking using Wikipedia's articles for claim verification. The algorithm uses NLP techniques in order to extract the so-called claim from the user input, then, using Wikipedia's API, it retrieves all the relevant articles and assesses with a degree of confidence if the claim is true, false or unable to decide due to lack of information showing evidence (sentences in articles) and probabilities for each resulted case.\\[1cm]
+Here, we present our contribution in this regard: an automated solution for fact-checking using Wikipedia's articles for claim verification. The algorithm uses NLP techniques \cite{lazarski2021using} in order to extract the so-called claim from the user input, then, using Wikipedia's API, it retrieves all the relevant articles and assesses with a degree of confidence if the claim is true, false or unable to decide due to lack of information showing evidence (sentences in articles) and probabilities for each resulted case.\\[1cm]
 
 \textbf{Keywords:} Natural Language Processing, Wikipedia, Information retrieval, Text processing, Natural Language Inferencing, Fact-Checking, Document retrieval, Sentence retrieval, Fake-news.
 
@@ -105,22 +105,22 @@ Here, we present our contribution in this regard: an automated solution for fact
 \chapter{Introduction}
 \section{Project Context}
 
-From a social and psychological perspective, humans have been proven irrational and vulnerable when differentiating between truth and false news (typical accuracy ranges between 55\% and 58\%), thus fake news obtain public trust relatively easier than truthful news because individuals tend to trust fake news after repeated exposure (\textit{Validity effect}), or if it confirms their pre-existing beliefs (\textit{Confirmation bias}), or simply due to the obligation of participating socially and proving a social identity (\textit{Peer pressure}). The social sciences are still trying to comprehend the biological motivations that makes fake news more appealing to humans.\\
+From a social and psychological perspective, humans have been proven irrational and vulnerable when differentiating between truth and false news (typical accuracy ranges between 55\% and 58\%) \cite{zhou2019fake}, thus fake news obtain public trust relatively easier than truthful news because individuals tend to trust fake news after repeated exposure (\textit{Validity effect}), or if it confirms their pre-existing beliefs (\textit{Confirmation bias}), or simply due to the obligation of participating socially and proving a social identity (\textit{Peer pressure}). The social sciences are still trying to comprehend the biological motivations that makes fake news more appealing to humans.\\
 
-On the other hand, the growth of social media platforms resulted in a huge acceleration of news spreading whether true or false. As of Aug. 2017, 67\% of Americans get their news from social media. These platforms even give the user the right to share, forward, vote and participate to online discussions. All of this made the problem of fake news spreading more and more dangerous, our economies for example, are not robust to the spread of falsity, false rumors have affected stock prices and the motivations for large-scale investments, as we witnessed after a false tweet claimed that Barack Obama was injured in an explosion which caused \$130 billion drop in stock value. Another recent example is related to public health where rumors about COVID-19 vaccines and drug companies influenced people in their decision on getting vaccinated.\\
+On the other hand, the growth of social media platforms resulted in a huge acceleration of news spreading whether true or false. As of Aug. 2017, 67\% \cite{zhou2019fake} of Americans get their news from social media. These platforms even give the user the right to share, forward, vote and participate to online discussions. All of this made the problem of fake news spreading more and more dangerous, our economies for example, are not robust to the spread of falsity, false rumors have affected stock prices and the motivations for large-scale investments, as we witnessed after a false tweet claimed that Barack Obama was injured in an explosion which caused \$130 billion drop in stock value \cite{vosoughi2018spread}. Another recent example is related to public health where rumors about COVID-19 vaccines and drug companies influenced people in their decision on getting vaccinated.\\
 
 That being said, is there a way to monitor the spread of fake news through social media? Or more specifically, how can we differentiate between fake news and truthful news, and at what level of confidence can we do that?\\
 
 From a computer engineering perspective, different approaches were studied:
 
 \begin{itemize}
-\item \textbf{Knowledge-based Fake News Detection:} a method aims to assess news authenticity by comparing the knowledge extracted from to-be verified news content with known facts, also called fact-checking.
-\item \textbf{Style-based Fake News Detection:} focuses on the style of writing, i.e. the form of text rather than its meaning.
-\item \textbf{Propagation-based Fake News Detection:} a principled way to characterize and understand hierarchical propagation network features. We perform a statistical comparative analysis over these features, including micro-level and macro-level, of fake news and true news.
-\item \textbf{Credibility-based Fake News Detection:} the information about authors of news articles can indicate news credibility and help detect fake news.
+\item \textbf{Knowledge-based Fake News Detection \cite{chernyavskiy2021whatthewikifact}:} a method aims to assess news authenticity by comparing the knowledge extracted from to-be verified news content with known facts, also called fact-checking.
+\item \textbf{Style-based Fake News Detection \cite{przybyla2020capturing}:} focuses on the style of writing, i.e. the form of text rather than its meaning.
+\item \textbf{Propagation-based Fake News Detection \cite{shu2020hierarchical}:} a principled way to characterize and understand hierarchical propagation network features. We perform a statistical comparative analysis over these features, including micro-level and macro-level, of fake news and true news.
+\item \textbf{Credibility-based Fake News Detection \cite{sitaula2020credibility}:} the information about authors of news articles can indicate news credibility and help detect fake news.
 \end{itemize}
 
-In this project we will focus on the method of \textbf{Knowledge-based Fake News Detection} also called \textbf{Fact-Checking}. The goal is not to implement an algorithm that scans social networks for real time fake news detection, but rather we will create a model that can assess with a degree of confidence the truthfulness or falseness of a claim given by a user as an input by exploiting Wikipedia's articles as a source of true knowledge and export evidence that validates or refutes the subjected claim.
+In this project we will focus on the method of \textbf{Knowledge-based Fake News Detection} also called \textbf{Fact-Checking}. The goal is not to implement an algorithm that scans social networks for real time fake news detection, but rather we will create a model that can assess with a degree of confidence the truthfulness or falseness of a claim given by a user as an input by exploiting Wikipedia's articles \cite{trokhymovychnatural} as a source of true knowledge and export evidence that validates or refutes the subjected claim.
 
 \section{Use case scenario}
 Suppose that while browsing the internet or talking to people you come across a claim that says \textit{"The former U.S president John F. Kennedy died in September 22, 1963"}, as it is a general truth and not a relative truth it should be easier to verify the validity of this claim as well as find evidence that proves it.\\
@@ -150,11 +150,11 @@ In order for the model to work each layer/part of the system must answer to a sp
 These can be regarded as main challenges of our Fact-Checking project, but, evidently, other problems can be presented for example the verifiability of claims, not all claims can be verifiable, especially if it is an personal opinion or a personal belief, in this case the model must not give a True or False assessment but it should tell the user that there is not enough information (NEI) to make such an assessment.
 
 \section{Related work and solutions}
-\subsection{Styled based fake news detection}
+\subsection{Styled based fake news detection \cite{przybyla2020capturing}}
 A study done by \textit{Piotr Przybyła} named \textit{Capturing the Style of Fake News} in 2020 from Institute of Computer Science, Polish Academy of Sciences, in order to detect fake news or in other words assess the credibility of an article by looking at the style of writing rather than the meaning of the words and sentences.\\
 The purpose of this study was to prove that general-purpose text classifiers, despite their good performance when evaluating simplistically, they overfit to sources of documents in training data. In contrast to this method, a truly style-based prediction that uses an analysis of the stylometric model shows that it focuses on sensational and affective vocabulary, known to be typical for fake news.\\
 
-Fake news sources usually attempt to attract attention for short-time financial or political goal (Allcott and Gentzkow 2017) rather than to build a long-term relationship with the reader, in this perspective, the language used by these sources tend to be informal, sensational and affective (Bakir and McStay 2017). This can be used to build a classifier for indicating low credibility.\\
+Fake news sources usually attempt to attract attention for short-time financial or political goal \cite{allcott2017social} rather than to build a long-term relationship with the reader, in this perspective, the language used by these sources tend to be informal, sensational and affective \cite{bakir2017fake}. This can be used to build a classifier for indicating low credibility.\\
 
 First of all they started by gathering a corpus of 103,219 documents from 223 online sources labeled by media experts like \textit{PolitiFact} and \textit{Pew Research Center}. Then they designed two models: a neural network and a model based on features used in stylometric analysis. This has a purpose to demonstrate that the stylometric features based model captures the affective language elements.\\
 
@@ -172,7 +172,7 @@ First of all they started by gathering a corpus of 103,219 documents from 223 on
 	\item frequencies of words belonging to the 182 word categories in the expanded GI dictionary, represented as counts normalized by the document length.
 	\end{itemize}
 
-\textbf{Neural network classifier:} the applied solution was BiLSTMAvg a neural network with architecture based on elements used in natural language processing, i.e. word embeddings (Mikolov et al. 2013) and bidirectional LSTM (Hochreiter and Schmidhuber 1997). The following layers are included:
+\textbf{Neural network classifier:} the applied solution was BiLSTMAvg a neural network with architecture based on elements used in natural language processing, i.e. word embeddings \cite{mikolov2013efficient} and bidirectional LSTM (Hochreiter and Schmidhuber 1997). The following layers are included:
 	\begin{itemize}
 	\item An embedding layer, representing each token using a 300-dimensional word2vec vector trained on Google News,
 	\item Two LSTM layers, forward and backward, representing each sentence by two 100-dimensional vectors (output of the last cell in a sequence),
@@ -192,7 +192,7 @@ The evaluation protocol consisted on running the model learning and prediction i
 \end{figure}
 
 The obtained results shows that stylometric based classifier loses 10\% of the accuracy on unseen sources even if it has more consistent performance over evaluation scenarios. Piotr Przybyła explains this drop in accuracy by assuming that the model specialize in the style of individual sources rather than the general style of fake news. Nevertheless, he was able to prove that his model takes into account the affective words in order to classify fake news.
-\subsection{Knowledge graph based fake news detection}
+\subsection{Knowledge graph based fake news detection \cite{mayank2021deap}}
 Studying the \textit{"DEAP-FAKED"} paper published in 2021 by \textit{Mohit Mayank}, \textit{Shakshi Sharma} and \textit{Rajesh Sharma}, it turned out that by exploiting techniques related to network analysis, Natural Language Processing (NLP) and the implementation of Graph Neural Networks (GNNs) we can detect fake news with an F1 score of 88\%.\\
 
 The \textit{"DEAP-FAKED"} consists of three individual components:
@@ -221,15 +221,7 @@ The second dataset is CoAID, which contains diverse COVID-19 healthcare misinfor
 \item \textbf{Knowledge Graph:} the framework uses Wikidata5M as a knowledge graph, it is created by only considering the "valid" facts, where the validity is confirmed if all entities and relations in the fact have a Wikipedia article and long description.
 \end{itemize}
 
-As for the evaluation procedure, they chose five baseline models for comparison with \textit{DEAP-FAKED} framework:
-
-\begin{enumerate}
-\item ExtraTreeClassifier: a decision tree-based classification algorithm that fits randomized decision trees on various sub samples of the dataset. In this case they first extract the count vectorization-based feature matrix from the tokenized news items and then pass it to ExtraTreeClassifier.
-\item LSTM: Long-Short Term Memory is a gated variant of Recurrent Neural Networks. It mitigates the exploding gradient problem of the classical sequence-based neural networks. In this case they pass the title of the tokenized news items to the LSTM layer and connect the last hidden state of the LSTM with a sigmoid activated MLP layer to perform the Fake News classification.
-\item SentRoBERTa: a modification of the pre-trained RoBERTa network that uses siamese and triplet network structures to derive semantically meaningful sentence embeddings. In this case they use SentRoBERTa to generate sentence level embedding for news titles that are connected with the sigmoid activated MLP layer to perform the Fake News classification.
-\item StackedBiLSTM: a two layer stacking of the conventional bidirectional LSTM layer. In this case they pass the tokenized news title to the StackedBiLSTM layer and connect the last hidden state with sigmoid activated MLP layers to perform the Fake News classification.
-\item EntWiki-StackedBiLSTM: This model incorporates the entities along with the news title. For each news item, the news title is encoded using the StackedBiLSTM, as discussed before. They extract the Wikipedia description of the entity identified in the news item and encode that description using SentRoBERTa. The news title and entity encoding are then concatenated and passed to the sigmoid activated MLP layer to perform the Fake News classification.
-\end{enumerate}
+As for the evaluation procedure, they chose five baseline models for comparison with \textit{DEAP-FAKED} framework: ExtraTreeClassifier, LSTM, SentRoBERTa, StackedBiLSTM, and StackedBiLSTM.
 
 \begin{figure}[H]
 	\centering
@@ -240,10 +232,10 @@ As for the evaluation procedure, they chose five baseline models for comparison 
 As evident by the results, \textit{DEAP-FAKED} reports the highest score on both of the datasets.
 
 
-\subsection{Hierarchical Propagation based fake news detection}
+\subsection{Hierarchical Propagation based fake news detection \cite{shu2020hierarchical}}
 In a paper wrote by \textit{Kai Shu}, \textit{Deepak Mahudeswaran}, \textit{Suhang Wang}, and \textit{Huan Liu} with the name of \textit{Hierarchical Propagation Networks for Fake News Detection: Investigation and Exploitation}, the detection of fake news can be done by looking at the correlation between news and the hierarchical characteristics of a social network.\\
 
-The datasets used for this study were the public fake news repository \textit{FakeNewsNet} (Shu et al. 2017) that contains data related to different fact-checking websites that offers news content, social context and dynamic information. In addition, they used the data from fact-checking websites \textit{GossipCop} and \textit{PolitiFact} that contains news articles with labels annotated by professional journalists. News content includes meta attributes of the news like body text, he social context includes the related user interactions with the news like posting, sharing, commenting on Twitter, and dynamic information contains the timestamps of user's interactions.\\
+The datasets used for this study were the public fake news repository \textit{FakeNewsNet} \cite{shu2018fakenewsnet} that contains data related to different fact-checking websites that offers news content, social context and dynamic information. In addition, they used the data from fact-checking websites \textit{GossipCop} and \textit{PolitiFact} that contains news articles with labels annotated by professional journalists. News content includes meta attributes of the news like body text, he social context includes the related user interactions with the news like posting, sharing, commenting on Twitter, and dynamic information contains the timestamps of user's interactions.\\
 
 After collecting all of this data, building a hierarchical propagation network was the next step. First of all they defined two major levels of the hierarchy: 
 
@@ -278,7 +270,7 @@ To evaluate the performance of fake news detection of the model they choose rand
 \end{figure}
 
 
-\subsection{Perplexity based fake news detection}
+\subsection{Perplexity based fake news detection \cite{lee2021towards}}
 In March 2021, \textit{Nayeon Lee}, \textit{Yejin Bang}, \textit{Andrea Madotto}, \textit{Madian Khabsa}, and \textit{Pascale Fung} published a paper called \textit{Towards Few-Shot Fact-Checking via Perplexity} where they propose a new approach of the powerful transfer learning ability of a language model via a perplexity score. Using a method called \textit{few-shot learning}, they built a model that outperforms major class baseline models by more than 10\% on the F1-Macro metric score.\\
 
 \begin{figure}[H]
@@ -320,11 +312,11 @@ The datasets used in this experiment are:
 For the models created for this perplexity based experiment they used one unidirectional LM and one masked LM:
 
 \begin{itemize}
-\item $PPL_{GPT2-B}$ : a single-parameter classifier based on perplexity from GPT2-base (Radford et al., 2019) (unidirectional LM)
-\item $PPL_{BERT-B}$ : a single-parameter classifier based on perplexity from BERT-base (Devlin et al., 2019) (Masked LM)
+\item $PPL_{GPT2-B}$ : a single-parameter classifier based on perplexity from GPT2-base \cite{radford2019language} (unidirectional LM)
+\item $PPL_{BERT-B}$ : a single-parameter classifier based on perplexity from BERT-base \cite{devlin2018bert} (Masked LM)
 \end{itemize}
 
-As for baseline models they finetuned pre-trained Transformer-based (Vaswani et al., 2017) in order to build a classifier, which is a common approach used to achieve many state-of-the-art results in the literature.\\
+As for baseline models they finetuned pre-trained Transformer-based \cite{vaswani2017attention} in order to build a classifier, which is a common approach used to achieve many state-of-the-art results in the literature.\\
 
 Moving to the experimental setup, they used the \textit{Few-Shot} technique in order to validate or train the models. Given $N_D$ as the size of the dataset $D$, we do an $n$-shot experiment with $n$ samples from $D$ as a "validation set" for our perplexity-based approach or as a "training set" for the fine-tuning approach, and the remainder ($N_D - n$) as a test set. For example in the 2-shot experiment using the Covid19-Social dataset (340 samples), we have two training samples and 338 test samples.\\
 They took into consideration the accuracy and the F1-Macro metrics for the evaluation. Because the datasets are unbalanced, they mainly consider the F1-Macro score over accuracy as an overall evaluation.\\
@@ -346,27 +338,10 @@ tasks in all settings. For instance, $PPL_{GPT2-B}$ outperforms the Major Class 
 
 
 \chapter{Conclusion}
-Ces dernières années, de nombreuses techniques différentes de création d'empreintes digitales et d'indexation ont été proposées et sont maintenant utilisées dans des produits commerciaux. Dans ce projet, nous avons examiné de plus près l'une de ces techniques, qui a été développée à l'origine pour le système d'identification audio \textit{Shazam}. Nous avons discuté des idées principales qui sous-tendent ce système, mais il y a de nombreux paramètres qui doivent être ajustés afin de trouver un bon compromis entre les différentes exigences, notamment la robustesse, la spécificité, l'évolutivité et la compacité. Les aspects importants sont les suivants :\\
-
- \begin{itemize}
-	\item les paramètres de la STFT (longueur de la fenêtre, taille du saut) qui déterminent les résolutions temporelle et spectrale,
-	\item la stratégie de sélection et d'extraction des pics spectraux (avec ses paramètres de voisinage),
-	\item la taille des zones cibles (utilisées pour définir les triplets), et
-	\item des structures de données appropriées pour le hachage.
-\end{itemize}
-
-\vspace{0.5cm}
-Bien que ce système est robuste à de nombreux types de distorsions du signal, l'approche de création d'empreinte discutée n'est pas conçue pour gérer les déformations temporelles. La correspondance des cartes de constellation ainsi que les différences d'horodatage (\textit{timestamp}) dans les paires de pics sont toutes deux sensibles aux différences de tempo relatif entre la requête et le document de base de données. Par conséquent, il est nécessaire d'utiliser d'autres techniques pour être invariant aux modifications de l'échelle de temps.\\
-
-Les empreintes digitales utilisant les pics spectraux sont conçues pour être très sensibles à une version particulière d'un morceau de musique. Par exemple, face à une multitude d'interprétations différentes d'une chanson par le même artiste, le système d'empreintes digitales est susceptible de choisir la bonne, même si elles sont pratiquement indiscernables par l'oreille humaine. En général, les systèmes d'identification audio sont conçus pour cibler l'identification d'enregistrements qui sont déjà présents dans la base de données. Par conséquent, ces techniques ne sont généralement pas généralisables aux enregistrements en direct ou aux performances qui ne font pas partie de la base de données.
 
 
 \chapter{Perspectives}
-Comme décrit avant, il y a de nombreux paramètres qui doivent être ajustés afin de trouver un bon compromis entre les différentes exigences, notamment la robustesse, la spécificité, l'évolutivité et la compacité. Trouver des valeurs optimales à ces paramètres pourra augmenter largement les performances de notre application du point de vue de la robustesse aux distorsions, voire aussi du point de vue la mémoire utilisée et la vitesse de recherche d'une correspondance. Or, ce n'est pas une simple tâche, de plus les paramètres de notre application augmente, le processus de trouver des valeurs optimales à ces paramètres devient très compliqué.\\
 
-Parmi les solutions que nous envisageons comme extension à notre application est l'utilisation d'un modèle de réseau neurones artificielles qui prendra en entrée les paramètres de notre application, et la sortie sera divisée sur les différentes exigences voulues tel que la robustesse, la mémoire, et le temps de recherche.\\
-
-Ce réseau sera entraîné sur une large base d'apprentissage qui provienne de plusieurs tests déjà effectués d'une manière dynamique, par exemple nous allons exécuter la reconnaissance des morceaux sur une large collections de musiques tout en ajoutant du bruit et d'autres distorsions et aussi en variant le temps d'enregistrement du microphone, les résultats obtenus feront une très bonne base d'apprentissage pour notre réseau de neurones artificielles. Peut-être même on pourra ajuster les paramètres de notre application dynamiquement par rapport à chaque situation.\\
 
 \bibliographystyle{abbrv}
 \bibliography{ref}
