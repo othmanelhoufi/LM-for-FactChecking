@@ -133,6 +133,7 @@ Combing back to our example, the model should return that \textit{"John F. Kenne
 	\caption{General Model Processing Pipeline}
 \end{figure}
 
+Note: this is a first draft architecture of the model to be studied, many changes will be implemented across multiple levels during the experimental procedure.
 
 \chapter{Potential Datasets}
 The rise of fake news in the internet created the need of setting-up databases that contains as much claims as possible checked and approved manually by journalists and fact-checkers worldwide in order to be used as a dataset for experiments in automatic fact-checking models or just simply to be a reference to other journalists and the general public.
@@ -180,7 +181,7 @@ The multi-demnsionality of this dataset can be regarded as its strong value agai
 
 \newpage
 \section{Other datasets and comparison \cite{de2021identifying}}
-Of course other datasets exits with different structures with various sources. For each dataset we can conceptualize a new way of modeling classifiers, we can also use multiple datasets in one model.\\
+Of course other datasets exist with different structures and various sources. For each dataset we can conceptualize a new way of modeling classifiers, we can also use multiple datasets in one model.\\
  
 \begin{figure}[H]
 	\centering
@@ -206,7 +207,48 @@ These can be regarded as main challenges of our Fact-Checking project, but, evid
 
 
 \section{Related work and solutions}
-%\subsection{Language model based fake news detection \cite{lee2020language}}
+\subsection{Language model based fake news detection \cite{lee2020language}}
+In a paper called \textit{Language Models as Fact Checkers?} done by a team from \textit{Facebook AI} and \textit{Hong Kong University of Science and Technology}, it provides an example of a fact-checking model using zero-shot LM that outperforms a random baseline LM using the FEVER dataset.\\
+
+The goal of fact-checking as mentioned previously, and relatively to this paper, is to validate the truthfulness of a given claim. Each claim is assigned to one of these labels: support, refute, or not enough information (NEI) to verify.\\
+
+This paper describes the difference between Traditional Pipeline fact-checking models and their zero-shot fact-checking LM:
+
+\begin{itemize}
+\item \textbf{Traditional pipeline:} this type of models access knowledge within an external knowledge base like Wikipedia in order to validate a claim. It involves information retrieval modules such as document retrieval and sentence retrieval.
+\item \textbf{Zero-shot LM pipeline:} it replaces both the external knowledge base and the information retrieval modules with a pre-trained language model. In this case they used BERT as a pre-trained LM.
+\end{itemize}
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[scale=0.35]{img/tradition_and_zero_shot_lm.png}
+	\caption{Traditional fact-checking pipeline (left) vs. zero-shot LM-based pipeline (right) \cite{lee2020language}}
+\end{figure}
+
+To implement this end-to-end fact-checking model, they started by using an \textbf{Automatic Masking} in order to mask the last named entity in the claim. This last named entity is identified using an off-the-shelf Named-Entity-Recognition (NER) model from spaCy. This ensures that the masked token makes use of the \textit{knowledge} encoded in a LM, otherwise a problem like stop-words masking can occur.\\
+Next, they used \textbf{Verification by Entailment} in order to avoid naive matching predicted an gold tokens. This method leverages a textual entailment model from Al-lenNLP to validate the LM predictions.\\
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[scale=0.4]{img/LM_detailed_pipline.png}
+	\caption{Detailed illustration of our pipeline \cite{lee2020language}}
+\end{figure}
+
+\begin{enumerate}
+\item Masked the last named entity found by the NER model.
+\item Get the top-1 predicted token from the LM, and fill in the [MASK] accordingly to create the "evidence" sentence.
+\item Using the claim and generated "evidence" sentence, obtain entailment "features" using outputs from the last layer of the pre-trained entailment model (before the softmax).
+\item Input the entailment features into a multi-layer perceptron (MLP) for final fact-verification prediction.
+\end{enumerate}
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[scale=0.4]{img/bert_lm_evaluation.png}
+	\caption{Performance comparison between BERT-as-encoder models ($BERT_{freeze}$ , $BERT_{finetune}$ ) and BERT-as-LM model ($BERTasKB$). \cite{lee2020language}}
+\end{figure}
+
+As for evaluation, they used precision, recall, F1 and accuracy metrics in order to compare the zero-shot LM with other baseline models. We observe that the proposed approach ($BERTasKB$) outperforms $BERT_{freeze}$ on all metrics suggesting that querying language models in QA style is a better approach for extracting their encoded knowledge. Similarly, $BERTasKB$ model achieves an accuracy score of 49\% which is comparable to Fever-baseline at 48.8\%, except without the need for explicit document retrieval and evidence selection.
+
 
 \subsection{Styled based fake news detection \cite{przybyla2020capturing}}
 A study done by \textit{Piotr Przybyła} named \textit{Capturing the Style of Fake News} in 2020 from Institute of Computer Science, Polish Academy of Sciences, in order to detect fake news or in other words assess the credibility of an article by looking at the style of writing rather than the meaning of the words and sentences.\\
@@ -219,7 +261,7 @@ First of all they started by gathering a corpus of 103,219 documents from 223 on
 \begin{figure}[H]
 	\centering
 	\includegraphics[scale=0.4]{img/documents_in_topic.png}
-	\caption{From Piotr Przybyła paper - The largest 15 LDA (Latent Dirichlet Allocation) topics in the corpus, each shown with the six most signiﬁcant keywords, an identiﬁer and bars illustrating number of credible and non-credible documents associated with it}
+	\caption{The largest 15 LDA (Latent Dirichlet Allocation) topics in the corpus, each shown with the six most signiﬁcant keywords, an identiﬁer and bars illustrating number of credible and non-credible documents associated with it \cite{przybyla2020capturing}}
 \end{figure}
 
 \textbf{Stylometric classifier:} the architecture of this classifier is generally based on a collection of stylystic features followed by a linear modeling. The features are: 
@@ -246,7 +288,7 @@ The evaluation protocol consisted on running the model learning and prediction i
 \begin{figure}[H]
 	\centering
 	\includegraphics[scale=0.3]{img/styled_model_result.png}
-	\caption{From Piotr Przybyła paper - Classiﬁcation accuracy of our stylometric and neural classiﬁers compared to baselines in three evaluation scenarios, simulating, respectively, a new document from known sources and topics, a document from unknown topic and a document from unseen source}
+	\caption{Classiﬁcation accuracy of our stylometric and neural classiﬁers compared to baselines in three evaluation scenarios, simulating, respectively, a new document from known sources and topics, a document from unknown topic and a document from unseen source. \cite{przybyla2020capturing}}
 \end{figure}
 
 The obtained results shows that stylometric based classifier loses 10\% of the accuracy on unseen sources even if it has more consistent performance over evaluation scenarios. Piotr Przybyła explains this drop in accuracy by assuming that the model specialize in the style of individual sources rather than the general style of fake news. Nevertheless, he was able to prove that his model takes into account the affective words in order to classify fake news.
@@ -267,7 +309,7 @@ In this framework, the two representations are concatenated to create a super re
 \begin{figure}[H]
 	\centering
 	\includegraphics[scale=0.45]{img/deap_fake_framework.png}
-	\caption{From DEAP-FAKED paper - Illustration of the proposed DEAP-FAKED framework. The left sub-figure shows the entity encoder module. The right sub-figure shows the news encoder module. The top sub-figure is the Fake News classifier module. The bottom shows the tokenized news as the input to the entity encoder and news encoder.}
+	\caption{Illustration of the proposed DEAP-FAKED framework. The left sub-figure shows the entity encoder module. The right sub-figure shows the news encoder module. The top sub-figure is the Fake News classifier module. The bottom shows the tokenized news as the input to the entity encoder and news encoder. \cite{mayank2021deap}}
 \end{figure}
 
 The dataset used for \textit{DEAP-FAKED} framework can be described as following:
@@ -284,7 +326,7 @@ As for the evaluation procedure, they chose five baseline models for comparison 
 \begin{figure}[H]
 	\centering
 	\includegraphics[scale=0.4]{img/deap_faked_evaluation.png}
-	\caption{From DEAP-FAKED paper - Performance score of the models detailed in the paper is presented here. For each of the dataset, we report F1 macro and Accuracy metric values. We present average and standard deviation of the performance observed after performing 3 trials with different starting seed. For both the datasets, DEAP-FAKED reports the best performance value.}
+	\caption{Performance score of the models detailed in the paper is presented here. For each of the dataset, we report F1 macro and Accuracy metric values. We present average and standard deviation of the performance observed after performing 3 trials with different starting seed. For both the datasets, DEAP-FAKED reports the best performance value. \cite{mayank2021deap}}
 \end{figure}
 
 As evident by the results, \textit{DEAP-FAKED} reports the highest score on both of the datasets.
@@ -324,7 +366,7 @@ To evaluate the performance of fake news detection of the model they choose rand
 \begin{figure}[H]
 	\centering
 	\includegraphics[scale=0.4]{img/hierarchical_evaluation_results.png}
-	\caption{From the \textit{Hierarchical Propagation Networks for Fake News Detection: Investigation and Exploitation} paper - Evaluation of the model}
+	\caption{Evaluation of the model. \cite{shu2020hierarchical}}
 \end{figure}
 
 
@@ -334,7 +376,7 @@ In March 2021, \textit{Nayeon Lee}, \textit{Yejin Bang}, \textit{Andrea Madotto}
 \begin{figure}[H]
 	\centering
 	\includegraphics[scale=0.3]{img/perplexity_example.png}
-	\caption{From the \textit{Towards Few-Shot Fact-Checking via Perplexity} paper - Illustration of our simple yet effective perplexity-based approach. Few-shot data samples are used to find the optimal perplexity threshold th that separates Unsupported claims from Supported claims.}
+	\caption{Illustration of our simple yet effective perplexity-based approach. Few-shot data samples are used to find the optimal perplexity threshold th that separates Unsupported claims from Supported claims. \cite{lee2021towards}}
 \end{figure}
 
 \textit{Few-Shot Learning} refers to the technique of feeding a machine learning model with a very small amount of training data to guide its predictions, like a few examples at inference time, as opposed to standard fine-tuning techniques which require a relatively large amount of training data for the pre-trained model to adapt to the desired task with accuracy.\\
@@ -345,7 +387,7 @@ Perplexity is a commonly used metric for measuring the performance of LMs. It is
 \begin{figure}[H]
 	\centering
 	\includegraphics[scale=0.2]{img/perplexity_equation.png}
-	\caption{Perplexity score}
+	\caption{Perplexity score. \cite{lee2021towards}}
 \end{figure}
 
 Another way of interpreting perplexity is as a measure of the likelihood of a given test sentence with reference to the training corpus.\\
@@ -356,7 +398,7 @@ In this paper the goal is to determine the veracity of a claim given some eviden
 \begin{figure}[H]
 	\centering
 	\includegraphics[scale=0.43]{img/supported_unsupported_perplexity.png}
-	\caption{From the \textit{Towards Few-Shot Fact-Checking via Perplexity} paper - Relations between veracity of claim and perplexity. Unsupported claims have higher perplexity compared to Supported claims. Note that the perplexity score listed here is using GPT2-base on each of the claims.}
+	\caption{Relations between veracity of claim and perplexity. Unsupported claims have higher perplexity compared to Supported claims. Note that the perplexity score listed here is using GPT2-base on each of the claims. \cite{lee2021towards}}
 \end{figure}
 
 The datasets used in this experiment are:
@@ -383,7 +425,7 @@ They took into consideration the accuracy and the F1-Macro metrics for the evalu
 \begin{figure}[H]
 	\centering
 	\includegraphics[scale=0.43]{img/few_shots_perplexity_evaluation.png}
-	\caption{From the \textit{Towards Few-Shot Fact-Checking via Perplexity} paper - Results comparison among perplexity-based classifiers and fine-tuned classifiers in 2-shot, 5-shot and 10-shot settings across three different tasks. Models whose names start with PPL are our proposed perplexity-based classifiers. Major Class is a reference to evaluate classifier performance. All test results reported are mean values of three trials with randomly selected n-shot training samples from the dataset, where $n={2, 10, 50}$.}
+	\caption{Results comparison among perplexity-based classifiers and fine-tuned classifiers in 2-shot, 5-shot and 10-shot settings across three different tasks. Models whose names start with PPL are our proposed perplexity-based classifiers. Major Class is a reference to evaluate classifier performance. All test results reported are mean values of three trials with randomly selected n-shot training samples from the dataset, where $n={2, 10, 50}$. \cite{lee2021towards}}
 \end{figure}
 
 We can observe that the perplexity-based classifiers, especially $PPL_{GPT2-B}$, outperform all Major Class baselines across all
