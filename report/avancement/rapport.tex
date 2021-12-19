@@ -93,7 +93,7 @@
 	\end{titlepage}
 
 \chapter*{Abstract}
-As false information and fake news are propagating though out the internet and social networks, the need of fact-checking operations becomes necessary in order to maintain a truthful digital environment where general information can be reliably exploited whether in politics, finance and other domains. The need of this online claim assessment comes from the fact that fake news and false information can have a big negative impact on politics, economy (2016 USA Elections) and public health (COVID-19).\\ 
+As false information and fake news are propagating throughout the internet and social networks, the need of fact-checking operations becomes necessary in order to maintain a truthful digital environment where general information can be reliably exploited whether in politics, finance and other domains. The need of this online claim assessment comes from the fact that fake news and false information can have a big negative impact on politics, economy (2016 USA Elections) and public health (COVID-19).\\ 
 A number of solutions have been proposed to deal with this problem and limit the spread of false information, both manual and automatic. Of course the manual approaches done on websites such as \textit{PolitiFact.com}, \textit{FactCheck.org} and \textit{Snopes.com} don't construct a viable solution for the long term as the speed and scale of information propagation increase exponentially rendering this manual fact-checking operation where human fact-checkers can't scale up at the same rate limited and incapable of solving the problem.\\
 Here, we present our contribution in this regard: an automated solution for fact-checking using Wikipedia's articles for claim verification. The algorithm uses NLP techniques \cite{lazarski2021using} in order to extract the so-called claim from the user input, then, using Wikipedia's API, it retrieves all the relevant articles and assesses with a degree of confidence if the claim is true, false or unable to decide due to lack of information showing evidence (sentences in articles) and probabilities for each resulted case.\\[1cm]
 
@@ -125,7 +125,7 @@ In this project we will focus on the method of \textbf{Knowledge-based Fake News
 \section{Use case scenario}
 Suppose that while browsing the internet or talking to people you come across a claim that says \textit{"The former U.S president John F. Kennedy died in September 22, 1963"}, as it is a general truth and not a relative truth it should be easier to verify the validity of this claim as well as find evidence that proves it.\\
 Using the platform we will create, you can simply write the claim you like to verify with no regards to a specific linguistic rule, the model will extract relevant articles from Wikipedia using an API, then it retrieves sentences relative to your claim and apply a comparison in order to assess if the claim is True, False, or Not Enough Information as well as giving a percentage of confidence and evidence of the results that were processed straight from Wikipedia's database.\\
-Combing back to our example, the model should return that \textit{"John F. Kennedy died in November 22, 1963"} so the input claim is false.
+Coming back to our example, the model should return that \textit{"John F. Kennedy died in November 22, 1963"} so the input claim is false.
 
 \begin{figure}[H]
 	\centering
@@ -133,7 +133,7 @@ Combing back to our example, the model should return that \textit{"John F. Kenne
 	\caption{General Model Processing Pipeline}
 \end{figure}
 
-Note: this is a first draft architecture of the model to be studied, many changes will be implemented across multiple levels during the experimental procedure.
+\textbf{Note:} this is a first draft architecture of the model to be studied, many changes will be implemented across multiple levels during the experimental procedure.
 
 \chapter{Potential Datasets}
 The rise of fake news in the internet created the need of setting-up databases that contains as much claims as possible checked and approved manually by journalists and fact-checkers worldwide in order to be used as a dataset for experiments in automatic fact-checking models or just simply to be a reference to other journalists and the general public.
@@ -207,7 +207,7 @@ These can be regarded as main challenges of our Fact-Checking project, but, evid
 
 
 \section{Related work and solutions}
-\subsection{Language model based fake news detection \cite{lee2020language}}
+\subsection{Language model based fake news detection \cite{lee2020language} \cite{petroni2019language}}
 In a paper called \textit{Language Models as Fact Checkers?} done by a team from \textit{Facebook AI} and \textit{Hong Kong University of Science and Technology}, it provides an example of a fact-checking model using zero-shot LM that outperforms a random baseline LM using the FEVER dataset.\\
 
 The goal of fact-checking as mentioned previously, and relatively to this paper, is to validate the truthfulness of a given claim. Each claim is assigned to one of these labels: support, refute, or not enough information (NEI) to verify.\\
@@ -292,7 +292,7 @@ The evaluation protocol consisted on running the model learning and prediction i
 \end{figure}
 
 The obtained results shows that stylometric based classifier loses 10\% of the accuracy on unseen sources even if it has more consistent performance over evaluation scenarios. Piotr Przybyła explains this drop in accuracy by assuming that the model specialize in the style of individual sources rather than the general style of fake news. Nevertheless, he was able to prove that his model takes into account the affective words in order to classify fake news.
-\subsection{Knowledge graph based fake news detection \cite{mayank2021deap}}
+\subsection{Knowledge graph based fake news detection \cite{mayank2021deap} \cite{gad2019tracy}}
 Studying the \textit{"DEAP-FAKED"} paper published in 2021 by \textit{Mohit Mayank}, \textit{Shakshi Sharma} and \textit{Rajesh Sharma}, it turned out that by exploiting techniques related to network analysis, Natural Language Processing (NLP) and the implementation of Graph Neural Networks (GNNs) we can detect fake news with an F1 score of 88\%.\\
 
 The \textit{"DEAP-FAKED"} consists of three individual components:
@@ -332,7 +332,7 @@ As for the evaluation procedure, they chose five baseline models for comparison 
 As evident by the results, \textit{DEAP-FAKED} reports the highest score on both of the datasets.
 
 
-\subsection{Hierarchical Propagation based fake news detection \cite{shu2020hierarchical}}
+\subsection{Hierarchical Propagation based fake news detection \cite{shu2020hierarchical} \cite{castillo2011information}}
 In a paper wrote by \textit{Kai Shu}, \textit{Deepak Mahudeswaran}, \textit{Suhang Wang}, and \textit{Huan Liu} with the name of \textit{Hierarchical Propagation Networks for Fake News Detection: Investigation and Exploitation}, the detection of fake news can be done by looking at the correlation between news and the hierarchical characteristics of a social network.\\
 
 The datasets used for this study were the public fake news repository \textit{FakeNewsNet} \cite{shu2018fakenewsnet} that contains data related to different fact-checking websites that offers news content, social context and dynamic information. In addition, they used the data from fact-checking websites \textit{GossipCop} and \textit{PolitiFact} that contains news articles with labels annotated by professional journalists. News content includes meta attributes of the news like body text, he social context includes the related user interactions with the news like posting, sharing, commenting on Twitter, and dynamic information contains the timestamps of user's interactions.\\
@@ -370,7 +370,7 @@ To evaluate the performance of fake news detection of the model they choose rand
 \end{figure}
 
 
-\subsection{Perplexity based fake news detection \cite{lee2021towards}}
+\subsection{Perplexity based fake news detection \cite{lee2021towards} \cite{lee2020misinformation}}
 In March 2021, \textit{Nayeon Lee}, \textit{Yejin Bang}, \textit{Andrea Madotto}, \textit{Madian Khabsa}, and \textit{Pascale Fung} published a paper called \textit{Towards Few-Shot Fact-Checking via Perplexity} where they propose a new approach of the powerful transfer learning ability of a language model via a perplexity score. Using a method called \textit{few-shot learning}, they built a model that outperforms major class baseline models by more than 10\% on the F1-Macro metric score.\\
 
 \begin{figure}[H]
@@ -432,15 +432,20 @@ We can observe that the perplexity-based classifiers, especially $PPL_{GPT2-B}$,
 tasks in all settings. For instance, $PPL_{GPT2-B}$ outperforms the Major Class by a great margin of
 16\% and 36.8\% on accuracy and F1-Macro scores. Evidence conditioned perplexity scores are capable of providing signals regarding the veracity of the the given claim.
 
-\subsection{Other approaches}
-
-
+%\subsection{Other approaches}
+%The interest of researches and social media companies in this area rises everyday, and other experiments and solutions were proposed such as:
+%
+%\begin{itemize}
+%\item Fact verification using a large scale table \citep{chen2019tabfact}, where a large-scale dataset was constructed called \textit{TabFact} with 16k Wikipedia tables as the evidence for 118k human-annotated natural language statements, which are labeled as either ENTAILED or REFUTED. Then using the pre-trained language model BERT, called Table-BERT, to encode the linearized tables and statements into continuous vectors for verification achieving 68.1\% in accuracy metric.
+%\item Web based fact verification, where 
+%\end{itemize}
 
 
 \chapter{Conclusion}
+All the articles and studies exploited in this literature research are fairly recent, which proves that fake news detection or fact-checking is one of the most urgent problems to deal with today in every society. As fake news about Covid-19 vaccines rocket through the roof in social media, the World Health Organization (WHO) said in a public tweet: We’re not just fighting a pandemic;
+we’re fighting an infodemic.\\
 
-
-\chapter{Perspectives}
+Other companies like \textit{Facebook} are \textit{Twitter} are currently trying to make progress in fake news detection algorithms. We hope that during this project we can provide a new approach dealing with fake news propagation and contribute positively in this area.
 
 
 \bibliographystyle{abbrv}
