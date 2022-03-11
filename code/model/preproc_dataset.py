@@ -60,7 +60,7 @@ class FeverDataset:
         df.loc[X_val, 'data_type'] = 'val'
 
         cnt = df.groupby(['label', 'data_type']).count()
-        print(cnt)
+        # print(cnt)
 
         return df
 
