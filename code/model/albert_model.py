@@ -22,7 +22,7 @@ transformers_logger.setLevel(logging.ERROR)
 # Preparing train data and eval data
 fever = preproc_dataset.FeverDataset()
 df = fever.claim_dataset
-df = df.sample(50)
+df = df.sample(60)
 # print(df.describe())
 # exit()
 
@@ -37,8 +37,8 @@ eval_df.columns = ["text", "labels"]
 
 # Optional model configuration
 model_args = ClassificationArgs()
-model_args.output_dir = 'outputs/bert_base_uncased'
-model_args.num_train_epochs = 1
+model_args.output_dir = 'outputs/albert_base_v2'
+model_args.num_train_epochs = 7
 # model_args.train_batch_size = 500
 # model_args.optimizer = 'AdamW'
 # model_args.learning_rate = 1e-3
@@ -57,8 +57,8 @@ cuda_available = torch.cuda.is_available()
 print('GPU available : ', cuda_available)
 
 model = ClassificationModel(
-    'bert',
-    'bert-base-uncased',
+    'albert',
+    'albert-base-v2',
     num_labels=3,
     args=model_args,
     use_cuda=cuda_available
