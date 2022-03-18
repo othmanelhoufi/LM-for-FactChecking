@@ -1,12 +1,12 @@
 #!/usr/bin/env python3
 import numpy as np
-import pandas as pd
 from sklearn.model_selection import train_test_split
 from sklearn.metrics import accuracy_score, recall_score, precision_score, f1_score
 import torch
 from transformers import TrainingArguments, Trainer
 from transformers import BertTokenizer, BertForSequenceClassification
 from transformers import EarlyStoppingCallback
+from transformers.utils import logging
 from sklearn.metrics import classification_report
 
 
@@ -16,24 +16,34 @@ import preproc_dataset
 import os
 os.environ['WANDB_DISABLED'] = 'true'
 
+# Set the logging level to error, meaning display errors and worse, but
+# don't display any `INFO` logs.
+# logging.getLogger("transformers").setLevel(logging.ERROR)
+# logging.getLogger("transformers.utils.logging.enable_progress_bar").setLevel(logging.ERROR)
+
 # specify GPU
-# device = torch.device("cuda")
+torch.cuda.empty_cache()
 device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
+print('USING DEVICE:', device)
+#Additional Info when using cuda
+if device.type == 'cuda':
+    print(torch.cuda.get_device_name(0))
+    print('Memory Usage:')
+    print('Allocated:', round(torch.cuda.memory_allocated(0)/1024**3,1), 'GB')
+    print('Cached:   ', round(torch.cuda.memory_reserved(0)/1024**3,1), 'GB')
 
 # Transformer model
 MODEL_NAME = 'bert-base-uncased'
 
 # hyperparams
 MAX_SEQ_LEN = 128
-BATCH_SIZE = 50
+TRAIN_BATCH_SIZE = 20
+EVAL_BATCH_SIZE = 20
 LR = 3e-5
-EPOCHS = 10
-
-# FEVER dataset
-fever = preproc_dataset.FeverDataset()
-DATASET = fever.claim_dataset
-DATASET.columns = ["text", "label"]
-# DATASET = DATASET.sample(150)
+EPOCHS = 3
+SAVE_STEPS = 4362
+EVAL_STEPS = 4362
+EARLY_STOPPING_PATIENCE = 3
 
 
 # Create torch dataset
@@ -52,13 +62,12 @@ class Dataset(torch.utils.data.Dataset):
         return len(self.encodings["input_ids"])
 
 
-# Preparing train data and eval data
-def split_dataset(dataset=DATASET):
+# Splitting text and label columns
+def split_dataset(dataset):
     # Preprocess data
     X = list(dataset['text'])
     y = list(dataset['label'])
-    X_train, X_val, y_train, y_val = train_test_split(X, y, test_size=0.3)
-    return X_train, y_train, X_val, y_val
+    return X, y
 
 
 # Import BERT Model and BERT Tokenizer
@@ -74,14 +83,17 @@ def init_bert_model(model_name=MODEL_NAME):
 
 
 # Tokenization
-def init_tokens(X_train, X_val, max_seq_len=MAX_SEQ_LEN):
+def init_tokens(X_train, X_val, X_test, tokenizer, max_seq_len=MAX_SEQ_LEN):
     # tokenize and encode sequences in the training set
     tokens_train = tokenizer(X_train, padding=True, truncation=True, max_length=max_seq_len)
 
     # tokenize and encode sequences in the validation set
     tokens_val = tokenizer(X_val, padding=True, truncation=True, max_length=max_seq_len)
 
-    return tokens_train, tokens_val
+    # tokenize and encode sequences in the test set
+    tokens_test = tokenizer(X_test, padding=True, truncation=True, max_length=max_seq_len)
+
+    return tokens_train, tokens_val, tokens_test
 
 
 # Define Trainer parameters
@@ -106,49 +118,109 @@ def compute_metrics(p):
             "f1_micro": f1_micro, "f1_macro": f1_macro, "f1_weighted": f1_weighted}
 
 
-if __name__ == '__main__':
+def ask_user():
+    print("\n1 - Show dataset description",
+          "\n2 - Start model fine-tuning",
+          "\n3 - Start model predictions",
+          "\n4 - Delete pre-fine-tuned model",
+          "\n5 - Show learning loss and accuracy",
+          "\n6 - Show model metrics",
+          "\n7 - Quit program")
+    answer = input()
+    return int(answer)
 
-    train_text, train_labels, val_text, val_labels = split_dataset(DATASET)
+def start():
+    logging.set_verbosity(40)
+    # logging.enable_progress_bar()
+
+    print("\n**************** ", MODEL_NAME , "Model ****************\n")
+
+    # FEVER dataset
+    fever = preproc_dataset.FeverDataset()
+    train_dataset = fever.get_train_dataset()
+    val_dataset = fever.get_val_dataset()
+    test_dataset = fever.get_test_dataset()
+
     bert, tokenizer = init_bert_model(MODEL_NAME)
-    tokens_train, tokens_val = init_tokens(train_text, val_text, MAX_SEQ_LEN)
+    train_text, train_labels = split_dataset(train_dataset)
+    val_text, val_labels = split_dataset(val_dataset)
+    test_text, test_labels = split_dataset(test_dataset)
 
-    train_dataset = Dataset(tokens_train, train_labels)
-    val_dataset = Dataset(tokens_val, val_labels)
+    tokens_train, tokens_val, tokens_test = init_tokens(train_text, val_text, test_text, tokenizer, MAX_SEQ_LEN)
+
+    y_pred = []
+
+    answer = -1
+    while answer != 7 :
+
+        answer = ask_user()
+        print("\n")
+
+        if(answer == 1):
+            fever.get_describtion()
+            fever.print_data_example()
+        elif(answer == 2):
+            print("STARTING LEARNING ...\n")
+
+            train_dataset_torch = Dataset(tokens_train, train_labels)
+            val_dataset_torch = Dataset(tokens_val, val_labels)
+
+            # Define Trainer
+            args = TrainingArguments(
+                output_dir="outputs/" + MODEL_NAME,
+                overwrite_output_dir=True,
+                evaluation_strategy="steps",
+                save_steps=SAVE_STEPS,
+                eval_steps=EVAL_STEPS,
+                per_device_train_batch_size=TRAIN_BATCH_SIZE,
+                per_device_eval_batch_size=EVAL_BATCH_SIZE,
+                num_train_epochs=EPOCHS,
+                seed=0,
+                load_best_model_at_end=True,
+            )
+
+            trainer = Trainer(
+                model=bert,
+                args=args,
+                train_dataset=train_dataset_torch,
+                eval_dataset=val_dataset_torch,
+                compute_metrics=compute_metrics,
+                callbacks=[EarlyStoppingCallback(early_stopping_patience=EARLY_STOPPING_PATIENCE)],
+            )
+
+            # Train pre-trained model
+            trainer.train()
+
+        elif(answer == 3):
+            print("STARTING PREDICTIONS ...\n")
+            checkpoint_num = input("Enter checkpoint number: ")
+            test_dataset_torch = Dataset(tokens_test, test_labels)
+            # Load trained model
+            model_path = "outputs/" + MODEL_NAME + "/checkpoint-" + checkpoint_num
+            bert = BertForSequenceClassification.from_pretrained(model_path, num_labels=3)
+            # Define test trainer
+            test_trainer = Trainer(bert)
+            # Make prediction
+            raw_pred, _, _ = test_trainer.predict(test_dataset_torch)
+            # Preprocess raw predictions
+            y_pred = np.argmax(raw_pred, axis=1)
+
+        elif(answer == 4):
+            print("FINE TUNED MODEL DELETED ...\n")
+        elif(answer == 5):
+            print("LEARNING LOSS & ACCURACY ...\n")
+        elif(answer == 6):
+            print("MODEL METRICS ...\n")
+            labels = {'REFUTES':0, 'SUPPORTS':1, 'NOT ENOUGH INFO':2}
+
+            if len(y_pred) > 0:
+                print(classification_report(test_labels, y_pred, target_names=labels))
+            else:
+                printprint("START PREDICTIONS FIRST !!\n")
+
+        elif(answer == 7):
+            print("GOODBYE ...")
 
 
-    # Define Trainer
-    args = TrainingArguments(
-        output_dir="outputs/" + MODEL_NAME,
-        evaluation_strategy="steps",
-        eval_steps=500,
-        per_device_train_batch_size=8,
-        per_device_eval_batch_size=8,
-        num_train_epochs=3,
-        seed=0,
-        load_best_model_at_end=True,
-    )
-
-    trainer = Trainer(
-        model=bert,
-        args=args,
-        train_dataset=train_dataset,
-        eval_dataset=val_dataset,
-        compute_metrics=compute_metrics,
-        callbacks=[EarlyStoppingCallback(early_stopping_patience=3)],
-    )
-
-    # Train pre-trained model
-    # trainer.train()
-
-    # Load trained model
-    model_path = "outputs/checkpoint-12000"
-    bert = BertForSequenceClassification.from_pretrained(model_path, num_labels=3)
-    # Define test trainer
-    test_trainer = Trainer(bert)
-    # Make prediction
-    raw_pred, _, _ = test_trainer.predict(val_dataset)
-    # Preprocess raw predictions
-    y_pred = np.argmax(raw_pred, axis=1)
-
-    labels = {'REFUTES':0, 'SUPPORTS':1, 'NOT ENOUGH INFO':2}
-    print(classification_report(val_labels, y_pred, target_names=labels))
+if __name__ == '__main__':
+    start()
