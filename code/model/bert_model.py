@@ -13,7 +13,6 @@ from sklearn.metrics import classification_report, confusion_matrix
 import preproc_dataset
 
 import wandb
-wandb.init(project="NLP for fact-checking using FEVER dataset", entity="othmanelhoufi")
 
 # specify GPU
 torch.cuda.empty_cache()
@@ -42,6 +41,9 @@ SAVE_STRATEGY = 'epoch'
 SAVE_TOTAL_LIMIT = 3
 EARLY_STOPPING_PATIENCE = 3
 REPORT="wandb"
+
+# init wandb
+wandb.init(project="NLP-for-fact-checking-using-FEVER-dataset", name=MODEL_NAME + '-b' + str(TRAIN_BATCH_SIZE), entity="othmanelhoufi")
 
 # Create torch dataset
 class Dataset(torch.utils.data.Dataset):
@@ -116,7 +118,7 @@ def ask_user():
     return int(answer)
 
 def start():
-    logging.set_verbosity(40)
+    # logging.set_verbosity(40)
     # logging.enable_progress_bar()
 
     print("\n**************** ", MODEL_NAME , "Model ****************\n")
@@ -137,7 +139,7 @@ def start():
     y_pred = []
 
     answer = -1
-    while answer != 7 :
+    while answer != 5 :
 
         answer = ask_user()
         print("\n")
@@ -167,7 +169,7 @@ def start():
                 optim=OPTIM,
                 seed=0,
                 report_to=REPORT,
-                run_name = MODEL_NAME + '-b' + TRAIN_BATCH_SIZE,
+                run_name = MODEL_NAME + '-b' + str(TRAIN_BATCH_SIZE),
                 load_best_model_at_end=False,
             )
 
@@ -182,7 +184,6 @@ def start():
 
             # Train pre-trained model
             trainer.train()
-            wandb.finish()
 
         elif(answer == 3):
             print("STARTING PREDICTIONS ...\n")
@@ -208,10 +209,13 @@ def start():
 
             if len(y_pred) > 0:
                 print(classification_report(test_labels, y_pred, target_names=labels))
+                # Confusion Matrices
+                wandb.sklearn.plot_confusion_matrix(test_labels, y_pred, ['REFUTES', 'SUPPORTS', 'NEI'])
             else:
                 print("START PREDICTIONS FIRST !!\n")
 
         elif(answer == 5):
+            wandb.finish()
             print("GOODBYE ...")
 
 
