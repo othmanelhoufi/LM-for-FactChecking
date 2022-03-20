@@ -4,7 +4,7 @@ from sklearn.model_selection import train_test_split
 from sklearn.metrics import accuracy_score, recall_score, precision_score, f1_score, matthews_corrcoef
 import torch
 from transformers import TrainingArguments, Trainer
-from transformers import DistilBertTokenizer, DistilBertForSequenceClassification
+from transformers import RobertaTokenizer, RobertaForSequenceClassification
 from transformers import EarlyStoppingCallback
 from transformers.utils import logging
 from sklearn.metrics import classification_report, confusion_matrix
@@ -27,7 +27,7 @@ if device.type == 'cuda':
     print('Cached:   ', round(torch.cuda.memory_reserved(0)/1024**3,1), 'GB')
 
 # Transformer model
-MODEL_NAME = 'distilbert-base-uncased'
+MODEL_NAME = 'roberta-base'
 
 # hyperparams
 MAX_SEQ_LEN = 128
@@ -70,10 +70,10 @@ def split_dataset(dataset):
 # Import Model and Tokenizer
 def init_model(model_name=MODEL_NAME):
     # import pretrained model
-    model = DistilBertForSequenceClassification.from_pretrained(MODEL_NAME, num_labels=3)
+    model = RobertaForSequenceClassification.from_pretrained(MODEL_NAME, num_labels=3)
 
     # Load the tokenizer
-    tokenizer = DistilBertTokenizer.from_pretrained(model_name)
+    tokenizer = RobertaTokenizer.from_pretrained(model_name)
 
     return model, tokenizer
 
@@ -190,7 +190,7 @@ def start():
             test_dataset_torch = Dataset(tokens_test, test_labels)
             # Load trained model
             model_path = "outputs/" + MODEL_NAME + "/checkpoint-" + checkpoint_num
-            model = DistilBertForSequenceClassification.from_pretrained(model_path, num_labels=3)
+            model = RobertaForSequenceClassification.from_pretrained(model_path, num_labels=3)
             # Define test trainer
             test_trainer = Trainer(model)
             # Make prediction

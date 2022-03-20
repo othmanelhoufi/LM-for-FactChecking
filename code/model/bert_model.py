@@ -1,25 +1,19 @@
 #!/usr/bin/env python3
 import numpy as np
 from sklearn.model_selection import train_test_split
-from sklearn.metrics import accuracy_score, recall_score, precision_score, f1_score
+from sklearn.metrics import accuracy_score, recall_score, precision_score, f1_score, matthews_corrcoef
 import torch
 from transformers import TrainingArguments, Trainer
 from transformers import BertTokenizer, BertForSequenceClassification
 from transformers import EarlyStoppingCallback
 from transformers.utils import logging
-from sklearn.metrics import classification_report
+from sklearn.metrics import classification_report, confusion_matrix
 
 
 import preproc_dataset
 
-# disable WANDB
-# import os
-# os.environ['WANDB_DISABLED'] = 'true'
-
-# Set the logging level to error, meaning display errors and worse, but
-# don't display any `INFO` logs.
-# logging.getLogger("transformers").setLevel(logging.ERROR)
-# logging.getLogger("transformers.utils.logging.enable_progress_bar").setLevel(logging.ERROR)
+import wandb
+wandb.init(project="NLP for fact-checking using FEVER dataset", entity="othmanelhoufi")
 
 # specify GPU
 torch.cuda.empty_cache()
@@ -40,14 +34,14 @@ MAX_SEQ_LEN = 128
 TRAIN_BATCH_SIZE = 20
 EVAL_BATCH_SIZE = 20
 EPOCHS = 3
-LR = 6e-5
+LR = 3e-5
 OPTIM = 'adamw_hf'
 SAVE_STEPS = 4362
 EVAL_STEPS = 500
 SAVE_STRATEGY = 'epoch'
 SAVE_TOTAL_LIMIT = 3
 EARLY_STOPPING_PATIENCE = 3
-
+REPORT="wandb"
 
 # Create torch dataset
 class Dataset(torch.utils.data.Dataset):
@@ -105,30 +99,19 @@ def compute_metrics(p):
     pred = np.argmax(pred, axis=1)
 
     accuracy = accuracy_score(y_true=labels, y_pred=pred)
-    # recall_micro = recall_score(y_true=labels, y_pred=pred, average='micro')
-    # recall_macro = recall_score(y_true=labels, y_pred=pred, average='macro')
-    # recall_weighted = recall_score(y_true=labels, y_pred=pred, average='weighted')
-    # precision_micro = precision_score(y_true=labels, y_pred=pred, average='micro')
-    # precision_macro = precision_score(y_true=labels, y_pred=pred, average='macro')
-    # precision_weighted = precision_score(y_true=labels, y_pred=pred, average='weighted')
-    # f1_micro = f1_score(y_true=labels, y_pred=pred, average='micro')
-    # f1_macro = f1_score(y_true=labels, y_pred=pred, average='macro')
-    # f1_weighted = f1_score(y_true=labels, y_pred=pred, average='weighted')
+    mcc = matthews_corrcoef(y_true=labels, y_pred=pred)
 
-    return {"accuracy": accuracy}
-            # "precision_micro": precision_micro, "precision_macro": precision_macro, "precision_weighted": precision_weighted,
-            # "recall_micro": recall_micro, "recall_macro": recall_macro, "recall_weighted": recall_weighted,
-            # "f1_micro": f1_micro, "f1_macro": f1_macro, "f1_weighted": f1_weighted}
+    return {"accuracy": accuracy, "mcc": mcc}
 
 
 def ask_user():
     print("\n1 - Show dataset description",
           "\n2 - Start model fine-tuning",
           "\n3 - Start model predictions",
-          "\n4 - Delete pre-fine-tuned model",
-          "\n5 - Show learning loss and accuracy",
-          "\n6 - Show model metrics",
-          "\n7 - Quit program")
+          # "\n4 - Delete pre-fine-tuned model",
+          # "\n5 - Show learning loss and accuracy",
+          "\n4 - Show model metrics",
+          "\n5 - Quit program")
     answer = input()
     return int(answer)
 
@@ -183,7 +166,8 @@ def start():
                 learning_rate=LR,
                 optim=OPTIM,
                 seed=0,
-                report_to="none",
+                report_to=REPORT,
+                run_name = MODEL_NAME + '-b' + TRAIN_BATCH_SIZE,
                 load_best_model_at_end=False,
             )
 
@@ -198,6 +182,7 @@ def start():
 
             # Train pre-trained model
             trainer.train()
+            wandb.finish()
 
         elif(answer == 3):
             print("STARTING PREDICTIONS ...\n")
@@ -213,11 +198,11 @@ def start():
             # Preprocess raw predictions
             y_pred = np.argmax(raw_pred, axis=1)
 
+        # elif(answer == 4):
+        #     print("FINE TUNED MODEL DELETED ...\n")
+        # elif(answer == 5):
+        #     print("LEARNING LOSS & ACCURACY ...\n")
         elif(answer == 4):
-            print("FINE TUNED MODEL DELETED ...\n")
-        elif(answer == 5):
-            print("LEARNING LOSS & ACCURACY ...\n")
-        elif(answer == 6):
             print("MODEL METRICS ...\n")
             labels = {'REFUTES':0, 'SUPPORTS':1, 'NOT ENOUGH INFO':2}
 
@@ -226,7 +211,7 @@ def start():
             else:
                 print("START PREDICTIONS FIRST !!\n")
 
-        elif(answer == 7):
+        elif(answer == 5):
             print("GOODBYE ...")
 
 
