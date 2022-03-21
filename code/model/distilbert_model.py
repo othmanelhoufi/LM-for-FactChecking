@@ -40,10 +40,11 @@ EVAL_STEPS = 500
 SAVE_STRATEGY = 'epoch'
 SAVE_TOTAL_LIMIT = 3
 EARLY_STOPPING_PATIENCE = 3
-REPORT="wandb"
+REPORT="none"
 
-# init wandb
-wandb.init(project="NLP-for-fact-checking-using-FEVER-dataset", name=MODEL_NAME + '-b' + str(TRAIN_BATCH_SIZE), entity="othmanelhoufi")
+if REPORT == "wandb":
+    # init wandb
+    wandb.init(project="NLP-for-fact-checking-using-FEVER-dataset", name=MODEL_NAME + '-b' + str(TRAIN_BATCH_SIZE), entity="othmanelhoufi")
 
 
 # Create torch dataset
@@ -209,14 +210,15 @@ def start():
             labels = {'REFUTES':0, 'SUPPORTS':1, 'NOT ENOUGH INFO':2}
 
             if len(y_pred) > 0:
-                print(classification_report(test_labels, y_pred, target_names=labels))
+                print(classification_report(test_labels, y_pred, target_names=labels, digits=4))
                 # Confusion Matrices
-                wandb.sklearn.plot_confusion_matrix(test_labels, y_pred, ['REFUTES', 'SUPPORTS', 'NEI'])
+                if REPORT == "wandb":
+                    wandb.sklearn.plot_confusion_matrix(test_labels, y_pred, ['REFUTES', 'SUPPORTS', 'NEI'])
             else:
                 print("START PREDICTIONS FIRST !!\n")
 
         elif(answer == 5):
-            wandb.finish()
+            if REPORT == "wandb": wandb.finish()
             print("GOODBYE ...")
 
 

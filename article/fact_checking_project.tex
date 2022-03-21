@@ -1,817 +1,133 @@
-\documentclass[conference,compsoc]{IEEEtran}
-% *** MISC UTILITY PACKAGES ***
-%
-%\usepackage[latin1]{inputenc} %Codificacion iso-8889-1
-% \usepackage[table,xcdraw]{xcolor}
-% If you use beamer only pass "xcolor=table" option, i.e. \documentclass[xcolor=table]{beamer}
-%\usepackage{ifpdf}
-% Heiko Oberdiek's ifpdf.sty is very useful if you need conditional
-% compilation based on whether the output is pdf or dvi.
-% usage:
-% \ifpdf
-%   % pdf code
-% \else
-%   % dvi code
-% \fi
-% The latest version of ifpdf.sty can be obtained from:
-% http://www.ctan.org/tex-archive/macros/latex/contrib/oberdiek/
-% Also, note that IEEEtran.cls V1.7 and later provides a builtin
-% \ifCLASSINFOpdf conditional that works the same way.
-% When switching from latex to pdflatex and vice-versa, the compiler may
-% have to be run twice to clear warning/error messages.
-
-\usepackage{float}
-
-
-
-
-% *** CITATION PACKAGES ***
-%
-\ifCLASSOPTIONcompsoc
-  % IEEE Computer Society needs nocompress option
-  % requires cite.sty v4.0 or later (November 2003)
-  \usepackage[nocompress]{cite}
-\else
-  % normal IEEE
-  \usepackage{cite}
-\fi
-
-% *** GRAPHICS RELATED PACKAGES ***
-%
-\ifCLASSINFOpdf
-   \usepackage[pdftex]{graphicx}
-  % declare the path(s) where your graphic files are
-   \graphicspath{{images/}}
-  % and their extensions so you won't have to specify these with
-  % every instance of \includegraphics
-   %\DeclareGraphicsExtensions{.pdf,.jpeg,.png}
-\else
-  % or other class option (dvipsone, dvipdf, if not using dvips). graphicx
-  % will default to the driver specified in the system graphics.cfg if no
-  % driver is specified.
-  \usepackage[dvips]{graphicx}
-  % declare the path(s) where your graphic files are 
-  \graphicspath{{images/}}
-  % and their extensions so you won't have to specify these with
-  % every instance of \includegraphics
-  % \DeclareGraphicsExtensions{.eps}
-\fi
-% graphicx was written by David Carlisle and Sebastian Rahtz. It is
-% required if you want graphics, photos, etc. graphicx.sty is already
-% installed on most LaTeX systems. The latest version and documentation
-% can be obtained at: 
-% http://www.ctan.org/tex-archive/macros/latex/required/graphics/
-% Another good source of documentation is "Using Imported Graphics in
-% LaTeX2e" by Keith Reckdahl which can be found at:
-% http://www.ctan.org/tex-archive/info/epslatex/
-%
-% latex, and pdflatex in dvi mode, support graphics in encapsulated
-% postscript (.eps) format. pdflatex in pdf mode supports graphics
-% in .pdf, .jpeg, .png and .mps (metapost) formats. Users should ensure
-% that all non-photo figures use a vector format (.eps, .pdf, .mps) and
-% not a bitmapped formats (.jpeg, .png). IEEE frowns on bitmapped formats
-% which can result in "jaggedy"/blurry rendering of lines and letters as
-% well as large increases in file sizes.
-%
-% You can find documentation about the pdfTeX application at:
-% http://www.tug.org/applications/pdftex
-
-
-
-
-
-% *** MATH PACKAGES ***
-%
-\usepackage[cmex10]{amsmath}
-\usepackage{listings}
-\usepackage{color}
- 
-\definecolor{codegreen}{rgb}{0,0.6,0}
-\definecolor{codegray}{rgb}{0.5,0.5,0.5}
-\definecolor{codepurple}{rgb}{0.58,0,0.82}
-\definecolor{backcolour}{rgb}{0.95,0.95,0.92}
- 
-\lstdefinestyle{mystyle}{
-    backgroundcolor=\color{backcolour},   
-    commentstyle=\color{codegreen},
-    keywordstyle=\color{magenta},
-    numberstyle=\tiny\color{codegray},
-    stringstyle=\color{codepurple},
-    basicstyle=\footnotesize,
-    breakatwhitespace=false,         
-    breaklines=true,                 
-    captionpos=b,                    
-    keepspaces=true,                 
-    numbers=left,                    
-    numbersep=5pt,                  
-    showspaces=false,                
-    showstringspaces=false,
-    showtabs=false,
-    tabsize=2
-}
- 
-\lstset{style=mystyle}
- 
-
-% A popular package from the American Mathematical Society that provides
-% many useful and powerful commands for dealing with mathematics. If using
-% it, be sure to load this package with the cmex10 option to ensure that
-% only type 1 fonts will utilized at all point sizes. Without this option,
-% it is possible that some math symbols, particularly those within
-% footnotes, will be rendered in bitmap form which will result in a
-% document that can not be IEEE Xplore compliant!
-%
-% Also, note that the amsmath package sets \interdisplaylinepenalty to 10000
-% thus preventing page breaks from occurring within multiline equations. Use:
-%\interdisplaylinepenalty=2500
-% after loading amsmath to restore such page breaks as IEEEtran.cls normally
-% does. amsmath.sty is already installed on most LaTeX systems. The latest
-% version and documentation can be obtained at:
-% http://www.ctan.org/tex-archive/macros/latex/required/amslatex/math/
-
-
-
-
-
-% *** SPECIALIZED LIST PACKAGES ***
-%
-%\usepackage{algorithmic}
-% algorithmic.sty was written by Peter Williams and Rogerio Brito.
-% This package provides an algorithmic environment fo describing algorithms.
-% You can use the algorithmic environment in-text or within a figure
-% environment to provide for a floating algorithm. Do NOT use the algorithm
-% floating environment provided by algorithm.sty (by the same authors) or
-% algorithm2e.sty (by Christophe Fiorio) as IEEE does not use dedicated
-% algorithm float types and packages that provide these will not provide
-% correct IEEE style captions. The latest version and documentation of
-% algorithmic.sty can be obtained at:
-% http://www.ctan.org/tex-archive/macros/latex/contrib/algorithms/
-% There is also a support site at:
-% http://algorithms.berlios.de/index.html
-% Also of interest may be the (relatively newer and more customizable)
-% algorithmicx.sty package by Szasz Janos:
-% http://www.ctan.org/tex-archive/macros/latex/contrib/algorithmicx/
-
-
-
-
-% *** ALIGNMENT PACKAGES ***
-%
-%\usepackage{array}
-% Frank Mittelbach's and David Carlisle's array.sty patches and improves
-% the standard LaTeX2e array and tabular environments to provide better
-% appearance and additional user controls. As the default LaTeX2e table
-% generation code is lacking to the point of almost being broken with
-% respect to the quality of the end results, all users are strongly
-% advised to use an enhanced (at the very least that provided by array.sty)
-% set of table tools. array.sty is already installed on most systems. The
-% latest version and documentation can be obtained at:
-% http://www.ctan.org/tex-archive/macros/latex/required/tools/
-
-
-% IEEEtran contains the IEEEeqnarray family of commands that can be used to
-% generate multiline equations as well as matrices, tables, etc., of high
-% quality.
-
-
-
-
-% *** SUBFIGURE PACKAGES ***
-%\ifCLASSOPTIONcompsoc
-%  \usepackage[caption=false,font=footnotesize,labelfont=sf,textfont=sf]{subfig}
-%\else
-%  \usepackage[caption=false,font=footnotesize]{subfig}
-%\fi
-% subfig.sty, written by Steven Douglas Cochran, is the modern replacement
-% for subfigure.sty, the latter of which is no longer maintained and is
-% incompatible with some LaTeX packages including fixltx2e. However,
-% subfig.sty requires and automatically loads Axel Sommerfeldt's caption.sty
-% which will override IEEEtran.cls' handling of captions and this will result
-% in non-IEEE style figure/table captions. To prevent this problem, be sure
-% and invoke subfig.sty's "caption=false" package option (available since
-% subfig.sty version 1.3, 2005/06/28) as this is will preserve IEEEtran.cls
-% handling of captions.
-% Note that the Computer Society format requires a sans serif font rather
-% than the serif font used in traditional IEEE formatting and thus the need
-% to invoke different subfig.sty package options depending on whether
-% compsoc mode has been enabled.
-%
-% The latest version and documentation of subfig.sty can be obtained at:
-% http://www.ctan.org/tex-archive/macros/latex/contrib/subfig/
-
-
-
-
-% *** FLOAT PACKAGES ***
-%
-%\usepackage{fixltx2e}
-% fixltx2e, the successor to the earlier fix2col.sty, was written by
-% Frank Mittelbach and David Carlisle. This package corrects a few problems
-% in the LaTeX2e kernel, the most notable of which is that in current
-% LaTeX2e releases, the ordering of single and double column floats is not
-% guaranteed to be preserved. Thus, an unpatched LaTeX2e can allow a
-% single column figure to be placed prior to an earlier double column
-% figure. The latest version and documentation can be found at:
-% http://www.ctan.org/tex-archive/macros/latex/base/
-
-
-%\usepackage{stfloats}
-% stfloats.sty was written by Sigitas Tolusis. This package gives LaTeX2e
-% the ability to do double column floats at the bottom of the page as well
-% as the top. (e.g., "\begin{figure*}[!b]" is not normally possible in
-% LaTeX2e). It also provides a command:
-%\fnbelowfloat
-% to enable the placement of footnotes below bottom floats (the standard
-% LaTeX2e kernel puts them above bottom floats). This is an invasive package
-% which rewrites many portions of the LaTeX2e float routines. It may not work
-% with other packages that modify the LaTeX2e float routines. The latest
-% version and documentation can be obtained at:
-% http://www.ctan.org/tex-archive/macros/latex/contrib/sttools/
-% Do not use the stfloats baselinefloat ability as IEEE does not allow
-% \baselineskip to stretch. Authors submitting work to the IEEE should note
-% that IEEE rarely uses double column equations and that authors should try
-% to avoid such use. Do not be tempted to use the cuted.sty or midfloat.sty
-% packages (also by Sigitas Tolusis) as IEEE does not format its papers in
-% such ways.
-% Do not attempt to use stfloats with fixltx2e as they are incompatible.
-% Instead, use Morten Hogholm'a dblfloatfix which combines the features
-% of both fixltx2e and stfloats:
-%
-% \usepackage{dblfloatfix}
-% The latest version can be found at:
-% http://www.ctan.org/tex-archive/macros/latex/contrib/dblfloatfix/
-
-
-
-
-% *** PDF, URL AND HYPERLINK PACKAGES ***
-%
-%\usepackage{url}
-% url.sty was written by Donald Arseneau. It provides better support for
-% handling and breaking URLs. url.sty is already installed on most LaTeX
-% systems. The latest version and documentation can be obtained at:
-% http://www.ctan.org/tex-archive/macros/latex/contrib/url/
-% Basically, \url{my_url_here}.
-
-
-
-
-% *** Do not adjust lengths that control margins, column widths, etc. ***
-% *** Do not use packages that alter fonts (such as pslatex).         ***
-% There should be no need to do such things with IEEEtran.cls V1.6 and later.
-% (Unless specifically asked to do so by the journal or conference you plan
-% to submit to, of course. )
-
-
-% correct bad hyphenation here
-\hyphenation{op-tical net-works semi-conduc-tor}
-\usepackage[spanish,USenglish]{babel} % espanol, ingles
-\usepackage[utf8x]{inputenc} % acentos sin codigo
-
-\usepackage{listings}
+\documentclass[conference]{IEEEtran}
+\IEEEoverridecommandlockouts
+% The preceding line is only needed to identify funding in the first footnote. If that is unneeded, please comment it out.
+\usepackage{cite}
+\usepackage{hyperref}
+\usepackage{amsmath,amssymb,amsfonts}
+\usepackage{algorithmic}
+\usepackage{graphicx}
+\usepackage{textcomp}
+\usepackage{xcolor}
+\def\BibTeX{{\rm B\kern-.05em{\sc i\kern-.025em b}\kern-.08em
+    T\kern-.1667em\lower.7ex\hbox{E}\kern-.125emX}}
+    
+\graphicspath{ {./img/} }
 \begin{document}
-\selectlanguage{english}
-\lstset{language=SQL}  
 
-%
-% paper title
-% Titles are generally capitalized except for words such as a, an, and, as,
-% at, but, by, for, in, nor, of, on, or, the, to and up, which are usually
-% not capitalized unless they are the first or last word of the title.
-% Linebreaks \\ can be used within to get better formatting as desired.
-% Do not put math or special symbols in the title.
-\title{Natural Language Processing for Fact-Checking and Claim Assessment}
+% Enriched topological learning for cluster detection and visualization
+\title{Natural Language Processing for Fact-Checking and Claim Assessment\\
+{\large A language model based approach}
+}
 
-
-
-\author{\IEEEauthorblockN{Othman El houfi}
-\IEEEauthorblockA{M.S. student\\Research in Data Science and Machine Learning\\CY Cergy Paris University, France\\
+\author{
+\IEEEauthorblockN{Othman El houfi}
+\IEEEauthorblockA{\textit{MSc Data Science \& Machine Learning} \\
+CY Cergy Paris University, France \\
 othmanelhoufi@gmail.com}
 \and
 \IEEEauthorblockN{Dimitris Kotzinos}
-\IEEEauthorblockA{University professor\\Department of computer science\\
-CY Cergy Paris University, France\\
+\IEEEauthorblockA{\textit{University Professor} \\
+CY Cergy Paris University, France \\
 dimitrios.kotzinos@cyu.fr}
 }
 
-% author names and affiliations
-% use a multiple column layout for up to three different
-% affiliations
-%\author{\IEEEauthorblockN{Rosmeli Quintero}
-%\IEEEauthorblockA{Escuela de Computaci\'on\\Licenciatura en Computaci\'on\\
-%Universidad Central de Venezuela\\
-%Caracas, Venezuela\\
-%Email: qrosmeli@gmail.com}
-%\and
-%\IEEEauthorblockN{Jean Carlos Gomes}
-%\IEEEauthorblockA{Escuela de Computaci\'on\\Licenciatura en Computaci\'on\\
-%Universidad Central de Venezuela\\
-%Caracas, Venezuela\\
-%Email: jean.gomes@ucv.ve}
-%}
-% make the title area
 \maketitle
 
-% As a general rule, do not put math, special symbols or citations
-% in the abstract
 \begin{abstract}
-En los últimos años se ha visto un auge en el uso de los sistemas de bases de datos NoSQL y junto a ello se ha popularizado la idea de aplicaciones de Persistencia Políglota. Esta consiste en que gracias a la gran variedad y cantidad de datos, y los diversos servicios que pueden dar las aplicaciones hoy en día, es probable que un único tipo de sistema de almacenamiento no sea capaz de cubrir de forma eficiente todas las necesidades de la aplicación. En este articulo se dará una idea general de las Aplicaciones de Persistencia Políglota dando información acerca de su funcionamiento, arquitectura y motivación; y ademas se hablara específicamente de como aplicar la Persistencia Políglota con MongoDB y Neo4j.
-\\
-Palabras Clave: NoSQL, Persistencia Políglota, MongoDB, Neo4j, Neo4j Doc Manager
+As false information and fake news are propagating throughout the internet and social networks, the need of fact-checking operations becomes necessary in order to maintain a truthful digital environment where general information can be reliably exploited whether in politics, finance or other domains. The need of this online claim assessment comes from the fact that fake news and false information can have a big negative impact on politics, economy (2016 USA Elections) and public health (COVID-19).\\ 
+A number of solutions have been proposed to deal with this problem and limit the spread of false information, both manual and automatic. Of course the manual approaches done on websites such as \textit{PolitiFact.com}, \textit{FactCheck.org} and \textit{Snopes.com} don't construct a viable solution for the long term as the speed and scale of information propagation increase exponentially rendering this manual fact-checking operation where human fact-checkers can't scale up at the same rate limited and incapable of solving the problem.\\
+Here, we present our contribution in this regard: an automated solution for fact-checking using Wikipedia as a source of truth and a state of the art language models used today for NLP tasks (BERT, RoBERTa, XLNet...) in order to classify a given claim as \textit{Supports}, \textit{Refutes} or \textit{Not enough information (NEI)}.\\
 \end{abstract}
 
-%no keywords
-
-
-
-
-
-
-% For peer review papers, you can put extra information on the cover
-% page as needed:
-% \ifCLASSOPTIONpeerreview
-% \begin{center} \bfseries EDICS Category: 3-BBND \end{center}
-% \fi
-%
-% For peerreview papers, this IEEEtran command inserts a page break and
-% creates the second title. It will be ignored for other modes.
-\IEEEpeerreviewmaketitle
-
+\begin{IEEEkeywords}
+Natural Language Processing, Language Model, Wikipedia, Information retrieval, Text processing, Natural Language Inferencing, Fact-Checking, Document retrieval, Fake-news.
+\end{IEEEkeywords}
 
 \section{Introduction}
+From a social and psychological perspective, humans have been proven irrational and vulnerable when differentiating between truth and false news (typical accuracy ranges between 55\% and 58\%) \cite{zhou2019fake}, thus fake news obtain public trust relatively easier than truthful news because individuals tend to trust fake news after repeated exposure (\textit{Validity effect}), or if it confirms their pre-existing beliefs (\textit{Confirmation bias}), or simply due to the obligation of participating socially and proving a social identity (\textit{Peer pressure}). The social sciences are still trying to comprehend the biological motivations that makes fake news more appealing to humans.\\
 
-Para entender mejor a que se refiere con este término podríamos definir la palabra políglota, su definición es: alguien que habla o escribe varios idiomas; Entonces basado en esa definición pero llevandolo a base datos, podríamos definir persistencia políglota como un conjunto de aplicaciones que utilizan varias tecnologías básicas de base de datos que se usan para resolver  problemas complejos de almacenamiento.
-\\
-Diferentes bases de datos están diseñadas para resolver diferentes problemas. El uso de un único motor de base de datos para todos los requisitos suele conducir a soluciones no eficientes \cite{art15}; por lo tanto estos problemas complejos se  fragmentan en partes más pequeñas y se aplican diferentes modelos de base de datos según las necesidades específicas de cada requerimiento del problema. Pero esta solucion tambien trae inconvenientes pues es necesario que la aplicación o un servicio maneje la comunicación con los diferentes tipos de almacenamientos y análisis de datos.
-\\
-\section{Origen}
-Debido a que persistencia políglota es una idea y forma de trabajo, no una aplicación ni una tecnología específica, esta no tiene un origen claro; no hay registros de cuales empresas  o aplicaciones fueron las primeras en trabajar de este modo, pero si existe registros de cómo el término  se originó. 
-\\
-En 2006, Neal Ford (Director, Software Architect, y Meme Wrangler en ThoughtWorks) \cite{art16} acuñó el  término programación políglota, para expresar la idea de que las aplicaciones deberían ser escritas en una mezcla de idiomas para aprovechar el hecho de que diferentes lenguajes son adecuados para abordar diferentes problemas. Aplicaciones complejas combinan diferentes tipos de problemas, por lo que escoger el lenguaje adecuado para cada trabajo puede ser más productivo que tratar de encajar todos los aspectos en un solo idioma \cite{art17}.
-\\
-Con el paso del tiempo, se ha aplicado este método de trabajo al área de base de datos y este ha ido evolucionando en este campo, manteniendo la idea original la cual es trabajar con distintos tipos de tecnologías pero ahora en vez de lenguajes de programación se utilizan distintas  base de datos dentro de una misma aplicación, buscando guardar los datos de la forma más optima, ya no se aplica el término de programación y se toma el de persistencia porque estamos trabajando con el objetivo de guardar una gran cantidad de datos a través del tiempo,  al final  utilizamos el término persistencia políglotas para definir este enfoque híbrido.
-\\
-\section{Arquitectura}
-Hay distintas enfoques para aplicar y estructurar persistencias políglota para resolver los problemas que tenga la organización con su aplicaciones y base de datos, los distintos tipos de enfoques son:
-\\
-\subsection{Enfoque sin Persistencia Políglota}
-La aplicación utiliza un único almacén de datos, en este enfoque se obliga al almacén a responder ante los distintos tipos de datos que son recibidos [fig\ref{enfoque1}].
+On the other hand, the growth of social media platforms resulted in a huge acceleration of news spreading whether true or false. As of Aug. 2017, 67\% \cite{zhou2019fake} of Americans get their news from social media. These platforms even give the user the right to share, forward, vote and participate to online discussions. All of this made the problem of fake news spreading more and more dangerous, our economies for example, are not robust to the spread of falsity, false rumors have affected stock prices and the motivations for large-scale investments, as we witnessed after a false tweet claimed that Barack Obama was injured in an explosion which caused \$130 billion drop in stock value \cite{vosoughi2018spread}. Another recent example is related to public health where rumors about COVID-19 vaccines and drug companies influenced people in their decision on getting vaccinated.\\
 
-\begin{figure}[!h]
-\centering
-\includegraphics[width=0.5\textwidth]{image.jpg}
-\caption{Ejemplo de aplicación ecommerce con una base de datos RBMS que se encarga de todos los requerimientos \cite{art15} }
-\label{enfoque1}
-\end{figure}
+That being said, is there a way to monitor the spread of fake news through social media? Or more specifically, how can we differentiate between fake news and truthful news, and at what level of confidence can we do that?\\
 
-\subsection{Enfoque con Persistencia Políglota}
-No es necesario que la aplicación utilice un único almacén de datos para todas sus necesidades. Se crean diferentes bases de datos para diferentes propósitos. La aplicación se encarga de mantener la consistencia de la bases de datos[fig\ref{enfoque2}].
+From a computer engineering perspective, different approaches were studied:
 
-\begin{figure}[!h]
-\centering
-\includegraphics[width=0.5\textwidth]{image.jpg}
-\caption{Ejemplo de aplicación ecommerce con varias bases de datos para cada requerimiento \cite{art15}}
-\label{enfoque2}
-\end{figure}
-
-\subsection{Enfoque Usando Servicios }
-En este enfoque se utilizan servicios para  englobar una base de datos esto sustituyen la comunicación directa con la base de datos. Esto permite que la aplicación no se encargue de guardar los datos,  todos los datos puedan ser guardadas en un lugar del servicio y consultadas por todas las aplicaciones . Las API proporcionadas por el servicio son más útiles que una única aplicación que habla con varias bases de datos[fig\ref{enfoque3}].
-
-\begin{figure}[!h]
-\centering
-\includegraphics[width=0.5\textwidth]{image.jpg}
-\caption{Ejemplo de aplicación ecommerce con un servicio que engloba la base de datos de grafos \cite{art15} }
-\label{enfoque3}
-\end{figure}
-
-
-\subsection{Enfoque Usando Servicios en todas las Base de Datos}
-Este enfoque es como el anterior pero se envuelve todas las bases de datos en  servicios. Permite que las bases de datos dentro de los servicios evolucionen sin tener que cambiar las aplicaciones dependientes[fig\ref{enfoque4}].
-
-\begin{figure}[!h]
-\centering
-\includegraphics[width=0.5\textwidth]{image.jpg}
-\caption{Ejemplo de aplicación ecommerce con servicios en cada base de datos \cite{art15} }
-\label{enfoque4}
-\end{figure}
-
-\subsection{Enfoque Usando Dos capas de  Servicios }
-En este enfoque se aplica las características del enfoque anterior pero se agregan capas adicionales de servicios. La nueva capa de servicio agregada se le trata como un  maestro que administrara las capas de nivel inferior. Este servicio maestro permite que la aplicación se desvincule completamente de la tarea de encargarse de mantener la consistencia y el análisis de los datos  de las distintas base de datos, ahora el servicio maestro es el que mantiene la consistencia y la entronización entre las distintas base de datos
-[fig\ref{enfoque5}].
-
-\begin{figure}[!h]
-\centering
-\includegraphics[width=0.5\textwidth]{image.jpg}
-\caption{Ejemplo de aplicación ecommerce con servicios en cada base de datos y una capa adicional llamada servicio maestro que engloba los demás servicios }
-\label{enfoque5}
-\end{figure}
-
-\subsection{Enfoque Expandiendo Funcionalidades }
-Existen casos en los que no podemos cambiar el almacenamiento de datos. Debido a las aplicaciones legadas existentes y su dependencia del almacenamiento de datos existente. 
-En estos casos podemos aplicar persistencia políglota de una forma diferente. en vez de una base de datos que maneje directamente requerimientos de la aplicación, podemos agregar una base de datos que trabaje en paralelo y ayude a  una base de datos ya existentes, esto le  agrega funcionalidades al sistema que ya tenemos para mejorar su desempeño[fig\ref{enfoque6}].
-
-\begin{figure}[!h]
-\centering
-\includegraphics[width=0.5\textwidth]{image.jpg}
-\caption{Ejemplo de aplicación ecommerce con una base de datos RBMS y una base de datos SOLR paralela indexar y optimizar la primera \cite{art15} }
-\label{enfoque6}
-\end{figure}
-
-
-\section{Ventajas y Desventajas}
-La Persistencia Políglota presenta una serie de ventajas y desventajas que tienen que ser analizadas al momento de querer utilizar la Persistencia Políglota en algún proyecto de software.
-
-\subsection{Ventajas}
 \begin{itemize}
-\item Mejoras de rendimiento, ya que se utiliza una Base de Datos dependiendo de las necesidades funcionales que se tengan.
-\item Nos permite manejar mayor volúmen de datos, debido a que las Bases de Datos NoSQL están diseñadas para operar en cluster. Esto nos permite un escalamiento horizontal.
-\item Las consultas son mucho más flexibles porque se adaptan a la necesidad y están directamente enlazadas al formato de datos manejado por la base de datos.
-\end{itemize}
-\subsection{Desventajas}
-\begin{itemize}
-\item Dificultad para que la data almacenada entre las distintas bases de datos sea consistente.
-\item Ahora hay que decidir cuál Base de Datos se va a utilizar de entre todas las que hay disponibles, esto puede traer problemas si no se tiene mucha experiencia.
-\item La complejidad de la aplicación aumenta debido a que ahora hay que manejar mayor cantidad de Bases de Datos y ademas que funcionen en conjunto todas ellas.
-\item Se adquieren nuevas responsabilidades administrativas porque ahora hay que estar a cargo de muchas mas Bases de Datos y asegurar su funcionamiento.
-\item Si no se tiene ninguna experiencia con las Bases de Datos que se quieren utilizar es necesario entrenamiento, el cual lleva cierto tiempo y afecta en parte al desarrollo.
+\item \textbf{Knowledge-based Fake News Detection \cite{chernyavskiy2021whatthewikifact}:} a method aims to assess news authenticity by comparing the knowledge extracted from to-be verified news content with known facts, also called fact-checking.
+\item \textbf{Style-based Fake News Detection \cite{przybyla2020capturing}:} focuses on the style of writing, i.e. the form of text rather than its meaning.
+\item \textbf{Propagation-based Fake News Detection \cite{shu2020hierarchical}:} a principled way to characterize and understand hierarchical propagation network features. We perform a statistical comparative analysis over these features, including micro-level and macro-level, of fake news and true news.
+\item \textbf{Credibility-based Fake News Detection \cite{sitaula2020credibility}:} the information about authors of news articles can indicate news credibility and help detect fake news.
 \end{itemize}
 
-\textbf{The real world of Database Administrator study by Dell (March 2015) \cite{art14} } 
- 
-\begin{figure}[!h]
-\centering
-\includegraphics[width=\linewidth]{image.jpg}
-\caption{¿De cuántas Bases de Datos son responsables los Administradores de Bases de Datos ? \cite{art14}}
-\label{real_1}
-\end{figure}
- 
-\begin{figure}[!h]
-\centering
-\includegraphics[width=\linewidth]{image.jpg}
-\caption{¿En términos de Administración de Bases de Dato, en los próximos 3 años, cuáles serán los retos para los administradores de Bases de Datos ? \cite{art14}}
-\label{real_2}
-\end{figure}
+In this paper we will focus on a new approach that utilizes Language Models (LMs) for fact-checking. The goal is not to implement an algorithm that scans social networks for real time fake news detection, but rather we will create a model that can assess with a degree of confidence the truthfulness or falseness of a claim given by a user as an input by exploiting LMs that were already trained on Wikipedia, and fine-tune each LM for a downstream task in order to solve this classification problem.
 
-\section{Consideraciones}
-Existen varias consideraciones que se pueden tomar antes de querer utilizar Persistencia Políglota en alguno de nuestros proyectos. A continuación se van a explicar cada una de ellas. 
+\section{Related works}
+\subsection{Language model based approach \cite{lee2020language} \cite{petroni2019language}}
+A paper called \textit{"Language Models as Fact Checkers?"} done by a team from \textit{FacebookAI} and \textit{Hong Kong University of Science and Technology}, provides an example of a fact-checking model using zero-shot LM that outperforms a random baseline LM using the FEVER dataset\cite{thorne2018fever}.\\
 
-\subsection{Strategic Project}
-La mayoría de los proyectos de software de una empresa son denominados Utility Project, es decir; que son aquellos desarrollos que no le traen ninguna ventaja competitiva en el mercado a la empresa pero son importantes de todos modos. Para este caso de proyectos (Utility Project), no es tan beneficioso usar Persistencia Políglota debido a que la complejidad y el tiempo de desarrollo sería mayor y a su vez no valdría tanto la pena hacer dicho esfuerzo. En cambio para los proyectos denominados Strategic Project si se vería el beneficio, ya que en comparación al anterior estos si traen alguna ventaja competitiva a la empresa y por ende sería de gran utilidad usar las mejores herramientas para su desarrollo.
-\subsection{Rapid Time to Market}
-Si se necesita un Proyecto de Software que salga lo más rápido al mercado entonces necesitas que la productividad sea mucho mayor, por lo tanto si se cuenta con la suficiente experiencia el uso de Persistencia Políglota sería una buena opción, ya que para cada necesidad que se tenga se utilizaría la tecnología más adecuada y esto traería consigo un incremento en la productividad.
-\subsection{Data Intensive}
-Cuando hablamos de Data Intensive nos podemos referir a:
+The goal of fact-checking as mentioned previously, and relatively to this paper, is to validate the truthfulness of a given claim. Each claim is assigned to one of these labels: \textit{Supports}, \textit{Refutes} or \textit{Not enough information (NEI)} to verify.\\
+
+This paper describes the difference between Traditional Pipeline fact-checking models and their zero-shot fact-checking LM:
+
 \begin{itemize}
-\item Gran cantidad de data.
-\item Gran disponibilidad.
-\item Gran cantidad de tráfico: tanto lectura como escritura.
-\item Relaciones muy complejas.
-\end{itemize}
-Cualquiera de estos aspectos nos puede dar a entender que necesitamos algún tipo de almacenamiento No-Relacional, pero es en realidad la naturaleza de la data lo que nos permitirá escoger si usar Persistencia Políglota o no. 
-
-\section{Casos de Uso}
-Un caso de uso muy común de Persistencia Políglota es el de una plataforma de comercio electrónico (e-commerce). Esta plataforma tratará muchos tipos de datos (por ejemplo, carrito de compras, inventario, pedidos completados, etc.).\cite{art10} 
-\\
-\subsection{Modelo Tradicional}
-Un primer enfoque sería almacenar todos estos datos en una sola Base de Datos [fig\ref{tradicional}], lo que requeriría una gran cantidad de conversión de datos para que el formato de los datos sea igual.
-\\
-\begin{figure}[!h]
-\centering
-\includegraphics[width=0.5\textwidth]{image.jpg}
-\caption{Modelo Tradicional de Desarrollo en el que se usa una sola Base de Datos}
-\label{tradicional}
-\end{figure}
-
-\subsection{Persistencia Políglota}
-Mediante Persistencia Políglota se pueden almacenar los datos en la base de datos más adecuada para cada tipo de datos [fig\ref{persistencia}].
-\\
-\begin{figure}[!h]
-\centering
-\includegraphics[width=0.5\textwidth]{image.jpg}
-\caption{Mediante Persistencia Políglota se observan las distintas Bases de Datos utilizadas para cada funcionalidad}
-\label{persistencia}
-\end{figure}
-
-Por lo tanto, estamos utilizando una mezcla de soluciones RDBMS (por ejemplo, SQL Server) con soluciones NoSQL de las cuales hay cuatro tipos: Valor-clave, Documento, Gráfico, Columna (ver Tipos de bases de datos NoSQL). Una guía [fig\ref{e-commerce}] sobre el tipo de base de datos a utilizar en función de la funcionalidad de los datos:
-\\
-\begin{figure}[!h]
-\centering
-\includegraphics[width=0.5\textwidth]{image.jpg}
-\caption{Cuadro con cada una de las funcionalidades de la aplicación e-commerce y porqué se usó cada una de las Base de Datos}
-\label{e-commerce}
-\end{figure}
-
-\section{Trabajos Relacionados}
-A continuación se presentan 3 ejemplos de  desarrollos de software que han optado por la persistencia políglota y tienen gran éxito en la actualidad.
-
-\subsection{Wanderu}
-
-\begin{figure}[!h]
-\centering
-\includegraphics[width=0.5\textwidth]{image.jpg}
-\caption{Interfaz Gráfica de Wanderu}
-\label{wanderu}
-\end{figure}
-
-Wanderu [fig\ref{wanderu}] es una aplicación web que provee a los usuarios la búsqueda de tickets para bus y tren, con trayectos que pueden combinar múltiples compañías de transporte. La data de las rutas está almacenada en JSON, lo que permite que una Base de Datos como MongoDB sea una buena solución para almacenar dichas rutas.
-\\
-Además, ellos también necesitan ser capaces de buscar el camino mas óptimo desde el origen hasta el destino. Esto es perfecto para una base de datos orientada a grafos como por ejemplo: Neo4j, ya que Neo4j puede manejar las relaciones entre cada una de las rutas o trayectos.
-\\
-Wanderu no quería forzar MongoDB (un almacén de datos basado en documentos) para que manejara las relaciones de estilo gráfo porque la implementación habría sido costosa e ineficiente. En su lugar, utilizaron un enfoque de persistencia políglota para capitalizar las fortalezas de cada uno, decidiendo usar tanto MongoDB como Neo4j juntos.\cite{art7}
-
-
-\subsection{Twitter}
-
-\begin{figure}[!h]
-\centering
-\includegraphics[width=0.5\textwidth]{image.jpg}
-\caption{Interfaz Gráfica de Twitter}
-\label{twitter}
-\end{figure}
-
-Twitter [fig\ref{twitter}] es un servicio de microblogging, con sede en San Francisco, California, con filiales en San Antonio (Texas) y Boston (Massachusetts) en Estados Unidos. Twitter, Inc. fue creado originalmente en California, pero está bajo la jurisdicción de Delaware desde 2007. Desde que Jack Dorsey lo creó en marzo de 2006, y lo lanzó en julio del mismo año, la red ha ganado popularidad mundial y se estima que tiene más de 500 millones de usuarios, generando 65 millones de tweets al día y maneja más de 800 000 peticiones de búsqueda diarias. Ha sido denominado como el "SMS de Internet".\cite{art5}
-\\
-La red permite enviar mensajes de texto plano de corta longitud, con un máximo de 140 caracteres, llamados tweets, que se muestran en la página principal del usuario. Los usuarios pueden suscribirse a los tweets de otros usuarios  – a esto se le llama 'seguir' y a los usuarios abonados se les llama 'seguidores', 'followers' y a veces tweeps' ('Twitter' + 'peeps', seguidores novatos que aún no han hecho muchos tweets). Por defecto, los mensajes son públicos, pudiendo difundirse privadamente mostrándolos únicamente a unos seguidores determinados. Los usuarios pueden twitear desde la web del servicio, con aplicaciones oficiales externas (como para teléfonos inteligentes), o mediante el Servicio de mensajes cortos (SMS) disponible en ciertos países. Si bien el servicio es gratis, acceder a él vía SMS comporta soportar tarifas fijadas por el proveedor de telefonía móvil.\cite{art5}
-\\
-\\
-Entre las tecnologías de almacenamiento que utiliza actualmente Twitter tenemos \cite{art6}:
-\begin{itemize}
-\item MySQL para almacenar tanto tweets como usuarios.
-\item FlockDB (una Base de Datos orientada a grafos) en la cual almacenan las relaciones entre los usuarios (following, follower, etc).
-\item Redis para almacenar el timeline por su velocidad para lectura y escritura.
-\item Cassandra se dice que se ha empezado a utilizar para migrar lo que se tiene en MySQL y así proveer una mayor escalabilidad.
+\item \textbf{Traditional pipeline:} this type of models access knowledge within an external knowledge base like Wikipedia in order to validate a claim. It involves information retrieval modules such as document retrieval and sentence retrieval.
+\item \textbf{Zero-shot LM pipeline:} it replaces both the external knowledge base and the information retrieval modules with a pre-trained language model.\\
 \end{itemize}
 
-\subsection{Linkedin}
+They used the publicly available 24-layer BERT-Large as our language model, which was pre-trained on Wikipedia in 2018. After fine-tuning the model they achieved 57\% in accuracy and 57\% in F1-macro score which was better than the baseline BERT model (without fine-tuning) that achieved 49\% in accuracy and 44\% in F1-macro score.
 
-\begin{figure}[!h]
-\centering
-\includegraphics[width=0.5\textwidth]{image.jpg}
-\caption{Interfaz Gráfica de Linkedin}
-\label{linkedin}
-\end{figure}
-
-LinkedIn [fig\ref{linkedin}] es una comunidad social orientada a las empresas, a los negocios y el empleo. Partiendo del perfil de cada usuario, que libremente revela su experiencia laboral y sus destrezas en un verdadero currículum laboral, la web pone en contacto a millones de empresas y empleados. Fundada en diciembre de 2002 por Reid Hoffman, Allen Blue, Konstantin Guericke, Eric Ly y Jean-Luc Vaillant, fue lanzada en mayo de 2003.\cite{art8}
-\\
-\\
-
-Entre las tecnologías de almacenamiento que utiliza actualmente LinkedIn tenemos \cite{art9}:
+\subsection{Perplexity based approach \cite{lee2021towards} \cite{lee2020misinformation}}
+In March 2021, \textit{Nayeon Lee}, \textit{Yejin Bang}, \textit{Andrea Madotto}, \textit{Madian Khabsa}, and \textit{Pascale Fung} published a paper called \textit{Towards Few-Shot Fact-Checking via Perplexity} where they propose a new approach of the powerful transfer learning ability of a language model via a perplexity score. Using a method called \textit{few-shot learning}, they built a model that outperforms major class baseline models by more than 10\% on the F1-Macro metric score.\\
+In this paper the goal is to determine the veracity of a claim given some evidence, for this they define a {claim, evidence} pair. The label \emph{Supported} is assigned when relevant evidence exists that supports the claim, and \emph{Unsupported} label for the opposite case.\\
+\emph{Unsupported} claims on average have higher perplexity than \emph{Supported} claims. For example, \emph{Supported} claim "Washing hands prevents the spread of diseases" has a perplexity value of 96.74, whereas the \emph{Unsupported} claim "All dogs speak English fluently" has a much higher perplexity value of 328.23.\\
+The datasets used in this experiment are: Covid19-Scientific, Covid19-Social, and FEVER. As for the perplexity based experiment they used one unidirectional LM and one masked LM:
 \begin{itemize}
-\item Oracle para almacenar la mayoría de sus datos.
-\item Voldemort (una Base de Datos clave-valor) en la cual almacenan los datos de los perfiles de los usuarios y así obtenerlos mucho más rápido.
+\item $PPL_{GPT2-B}$ : a single-parameter classifier based on perplexity from GPT2-base \cite{radford2019language} (unidirectional LM)
+\item $PPL_{BERT-B}$ : a single-parameter classifier based on perplexity from BERT-base \cite{devlin2018bert} (Masked LM)\\
 \end{itemize}
 
+They took into consideration the accuracy and the F1-Macro metrics for the evaluation. Because the datasets are unbalanced, they mainly consider the F1-Macro score over accuracy as an overall evaluation. The perplexity-based classifiers, especially $PPL_{GPT2-B}$, outperform all Major Class baselines across all
+tasks in all settings. For instance, $PPL_{GPT2-B}$ achieved accuracy of 67.48\% and F1-macro score of 64.70\% on FEVER dataset.\\
+On the other hand the classification was limited to two labels (\emph{Supported} and \emph{Unsupported}) which does not solve the entire classification problem in the FEVER dataset that provides three labels (\textit{Supports}, \textit{Refutes} or \textit{Not enough information (NEI)}).
 
-\section{Caso de Estudio: MongoDB y Neo4j}
-Hasta ahora hemos hablado de la persistencia políglota de forma general, en esta sección ahondaremos en un caso especifico, combinar las virtudes de MongoDB y Neo4j, el porque y como se combinarían estos sistemas manejadores de base de datos.
-\subsection{MongoDB}
-MongoDB[fig\ref{mongo_colecciones}] es una base de datos documental trabaja con archivos json, lo que permite que tenga un modelo de datos flexible, provee alta disponibilidad gracias al sharding ó escalabilidad horizontal y puede almacenar una gran cantidad de datos y accederlos de forma rápida.\cite{art1}
-\\
-Tiene como desventaja el hecho de que realizar las consultas puede resultar ser un trabajo bastante complejo y tedioso. 
+\section{Presented method}
+Most of the fact-checking algorithms today involving knowledge-based verification uses a traditional pipeline that puts in place a module for retrieving articles from an external source, another module for retrieving relevant sentences from each article, and a last module for natural language inferencing (NLI) in order to classify a claim.\\
 
-\begin{figure}[!h]
-\centering
-\includegraphics[width=0.5\textwidth]{image.jpg}
-\caption{Colecciones en MongoDB \cite{art11}}
-\label{mongo_colecciones}
+In this paper we present a method that is fully  reliant on the powerfulness of today's best LMs. We start by fine-tuning each model for the downstream task that is claim classification using the FEVER dataset, then each model is employed to assess the validity of new input claims. This approach takes into consideration only an internal knowledge source (FEVER) for fine-tuning, that is for the learning phase, which makes the prediction phase knowledge-free rather than utilizing external knowledge sources for retrieving articles and sentences.\\
+
+It is also important to mention that we only use LMs for classifying claims and not for generating evidence. We leave generating evidences with language models for future work.
+
+\subsection{Dataset}
+FEVER (Fact Extraction and VERification) consists of 185,445 claims generated by altering sentences extracted from Wikipedia and subsequently verified without knowledge of the sentence they were derived from. The claims are classified as Supported, Refuted or NotEnoughInfo. For the first two classes, the annotators also recorded the sentence(s) forming the necessary evidence for their judgment\cite{thorne2018fever}.
+
+\begin{figure}[htp]
+    \centering
+    \includegraphics[scale=0.37]{fever_example.png}
+    \caption{Manually verified claim requiring evidence from multiple Wikipedia pages.}
+    \label{fig:fever_example}
 \end{figure}
 
 
-\subsection{Neo4j}
-Neo4j[fig\ref{neo-nodos}] es una base de datos de grafos, este implementa los grafos de forma nativa, a diferencia de otros sistemas manejadores de base de datos que no solamente están dedicados al manejo de grafos.\cite{art2}
-\\
-Tambien provee el lenguaje de consultas Cypher, que hace que estás sean muy sencillas.
-\\
-Una base de datos de grafos tiene como fortaleza la representación de relaciones y el recorrido de caminos.
+\section{Results and Analysis}
+\subsection{Experimental protocol}
 
-\begin{figure}[!h]
-\centering
-\includegraphics[width=0.4\textwidth]{image.jpg}
-\caption{Grafo en Neo4j \cite{art12}}
-\label{neo-nodos}
-\end{figure}
+\subsection{Results}
 
-\subsection{MongoDB + Neo4j}
-Ya una vez vistas las ventajas que nos ofrece cada sistema manejador de base de datos, podemos darnos cuenta de que si combinamos ambos[fig\ref{mongo-neo1}] podemos tener la capacidad de almacenar gran cantidad de datos de MongoDB junto con el poder de representar las relaciones y los caminos entre nodos fácilmente de Neo4j en una sola aplicación.
-\\
-Esto nos es de utilidad en por ejemplo una aplicación de cursos de una universidad[fig\ref{mongo-neo2}], donde los cursos pueden ser almacenados y manejados con MongoDB mientras que un sistema de recomendaciones de los cursos, basados en los que ya se han visto con anterioridad, puede ser manejado con Neo4j.
+\subsection{Complexity analysis}
 
-\begin{figure}[!h]
-\centering
-\includegraphics[width=0.3\textwidth]{image.jpg}{mongo-neo1}
-\caption{Ejemplo de una aplicacion utilizando MongoDB y Neo4j\cite{art13}}
-\label{mongo-neo1}
-\end{figure}
+\subsection{Conclusion of the analysis}
 
-\begin{figure}[!h]
-\centering
-\includegraphics[width=0.5\textwidth]{image.jpg}
-\caption{El catalogo de cursos es manejado con MongoDB y las recomendaciones con Neo4j\cite{art13}}
-\label{mongo-neo2}
-\end{figure}
+\section{Conclusion}
 
-\subsection{Conectando MongoDB con Neo4j}
-Existen muchas formas y métodos de conectar estos dos sistemas manejadores de base de datos para que trabajen conjuntamente, aquí solo estudiaremos haremos referencia a las que hacen una conexión unidireccional de MongoDB a Neo4j, es decir, en donde solo los datos son transferidos de MongoDB a Neo4j.
-
-\subsubsection{ETL:}
-Un ETL o programa de extracción, transformación y carga, es la forma mas básica de transferir los datos de una base de datos a otra, pero es la que requiere mas trabajo, depende completamente del desarrollador de que forma sera implementado y las soluciones son a la medida, es decir, no siempre existe un único ETL que funcione para cada caso.
-
-\subsubsection{APOC:}
-Otra forma de conectar MongoDB con Neo4j es utilizando las APOC, acronimo de Awesome Procedures, estas son unas librerías que proveen herramientas para realizar la importación y exportación desde y hacia Neo4j de forma mas sencilla, es una alternativa mas general que el de un ETL, pero aun así requiere de un gran trabajo por parte del desarrollador.\cite{art3}
-
-\subsubsection{Neo4j Doc Manager:}
-Este método es el que hablaremos de forma mas detallada en este articulo, se trata de una herramienta proveída por los desarrolladores de Neo4j para automatizar la transferencia de los datos de MongoDB a Neo4j.\cite{art4}
-
-\subsection{Neo4j Doc Manager}
-Como se dijo anteriormente, esta es una herramienta proveída por los desarrolladores de Neo4j. Esta herramienta es una especie de extensión del Mongo Connector, que es la manera en la que MongoDB puede comunicarse con otros lenguajes de programación o sistemas manejadores de base de datos, pero no soporta de forma nativa la conexión con Neo4j, es por esto que se tuvo que crear el Neo4j Doc Manager.[fig\ref{doc-manager1}]
-\\
-Usando el Neo4j Doc Manager, al momento de insertar un nuevo documento en MongoDB, este es transformado de forma inmediata a un grafo de Neo4j, permitiendo que los datos sean compartidos de forma fácil y rápida entre ambos manejadores de base de datos.
-
-\begin{figure}[!h]
-\centering
-\includegraphics[width=0.5\textwidth]{image.jpg}
-\caption{Conexion entre MongoDB y Neo4j utilizando el Neo4j Doc Manager\cite{art13}}
-\label{doc-manager1}
-\end{figure}
-
-\subsubsection{Requerimientos}
-Para utilizar el Neo4j Doc Manager es necesario tener los siguiente programas instalados:
-\begin{itemize}
-\item MongoDB con un set de replicas.
-\item Neo4j.
-\item Mongo Connector.
-\item Neo4j Doc Manager.
-\end{itemize}
-
-Ya con esto se puede empezar a trabajar con ambos manejadores de base de datos.
-
-\subsection{Neo4j Doc Manager: Consideraciones}
-Aunque el Neo4j Doc Manager nos permite automatizar la conversión de los documentos de MongoDB a Neo4j, hay que tener en cuenta ciertas consideraciones para que esta conversión ocurra de manera exitosa.
-
-\subsubsection{Documento Simple}
-En este ejemplo podemos ver como se hace la conversión de un documento simple de MongoDB. [fig\ref{consi1}]
-
-\begin{figure}[!h]
-\centering
-\includegraphics[width=0.2\textwidth]{image.jpg}
-\caption{Documento simple}
-\label{consi1}
-\end{figure}
-
-\begin{figure}[!h]
-\centering
-\includegraphics[width=0.2\textwidth]{image.jpg}
-\caption{Conversión en Neo4j}
-\label{consi1-2}
-\end{figure}
-
-Vemos que cada documento se le asigna un nodo, y no existen relaciones entre ellos.[fig\ref{consi1-2}]
-
-\subsubsection{Documento sin tomar en cuenta las consideraciones}
-En este ejemplo, usamos un documento de MongoDB que no ha sido modificado con las consideraciones para hacer una buena conversión utilizando el Neo4j Doc Manager. [fig\ref{consi2}]
-
-\begin{figure}[!h]
-\centering
-\includegraphics[width=0.4\textwidth]{image.jpg}
-\caption{Documento sin seguir consideraciones}
-\label{consi2}
-\end{figure}
-
-Se puede ver de que la conversión no nos genero un grafo que pueda ser utilizable, ya que hay nodos sueltos sin relaciones y no toda la información se encuentra desplegada como se quisiera.[fig\ref{consi2-2}]
-
-\begin{figure}[!h]
-\centering
-\includegraphics[width=0.5\textwidth]{image.jpg}
-\caption{Grafo de documento sin seguir consideraciones}
-\label{consi2-2}
-\end{figure}
-
-\subsubsection{Consideraciones 1: Relaciones}
-Las relaciones son representadas a través de los subdocumentos dentro de un documento, es decir, por cada subdocumento se creara un nuevo nodo y una relacion hacia el, en este ejemplo se puede observar un documento con múltiples subdocumentos.[fig\ref{consi3}] 
-
-\begin{figure}[!h]
-\centering
-\includegraphics[width=0.3\textwidth]{image.jpg}{consi3}
-\caption{Documento con múltiples subdocumentos}
-\label{consi3}
-\end{figure}
-
-Una vez insertado, se observa como el grafo creado posee un nodo con tres relaciones hacia tres nodos diferentes, representando el documento de exposiciones con su información como quien la dicta, en donde y los temas.[fig\ref{consi3-2}] 
-
-\begin{figure}[!h]
-\centering
-\includegraphics[width=0.3\textwidth]{image.jpg}{consi3-2}
-\caption{Grafo generado de documento con múltiples subdocumentos}
-\label{consi3-2}
-\end{figure}
-
-\subsubsection{Consideraciones 2: Relaciones con arreglos}
-Otra manera de representar las relaciones es con los arreglos de subdocumentos, en este caso por cada elemento del arreglo, se creara un nuevo nodo con una relacion hacia el.[fig\ref{consi4}] 
-
-\begin{figure}[!h]
-\centering
-\includegraphics[width=0.3\textwidth]{image.jpg}{consi4}
-\caption{Documento con arreglo de subdocumentos}
-\label{consi4}
-\end{figure}
-
-Vemos entonces que el grafo generado posee un los nodos que se corresponden a el arreglo de subdocumentos, cada uno identificado con la relación bd0 y bd1 que corresponde a su posición en el arreglo.[fig\ref{consi4-2}] 
-
-\begin{figure}[!h]
-\centering
-\includegraphics[width=0.3\textwidth]{image.jpg}{consi4-2}
-\caption{Grafo con relación a partir de arreglos de subdocumentos}
-\label{consi4-2}
-\end{figure}
-
-\subsubsection{Consideraciones 3: Relaciones entre diferentes colecciones}
-La ultima consideración a tener, es la capacidad de poder relacionar diferentes colecciones de MongoDB en un solo grafo, para esto se debe de crear una referencia en el documento hacia el documento de otra colección.
-\\ 
-En la imagen se pueden ver como se referencia la colección lugar con la colección personas.[fig\ref{consi5}] 
-
-\begin{figure}[!h]
-\centering
-\includegraphics[width=0.3\textwidth]{image.jpg}{consi5}
-\caption{Colecciones distintas referenciandose}
-\label{consi5}
-\end{figure}
-
-Vemos entonces que en Neo4j se creo un grafo en el que los nodos personas están relacionados con el nodo lugar.[fig\ref{consi5-2}]
-
-\begin{figure}[!h]
-\centering
-\includegraphics[width=0.3\textwidth]{image.jpg}{consi5-2}
-\caption{Grafo resultado de dos colecciones distintas referenciandose}
-\label{consi5-2}
-\end{figure}
-
-\subsubsection{Aplicaciones 1}
-Ya una vez vistas todas las consideraciones necesarias, podemos aplicarlas para crear un grafo que nos permita hacer consultas que nos puedan servir en nuestras aplicaciones, en este ejemplo tenemos un grafo con todos los estudiantes del curso y como estan relacionados entre ellos.[fig\ref{consi6}]
-
-\begin{figure}[!h]
-\centering
-\includegraphics[width=0.4\textwidth]{image.jpg}
-\caption{Grafo representando a los estudiantes del curso}
-\label{consi6}
-\end{figure}
-
-A partir de este grafo podríamos realizar una consulta que nos diga, que en tal caso de que ocurra una epidemia y el paciente 0 sea un miembro del grafo, que otros miembros se infectarían.[fig\ref{consi6-2}]
-
-\begin{figure}[!h]
-\centering
-\includegraphics[width=0.3\textwidth]{image.jpg}{consi6-2}
-\caption{Consulta representando la propagación de una epidemia}
-\label{consi6-2}
-\end{figure}
-
-\subsubsection{Aplicaciones 2}
-En este ultimo ejemplo, tenemos un grafo que representa los productos de una tienda y quienes los han comprado.[fig\ref{consi7}]
-
-\begin{figure}[!h]
-\centering
-\includegraphics[width=0.3\textwidth]{image.jpg}
-\caption{Grafo representando productos y clientes}
-\label{consi7}
-\end{figure}
-
-A partir de este grafo podemos hacer consultas que nos puedan decir que productos recomendar a los clientes, a partir de los que ha comprado y los que otros clientes tambien han comprado.[fig\ref{consi7-2}]
-
-\begin{figure}[!h]
-\centering
-\includegraphics[width=0.3\textwidth]{image.jpg}
-\caption{Consulta de recomendaciones a un usuario}
-\label{consi7-2}
-\end{figure}
-
-\subsection{Conclusión}
-
-Una vez vistos todos los beneficios que posee la persistencia políglota, no nos queda mas que llegar a la conclusión de que las tecnologías tienden hacia este paradigma y que en un futuro todas nuestras aplicaciones manejaran mas de un sistema manejador de base de datos, lo que implicara que nosotros como desarrolladores y administradores de base de datos tengamos que ser capaces de manejar todos estos diferentes manejadores y saber en que momento nos conviene combinar un manejador con otro.
+\bibliographystyle{unsrt}
+\bibliography{ref}
 
 
+%\begin{figure}[htp]
+%    \centering
+%    \includegraphics[scale=0.37]{clustering_algo.png}
+%    \caption{Prototype Clustering algorithm.}
+%    \label{fig:clustering_algo}
+%\end{figure}
 
-
-\bibliographystyle{IEEEtran}
-% argument is your BibTeX string definitions and bibliography database(s)
-\bibliography{references}
-
-%
-% <OR> manually copy in the resultant .bbl file
-% set second argument of \begin to the number of references
-% (used to reserve space for the reference number labels box)
-%\begin{thebibliography}{1}
-
-%\bibitem{IEEEhowto:kopka}
-%H.~Kopka and P.~W. Daly, \emph{A Guide to \LaTeX}, 3rd~ed.\hskip 1em plus
-%  0.5em minus 0.4em\relax Harlow, England: Addison-Wesley, 1999.
-
-%\end{thebibliography}
-
-
-
-
-
-
-
-
-% that's all folks
 \end{document}

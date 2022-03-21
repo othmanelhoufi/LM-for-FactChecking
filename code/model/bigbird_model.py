@@ -4,7 +4,7 @@ from sklearn.model_selection import train_test_split
 from sklearn.metrics import accuracy_score, recall_score, precision_score, f1_score, matthews_corrcoef
 import torch
 from transformers import TrainingArguments, Trainer
-from transformers import BertTokenizer, BertForSequenceClassification
+from transformers import BigBirdTokenizer, BigBirdForSequenceClassification
 from transformers import EarlyStoppingCallback
 from transformers.utils import logging
 from sklearn.metrics import classification_report, confusion_matrix
@@ -26,7 +26,7 @@ if device.type == 'cuda':
     print('Cached:   ', round(torch.cuda.memory_reserved(0)/1024**3,1), 'GB')
 
 # Transformer model
-MODEL_NAME = 'bert-base-uncased'
+MODEL_NAME = 'google/bigbird-roberta-base'
 
 # hyperparams
 MAX_SEQ_LEN = 128
@@ -45,6 +45,7 @@ REPORT="none"
 if REPORT == "wandb":
     # init wandb
     wandb.init(project="NLP-for-fact-checking-using-FEVER-dataset", name=MODEL_NAME + '-b' + str(TRAIN_BATCH_SIZE), entity="othmanelhoufi")
+
 
 # Create torch dataset
 class Dataset(torch.utils.data.Dataset):
@@ -70,15 +71,15 @@ def split_dataset(dataset):
     return X, y
 
 
-# Import BERT Model and BERT Tokenizer
-def init_bert_model(model_name=MODEL_NAME):
-    # import BERT-base pretrained model
-    bert = BertForSequenceClassification.from_pretrained(MODEL_NAME, num_labels=3)
+# Import Model and Tokenizer
+def init_model(model_name=MODEL_NAME):
+    # import pretrained model
+    model = BigBirdForSequenceClassification.from_pretrained(MODEL_NAME, num_labels=3)
 
-    # Load the BERT tokenizer
-    tokenizer = BertTokenizer.from_pretrained(model_name)
+    # Load the tokenizer
+    tokenizer = BigBirdTokenizer.from_pretrained(model_name)
 
-    return bert, tokenizer
+    return model, tokenizer
 
 
 
@@ -130,7 +131,7 @@ def start():
     val_dataset = fever.get_val_dataset()
     test_dataset = fever.get_test_dataset()
 
-    bert, tokenizer = init_bert_model(MODEL_NAME)
+    model, tokenizer = init_model(MODEL_NAME)
     train_text, train_labels = split_dataset(train_dataset)
     val_text, val_labels = split_dataset(val_dataset)
     test_text, test_labels = split_dataset(test_dataset)
@@ -175,7 +176,7 @@ def start():
             )
 
             trainer = Trainer(
-                model=bert,
+                model=model,
                 args=args,
                 train_dataset=train_dataset_torch,
                 eval_dataset=val_dataset_torch,
@@ -192,9 +193,9 @@ def start():
             test_dataset_torch = Dataset(tokens_test, test_labels)
             # Load trained model
             model_path = "outputs/" + MODEL_NAME + "/checkpoint-" + checkpoint_num
-            bert = BertForSequenceClassification.from_pretrained(model_path, num_labels=3)
+            model = BigBirdForSequenceClassification.from_pretrained(model_path, num_labels=3)
             # Define test trainer
-            test_trainer = Trainer(bert)
+            test_trainer = Trainer(model)
             # Make prediction
             raw_pred, _, _ = test_trainer.predict(test_dataset_torch)
             # Preprocess raw predictions
@@ -213,6 +214,7 @@ def start():
                 # Confusion Matrices
                 if REPORT == "wandb":
                     wandb.sklearn.plot_confusion_matrix(test_labels, y_pred, ['REFUTES', 'SUPPORTS', 'NEI'])
+
             else:
                 print("START PREDICTIONS FIRST !!\n")
 
