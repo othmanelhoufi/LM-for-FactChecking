@@ -151,7 +151,7 @@ Test           & 3,333    & 3,333   & 3,333  & 9,999          \\ \hline
 \end{table}
 
 \subsection{Language Models}
-The year 2018 has been an inflection point for NLP as Google introduced a LM called BERT (Bidirectional Encoder Representations from Transformers)\cite{devlin-etal-2019-bert}. This model was described as state-of-the-art model that solves the most difficult tasks in NLP, it is also used today in Google's search engine for text completion and translation. BERT model can be fine-tuned with just one additional output layer to create state-of-the-art models for a wide range of tasks, such as question answering and language inference, without substantial task specific architecture modifications. From there a lot of LMs were introduced that uses the same architecture as BERT but with small changes such as number of parameters and data on which the model was pre-trained.
+The year 2018 has been an inflection point for NLP as Google introduced a LM called BERT (Bidirectional Encoder Representations from Transformers)\cite{devlin2018bert}. This model was described as state-of-the-art model that solves the most difficult tasks in NLP, it is also used today in Google's search engine for text completion and translation. BERT model can be fine-tuned with just one additional output layer to create state-of-the-art models for a wide range of tasks, such as question answering and language inference, without substantial task specific architecture modifications. From there a lot of LMs were introduced that uses the same architecture as BERT but with small changes such as number of parameters and data on which the model was pre-trained.
 
 \begin{figure}[htp]
     \centering
@@ -164,22 +164,36 @@ The year 2018 has been an inflection point for NLP as Google introduced a LM cal
 In this paper we will classify claims by fine-tuning the following LMs:
 
 \begin{itemize}
-\item BERT-base-uncased
-\item RoBERTa-base
-\item DistilBERT-base-uncased
-\item XLNET-base-cased
-\item ALBERT-base-v2
-\item BigBird-RoBERTa-base
+\item BERT-base-uncased \cite{devlin2018bert}
+\item RoBERTa-base \cite{liu2019roberta}
+\item DistilBERT-base-uncased \cite{sanh2019distilbert}
+\item XLNET-base-cased \cite{yang2019xlnet}
+\item ALBERT-base-v2 \cite{lan2019albert}
+\item BigBird-RoBERTa-base \cite{zaheer2020big}\\
 \end{itemize}
 
-\section{Results and Analysis}
-\subsection{Experimental protocol}
+All of these LMs were trained on Wikipedia dataset containing cleaned articles. The datasets are built from the Wikipedia dump \footnote{\url{https://dumps.wikimedia.org/}} with one split per language. Each example contains the content of one full Wikipedia article with cleaning to strip markdown and unwanted sections (references, etc.). So in one way, all these LMs were trained on facts from Wikipedia, for example if we give the following input \textit{"Paris is the capital of [MASK]."} to BERT-base model, the output will be \textit{"Paris is the capital of France."} with a probability of 0.951.\\
+So the conjecture behind our proposed method is that: fine-tuning LMs that were pre-trained on Wikipedia can result to a self-knowledge fact-checking classifier.
+\section{Experiment Protocol and Results}
+\subsection{Experiment Setup}
+As mentioned before, we conduct our experiment on the FEVER dataset using the splits in table\ref{tab:fever_splits}. As for LMs fine-tuning we used one GPU, the NVIDIA RTX6000P-8C\footnote{Thanks to my dear friend Massinissa Yebka for providing me with this computational power.} with 8Go of memory, and we chose the following hyperparameters:
+\begin{itemize}
+\item Tokenizer max sequence length: 128
+\item Output layer size: 3 (classes: 0, 1 and 2)
+\item Activation function: GeLU
+\item Learning rate: 3e-5
+\item Optimization: Adam with linear decay
+\item Epochs: 3
+\item Training batch size: 20
+\item Validation batch size: 20\\
+\end{itemize}
 
-\subsection{Results}
+These hyperparameters may not be optimal, but they were chosen after many different repeated experiments. Optimizing the models is left for future work.
+\subsection{Evaluation Metric}
+Most of the fact-checking methods that uses FEVER dataset used FEVER scoring, a metric that considers classification accuracy and evidence recall, but since we don't tackle the evidence problem in our approach, we rely on accuracy, recall, precision and F1-score as metrics for model evaluation.\\
+In addition, we track other aspects of each LM such as training time, model size, and memory usage during the fine-tuning step in order to make an overall evaluation. 
+\subsection{Results and Discussion}
 
-\subsection{Complexity analysis}
-
-\subsection{Conclusion of the analysis}
 
 \section{Conclusion}
 
