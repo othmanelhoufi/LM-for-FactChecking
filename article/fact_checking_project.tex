@@ -13,6 +13,7 @@
 \usepackage{booktabs}
 \usepackage{hhline}
 \usepackage{arydshln}
+\usepackage{tablefootnote}
 \usepackage[numbers]{natbib}
 
 \setlength\heavyrulewidth{0.25ex}
@@ -137,6 +138,7 @@ Since our mission is to classify claims to \textit{Supports}, \textit{Refutes} o
 55061           & Yamaha Corporation produces hardware.    & NEI \\ \hline
 \end{tabular}
 }
+\vspace{0.4cm}
 \caption{Examples of FEVER claims and labels.}
 \label{tab:fever_example}
 \end{table}
@@ -154,6 +156,7 @@ Val            & 3,333    & 3,333   & 3,333  & 9,999          \\ \hline
 Test           & 3,333    & 3,333   & 3,333  & 9,999          \\ \hline
 \end{tabular}%
 }
+\vspace{0.4cm}
 \caption{Dataset split sizes for SUPPORTS, REFUTES and NOTENOUGHINFO (NEI) classes.}
 \label{tab:fever_splits}
 \end{table}
@@ -185,7 +188,9 @@ So the conjecture behind our proposed method is that: fine-tuning LMs that were 
 \section{Experiment Protocol and Results}
 \subsection{Experiment Setup}
 As mentioned before, we conduct our experiment on the FEVER dataset using the splits in table\ref{tab:fever_splits}. As for LMs fine-tuning we used one GPU, the NVIDIA RTX6000P-8C\footnote{A big thanks to my dear friend Massinissa Yebka for providing me with this computational power.} with 24Go of GDDR6 memory and a peak single precision floating point performance of 14,9 Tflops.\\
+
 For all models we chose the following hyperparameters:
+
 \begin{itemize}
 \item Tokenizer max sequence length: 128
 \item Output layer size: 3 (classes: 0, 1 and 2)
@@ -233,17 +238,23 @@ In addition, we track other aspects of each LM such as training time, model size
  & REFUTES & 0.74 & 0.59 & 0.65 &  &  &  &  \\
  & NEI & 0.63 & 0.43 & 0.51 &  &  &  &  \\
 \bottomrule
-\textbf{Related works	} & \textbf{Label} & \textbf{prec} & \textbf{recall} & \textbf{~f1} & \textbf{accuracy} & \textbf{macro prec} & \textbf{macro recall} & \textbf{macro f1} \\ 
+\textbf{Related work} & \textbf{Label} & \textbf{prec} & \textbf{recall} & \textbf{~f1} & \textbf{accuracy} & \textbf{macro prec} & \textbf{macro recall} & \textbf{macro f1} \\ 
 \toprule
 \multirow{3}{*}{\textit{BERT-large} \cite{lee2020language}} & SUPPORTS & 0.54 & 0.67 & 0.59 & \multirow{3}{*}{0.57} & \multirow{3}{*}{0.57} & \multirow{3}{*}{0.57} & \multirow{3}{*}{0.57} \\
  & REFUTES & 0.62 & 0.55 & 0.58 &  &  &  &  \\
  & NEI & 0.57 & 0.49 & 0.53 &  &  &  &  \\ 
-\bottomrule
+\midrule
+\textit{FEVER Baseline} \cite{thorne2018fact} & - & - & - & - & 0.49 & - & - & -\\
+\textit{Ohio State University} \cite{thorne2018fact} & - & - & - & - & 0.50 & - & - & -\\
+\textit{Columbia NLP} \cite{thorne2018fact} & - & - & - & - & 0.58 & - & - & -\\
+\textit{Papelo} \cite{thorne2018fact} & - & - & - & - & 0.61 & - & - & -\\
+\textit{UNC-NLP} \cite{thorne2018fact} & - & - & - & - & 0.68 & - & - & -\\
+\textit{DREAM} \cite{zhong2019reasoning} & - & - & - & - & \textbf{0.77} & - & - & -\\
 
 \end{tabular}%
 }
 \vspace{0.4cm}
-\caption{Classification metrics for each fine-tuned LM.}
+\caption{Classification metrics for each fine-tuned LM using our approach vs. BERT-large fine-tuned by FacebookAI team vs. other models based on knowledge graphs and/or traditional pipelines (we take into consideration only the accuracy of label classification and not the FEVER scoring system).}
 \end{table*}
 
 \section{Conclusion}
