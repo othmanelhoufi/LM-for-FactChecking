@@ -8,6 +8,14 @@
 \usepackage{graphicx}
 \usepackage{xcolor}
 \usepackage[]{footmisc}
+\usepackage{multirow}
+\usepackage{makecell}
+\usepackage{booktabs}
+\usepackage{hhline}
+\usepackage{arydshln}
+\usepackage[numbers]{natbib}
+
+\setlength\heavyrulewidth{0.25ex}
 
 \def\BibTeX{{\rm B\kern-.05em{\sc i\kern-.025em b}\kern-.08em
     T\kern-.1667em\lower.7ex\hbox{E}\kern-.125emX}}
@@ -75,7 +83,7 @@ This paper describes the difference between Traditional Pipeline fact-checking m
 \item \textbf{Zero-shot LM pipeline:} it replaces both the external knowledge base and the information retrieval modules with a pre-trained language model.\\
 \end{itemize}
 
-They used the publicly available 24-layer BERT-Large as our language model, which was pre-trained on Wikipedia in 2018. After fine-tuning the model they achieved 57\% in accuracy and 57\% in F1-macro score which was better than the baseline BERT model (without fine-tuning) that achieved 49\% in accuracy and 44\% in F1-macro score.
+They used the publicly available 24-layer BERT-Large as LM, which was pre-trained on Wikipedia in 2018. After fine-tuning the model they achieved 57\% in accuracy and 57\% in F1-macro score which was better than the baseline BERT model (without fine-tuning) that achieved 49\% in accuracy and 44\% in F1-macro score.
 
 \subsection{Perplexity based approach \cite{lee2021towards} \cite{lee2020misinformation}}
 In March 2021, \textit{Nayeon Lee}, \textit{Yejin Bang}, \textit{Andrea Madotto}, \textit{Madian Khabsa}, and \textit{Pascale Fung} published a paper called \textit{Towards Few-Shot Fact-Checking via Perplexity} where they propose a new approach of the powerful transfer learning ability of a language model via a perplexity score. Using a method called \textit{few-shot learning}, they built a model that outperforms major class baseline models by more than 10\% on the F1-Macro metric score.\\
@@ -176,7 +184,8 @@ All of these LMs were trained on Wikipedia dataset containing cleaned articles. 
 So the conjecture behind our proposed method is that: fine-tuning LMs that were pre-trained on Wikipedia can result to a self-knowledge fact-checking classifier.
 \section{Experiment Protocol and Results}
 \subsection{Experiment Setup}
-As mentioned before, we conduct our experiment on the FEVER dataset using the splits in table\ref{tab:fever_splits}. As for LMs fine-tuning we used one GPU, the NVIDIA RTX6000P-8C\footnote{Thanks to my dear friend Massinissa Yebka for providing me with this computational power.} with 8Go of memory, and we chose the following hyperparameters:
+As mentioned before, we conduct our experiment on the FEVER dataset using the splits in table\ref{tab:fever_splits}. As for LMs fine-tuning we used one GPU, the NVIDIA RTX6000P-8C\footnote{A big thanks to my dear friend Massinissa Yebka for providing me with this computational power.} with 24Go of GDDR6 memory and a peak single precision floating point performance of 14,9 Tflops.\\
+For all models we chose the following hyperparameters:
 \begin{itemize}
 \item Tokenizer max sequence length: 128
 \item Output layer size: 3 (classes: 0, 1 and 2)
@@ -190,10 +199,52 @@ As mentioned before, we conduct our experiment on the FEVER dataset using the sp
 
 These hyperparameters may not be optimal, but they were chosen after many different repeated experiments. Optimizing the models is left for future work.
 \subsection{Evaluation Metric}
-Most of the fact-checking methods that uses FEVER dataset used FEVER scoring, a metric that considers classification accuracy and evidence recall, but since we don't tackle the evidence problem in our approach, we rely on accuracy, recall, precision and F1-score as metrics for model evaluation.\\
-In addition, we track other aspects of each LM such as training time, model size, and memory usage during the fine-tuning step in order to make an overall evaluation. 
+Most of the fact-checking methods that uses FEVER dataset employ FEVER scoring\cite{thorne2018fever}, a metric that considers classification accuracy and evidence recall, but since we don't tackle the evidence problem in our approach, we rely on accuracy, recall, precision and F1-score of the model classification as metrics for evaluation.\\
+In addition, we track other aspects of each LM such as training time, model size, and memory usage during the fine-tuning step in order to make an overall evaluation.
 \subsection{Results and Discussion}
+\begin{table*}[t]
+\centering
+\resizebox{\textwidth}{!}{%
+\begin{tabular}{c!{\vrule width \heavyrulewidth}cccccccc} 
+\bottomrule
+\textbf{Fine-tuned model} & \textbf{Label} & \textbf{prec} & \textbf{recall} & \textbf{~f1} & \textbf{accuracy} & \textbf{macro prec} & \textbf{macro recall} & \textbf{macro f1} \\ 
+\toprule
+\multirow{3}{*}{\textit{BERT-base-uncased}} & SUPPORTS & 0.55 & 0.78 & 0.64 & \multirow{3}{*}{\textbf{0.62}} & \multirow{3}{*}{0.63} & \multirow{3}{*}{\textbf{0.62}} & \multirow{3}{*}{\textbf{0.61}} \\
+ & REFUTES & 0.75 & 0.59 & 0.66 &  &  &  &  \\
+ & NEI & 0.61 & 0.47 & 0.53 &  &  &  &  \\ 
+\midrule
+\multirow{3}{*}{\textit{ALBERT-base-v2}} & SUPPORTS & 0.46 & 0.81 & 0.59 & \multirow{3}{*}{0.53} & \multirow{3}{*}{0.58} & \multirow{3}{*}{0.53} & \multirow{3}{*}{0.52} \\
+ & REFUTES & 0.77 & 0.46 & 0.58 &  &  &  &  \\
+ & NEI & 0.50 & 0.33 & 0.40 &  &  &  &  \\ 
+\midrule
+\multirow{3}{*}{\textit{DistilBERT-base-uncased}} & SUPPORTS & 0.54 & 0.78 & 0.64 & \multirow{3}{*}{0.61} & \multirow{3}{*}{0.63} & \multirow{3}{*}{0.61} & \multirow{3}{*}{\textbf{0.61}} \\
+ & REFUTES & 0.75 & 0.58 & 0.65 &  &  &  &  \\
+ & NEI & 0.60 & 0.47 & 0.53 &  &  &  &  \\ 
+\midrule
+\multirow{3}{*}{\textit{RoBERTa-base}} & SUPPORTS & 0.54 & 0.81 & 0.65 & \multirow{3}{*}{\textbf{0.62}} & \multirow{3}{*}{\textbf{0.64}} & \multirow{3}{*}{\textbf{0.62}} & \multirow{3}{*}{\textbf{0.61}} \\
+ & REFUTES & 0.75 & 0.59 & 0.66 &  &  &  &  \\
+ & NEI & 0.63 & 0.45 & 0.53 &  &  &  &  \\ 
+\midrule
+\multirow{3}{*}{\textit{BigBird-RoBERTa-base}} & SUPPORTS & 0.53 & 0.81 & 0.64 & \multirow{3}{*}{0.61} & \multirow{3}{*}{\textbf{0.64}} & \multirow{3}{*}{0.61} & \multirow{3}{*}{0.60} \\
+ & REFUTES & 0.75 & 0.58 & 0.66 &  &  &  &  \\
+ & NEI & 0.63 & 0.44 & 0.52 &  &  &  &  \\ 
+\midrule
+\multirow{3}{*}{\textit{XLNET-base-cased}} & SUPPORTS & 0.53 & 0.81 & 0.64 & \multirow{3}{*}{0.61} & \multirow{3}{*}{0.63} & \multirow{3}{*}{0.61} & \multirow{3}{*}{0.60} \\
+ & REFUTES & 0.74 & 0.59 & 0.65 &  &  &  &  \\
+ & NEI & 0.63 & 0.43 & 0.51 &  &  &  &  \\
+\bottomrule
+\textbf{Related works	} & \textbf{Label} & \textbf{prec} & \textbf{recall} & \textbf{~f1} & \textbf{accuracy} & \textbf{macro prec} & \textbf{macro recall} & \textbf{macro f1} \\ 
+\toprule
+\multirow{3}{*}{\textit{BERT-large} \cite{lee2020language}} & SUPPORTS & 0.54 & 0.67 & 0.59 & \multirow{3}{*}{0.57} & \multirow{3}{*}{0.57} & \multirow{3}{*}{0.57} & \multirow{3}{*}{0.57} \\
+ & REFUTES & 0.62 & 0.55 & 0.58 &  &  &  &  \\
+ & NEI & 0.57 & 0.49 & 0.53 &  &  &  &  \\ 
+\bottomrule
 
+\end{tabular}%
+}
+\vspace{0.4cm}
+\caption{Classification metrics for each fine-tuned LM.}
+\end{table*}
 
 \section{Conclusion}
 
