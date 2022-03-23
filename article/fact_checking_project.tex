@@ -111,7 +111,7 @@ Most of the fact-checking algorithms today involving knowledge-based verificatio
 \end{figure}
 
 
-In this paper we present a method that is fully  reliant on the powerfulness of today's best LMs. As illustrated in figure\ref{fig:processing_pipeline}, we start by fine-tuning each model for the downstream task that is claim classification using the FEVER dataset, then each model is employed to assess the validity of new input claims. This approach takes into consideration only an internal knowledge source (FEVER) for fine-tuning, that is for the learning phase, which makes the prediction phase knowledge-free rather than utilizing external knowledge sources for retrieving articles and sentences.
+In this paper we present a method that is fully  reliant on the powerfulness of today's best LMs. As illustrated in Figure \ref{fig:processing_pipeline}, we start by fine-tuning each model for the downstream task that is claim classification using the FEVER dataset, then each model is employed to assess the validity of new input claims. This approach takes into consideration only an internal knowledge source (FEVER) for fine-tuning, that is for the learning phase, which makes the prediction phase knowledge-free rather than utilizing external knowledge sources for retrieving articles and sentences.
 
 It is also important to mention that we only use LMs for classifying claims and not for generating evidence. We leave generating evidences with language models for future work.
 
@@ -187,7 +187,7 @@ All of these LMs were trained on Wikipedia dataset containing cleaned articles. 
 So the conjecture behind our method is that: fine-tuning LMs that were pre-trained on Wikipedia, and by exploiting the already stored knowledge within these LMs, we can create a self-knowledge-independent fact-checking classifier.
 \section{Experiment Protocol and Results}
 \subsection{Experiment Setup}
-As mentioned before, we conduct our experiment on the FEVER dataset using the splits in Table \ref{tab:fever_splits}. As for LMs fine-tuning we used one GPU, the NVIDIA RTX6000P-8C\footnote{A big thanks to my dear friend Massinissa Yebka for providing me with this computational power.} with 24Go of GDDR6 memory and a peak single precision floating point performance of 14,9 Tflops.\\
+As mentioned before, we conduct our experiment on the FEVER dataset using the splits in Table \ref{tab:fever_splits}. As for LMs fine-tuning we used one GPU, the NVIDIA RTX6000P-8C with 24Go of GDDR6 memory and a peak single precision floating point performance of 14,9 Tflops.\\
 
 For all models we chose the following hyperparameters:
 
@@ -197,6 +197,7 @@ For all models we chose the following hyperparameters:
 \item Activation function: GeLU
 \item Learning rate: 3e-5
 \item Optimization: Adam with linear decay
+\item Loss function: Cross-Entropy
 \item Epochs: 3
 \item Training batch size: 20
 \item Validation batch size: 20\\
@@ -217,7 +218,43 @@ Similarly, the fine-tuned \textit{RoBERTa-base} model achieved more accuracy sco
 
 Same as FacebookAI results\cite{lee2020language}, and upon examining the results of our fine-tuned LMs closely, we also find that all our LMs struggles immensely with the NEI category (lowest F1 scores) indicating that our current approach might also need specific modules to better tackle that category.\\
 
-Furthermore, the difference in classification performance between our LMs is not big considering the fact that each LM was pre-trained differently. The only model that performed poorly is \textit{ALBERT-base-v2}, it achieved only 53\% accuracy score and 52\% macro F1 score. This can be explained by the reduced number of the model's parameters (12 million vs. \textit{BERT}'s 110 million).
+Furthermore, the difference in classification performance between our LMs is not big considering the fact that each LM was pre-trained differently. The only model that performed poorly is \textit{ALBERT-base-v2}, it achieved only 53\% accuracy score and 52\% macro F1 score. This can be explained by the reduced number of the model's parameters (12 million vs. \textit{BERT}'s 110 million).\\
+
+We can also see the differences between each LM during the training and the evaluation as illustrated in Figure \ref{fig:train_loss} and Figure \ref{fig:eval_loss}.
+
+\begin{figure}[htp]
+    \centering
+    \includegraphics[scale=0.13]{train_loss.png}
+    \caption[Comparison]{The Cross-Entropy Loss of each LM during training.}
+    \label{fig:train_loss}
+\end{figure}
+
+\begin{figure}[htp]
+    \centering
+    \includegraphics[scale=0.13]{eval_loss.png}
+    \caption[Comparison]{The Cross-Entropy Loss of each LM during evaluation.}
+    \label{fig:eval_loss}
+\end{figure}
+
+As expected, \textit{RoBERTa-base} model reached the lowest Cross-Entropy loss of 0.878 during evaluation while \textit{ALBERT-base-v2} kept a higher loss of 0.961 during evaluation (also 0.75 during training). It is even clearer in Figure \ref{fig:eval_mcc} and Figure \ref{fig:eval_acc}  that \textit{ALBERT-base-v2} had the lowest Matthews correlation coefficient score (mcc) as well as  accuracy score during evaluation.
+
+\begin{figure}[htp]
+    \centering
+    \includegraphics[scale=0.13]{eval_mcc.png}
+    \caption[Comparison]{The Matthews correlation coefficient score of each LM during evaluation.}
+    \label{fig:eval_mcc}
+\end{figure}
+
+\begin{figure}[htp]
+    \centering
+    \includegraphics[scale=0.13]{eval_acc.png}
+    \caption[Comparison]{The accuracy score of each LM during evaluation.}
+    \label{fig:eval_acc}
+\end{figure}
+
+Even if the other LM reached the same accuracy and mcc as \textit{RoBERTa-base} during evaluation or a lower loss during training they did not perform as well in the test set which was demonstrated in Table \ref{tab:accuracy_res}.\\
+
+
 
 \begin{table*}[t]
 \centering
@@ -271,6 +308,9 @@ Furthermore, the difference in classification performance between our LMs is not
 \end{table*}
 
 \section{Conclusion}
+
+\section{Acknowledgements}
+We would like to thank Massinissa Yebka for providing us with the computational power that made our calculations possible in a short time-frame.
 
 \bibliographystyle{unsrt}
 \bibliography{ref}
