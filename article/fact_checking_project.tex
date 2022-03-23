@@ -2,12 +2,13 @@
 \IEEEoverridecommandlockouts
 % The preceding line is only needed to identify funding in the first footnote. If that is unneeded, please comment it out.
 \usepackage{cite}
-\usepackage{hyperref}
+\usepackage[hang, flushmargin]{footmisc}
+\usepackage[colorlinks=true]{hyperref}
 \usepackage{amsmath,amssymb,amsfonts}
 \usepackage{algorithmic}
 \usepackage{graphicx}
 \usepackage{xcolor}
-\usepackage[]{footmisc}
+%\usepackage[]{footmisc}
 \usepackage{multirow}
 \usepackage{makecell}
 \usepackage{booktabs}
@@ -46,21 +47,21 @@ dimitrios.kotzinos@cyu.fr}
 \begin{abstract}
 As false information and fake news are propagating throughout the internet and social networks, the need of fact-checking operations becomes necessary in order to maintain a truthful digital environment where general information can be reliably exploited whether in politics, finance or other domains. The need of this online claim assessment comes from the fact that fake news and false information can have a big negative impact on politics, economy (2016 USA Elections) and public health (COVID-19).\\ 
 A number of solutions have been proposed to deal with this problem and limit the spread of false information, both manual and automatic. Of course the manual approaches done on websites such as \textit{PolitiFact.com}, \textit{FactCheck.org} and \textit{Snopes.com} don't construct a viable solution for the long term as the speed and scale of information propagation increase exponentially rendering this manual fact-checking operation where human fact-checkers can't scale up at the same rate limited and incapable of solving the problem.\\
-Here, we present our contribution in this regard: an automated solution for fact-checking using FEVER dataset as a source of truth and a state of the art language models used today for NLP tasks (BERT, RoBERTa, XLNet...) in order to classify a given claim as \textit{Supports}, \textit{Refutes} or \textit{Not enough information (NEI)}. We successfully prove that fine-tuning a LM with the correct settings can achieve an accuracy of 62\% and F-score of 61\% which is better than the majority of fact-checking methods that exists today.\\
+Here, we present our contribution in this regard: an automated solution for fact-checking using FEVER dataset as a source of truth and a state of the art language models used today for NLP tasks (BERT, RoBERTa, XLNet...) in order to classify a given claim as \textit{Supports}, \textit{Refutes} or \textit{Not enough information (NEI)}. We successfully prove that fine-tuning a LM with the correct settings can achieve an accuracy of 62\% and F1-score of 61\% which is better than the majority of fact-checking methods that exists today.\\
 \end{abstract}
 
 \begin{IEEEkeywords}
-Natural Language Processing, Language Model, Wikipedia, Information retrieval, Text processing, Natural Language Inferencing, Fact-Checking, Document retrieval, Fake-news.
+Natural Language Processing, Language Model, Wikipedia, Fine-tuning, Zero-shot Learning, Text processing, Natural Language Inferencing, Fact-Checking, Fake-news.
 \end{IEEEkeywords}
 
 \section{Introduction}
-From a social and psychological perspective, humans have been proven irrational and vulnerable when differentiating between truth and false news (typical accuracy ranges between 55\% and 58\%) \cite{zhou2019fake}, thus fake news obtain public trust relatively easier than truthful news because individuals tend to trust fake news after repeated exposure (\textit{Validity effect}), or if it confirms their pre-existing beliefs (\textit{Confirmation bias}), or simply due to the obligation of participating socially and proving a social identity (\textit{Peer pressure}). The social sciences are still trying to comprehend the biological motivations that makes fake news more appealing to humans.\\
+From a social and psychological perspective, humans have been proven irrational and vulnerable when differentiating between truth and false news (typical accuracy ranges between 55\% and 58\%) \cite{zhou2019fake}, thus fake news obtain public trust relatively easier than truthful news because individuals tend to trust fake news after constant exposure (\textit{Validity effect}), or if it confirms their pre-existing beliefs (\textit{Confirmation bias}), or simply due to the obligation of participating socially and proving a social identity (\textit{Peer pressure}). The social sciences are still trying to comprehend the biological motivations that makes fake news more appealing to humans.\\
 
 On the other hand, the growth of social media platforms resulted in a huge acceleration of news spreading whether true or false. As of Aug. 2017, 67\% \cite{zhou2019fake} of Americans get their news from social media. These platforms even give the user the right to share, forward, vote and participate to online discussions. All of this made the problem of fake news spreading more and more dangerous, our economies for example, are not robust to the spread of falsity, false rumors have affected stock prices and the motivations for large-scale investments, as we witnessed after a false tweet claimed that Barack Obama was injured in an explosion which caused \$130 billion drop in stock value \cite{vosoughi2018spread}. Another recent example is related to public health where rumors about COVID-19 vaccines and drug companies influenced people in their decision on getting vaccinated.\\
 
 That being said, is there a way to monitor the spread of fake news through social media? Or more specifically, how can we differentiate between fake news and truthful news, and at what level of confidence can we do that?\\
 
-From a computer engineering perspective, different approaches were studied:
+From a computer engineering perspective, various approaches were examined:
 
 \begin{itemize}
 \item \textbf{Knowledge-based Fake News Detection \cite{chernyavskiy2021whatthewikifact}:} a method aims to assess news authenticity by comparing the knowledge extracted from to-be verified news content with known facts, also called fact-checking.
@@ -69,7 +70,7 @@ From a computer engineering perspective, different approaches were studied:
 \item \textbf{Credibility-based Fake News Detection \cite{sitaula2020credibility}:} the information about authors of news articles can indicate news credibility and help detect fake news.
 \end{itemize}
 
-In this paper we will focus on a new approach that utilizes Language Models (LMs) for fact-checking. The goal is not to implement an algorithm that scans social networks for real time fake news detection, but rather we will create a model that can assess with a degree of confidence the truthfulness or falseness of a claim given by a user as an input by exploiting LMs that were already trained on Wikipedia, and fine-tune each LM for a downstream task in order to solve this classification problem.
+In this paper we will focus on a modern approach that utilizes Language Models (LMs) for fact-checking. The goal is not to implement an algorithm that scans social networks for real time fake news detection, but rather we will design a model that can assess with a degree of confidence the truthfulness or falseness of a claim given by a user as an input by exploiting LMs that were already trained on Wikipedia, and fine-tune each LM for a downstream task in order to solve this classification problem.
 
 \section{Related works}
 \subsection{Language model based approach \cite{lee2020language} \cite{petroni2019language}}
@@ -87,7 +88,7 @@ This paper describes the difference between Traditional Pipeline fact-checking m
 They used the publicly available 24-layer BERT-Large as LM, which was pre-trained on Wikipedia in 2018. After fine-tuning the model they achieved 57\% in accuracy and 57\% in F1-macro score which was better than the baseline BERT model (without fine-tuning) that achieved 49\% in accuracy and 44\% in F1-macro score.
 
 \subsection{Perplexity based approach \cite{lee2021towards} \cite{lee2020misinformation}}
-In March 2021, \textit{Nayeon Lee}, \textit{Yejin Bang}, \textit{Andrea Madotto}, \textit{Madian Khabsa}, and \textit{Pascale Fung} published a paper called \textit{Towards Few-Shot Fact-Checking via Perplexity} where they propose a new approach of the powerful transfer learning ability of a language model via a perplexity score. Using a method called \textit{few-shot learning}, they built a model that outperforms major class baseline models by more than 10\% on the F1-Macro metric score.\\
+In March 2021, \textit{Nayeon Lee}, \textit{Yejin Bang}, \textit{Andrea Madotto}, \textit{Madian Khabsa}, and \textit{Pascale Fung} published a paper called \textit{Towards Few-Shot Fact-Checking via Perplexity} where they propose a new approach of the powerful transfer learning ability of a language model via a perplexity score. Using a method called \textit{few-shot learning}, they designed a model that outperforms major class baseline models by more than 10\% on the F1-Macro metric score.\\
 In this paper the goal is to determine the veracity of a claim given some evidence, for this they define a {claim, evidence} pair. The label \emph{Supported} is assigned when relevant evidence exists that supports the claim, and \emph{Unsupported} label for the opposite case.\\
 \emph{Unsupported} claims on average have higher perplexity than \emph{Supported} claims. For example, \emph{Supported} claim "Washing hands prevents the spread of diseases" has a perplexity value of 96.74, whereas the \emph{Unsupported} claim "All dogs speak English fluently" has a much higher perplexity value of 328.23.\\
 The datasets used in this experiment are: Covid19-Scientific, Covid19-Social, and FEVER. As for the perplexity based experiment they used one unidirectional LM and one masked LM:
@@ -101,7 +102,7 @@ tasks in all settings. For instance, $PPL_{GPT2-B}$ achieved accuracy of 67.48\%
 On the other hand the classification was limited to two labels (\emph{Supported} and \emph{Unsupported}) which does not solve the entire classification problem in the FEVER dataset that provides three labels (\textit{Supports}, \textit{Refutes} or \textit{Not enough information (NEI)}).
 
 \section{Proposed method}
-Most of the fact-checking algorithms today involving knowledge-based verification uses a traditional pipeline that puts in place a module for retrieving articles from an external source, another module for retrieving relevant sentences from each article, and a last module for natural language inferencing (NLI) in order to classify a claim.
+Most of the fact-checking algorithms today involving knowledge-based verification uses a traditional pipeline that puts in place a module for retrieving articles from an external source, another module for retrieving relevant sentences from each article and a last module for natural language inferencing (NLI) to classify a claim.
 
 \begin{figure}[htp]
     \centering
@@ -111,9 +112,9 @@ Most of the fact-checking algorithms today involving knowledge-based verificatio
 \end{figure}
 
 
-In this paper we present a method that is fully  reliant on the powerfulness of today's best LMs. As illustrated in Figure \ref{fig:processing_pipeline}, we start by fine-tuning each model for the downstream task that is claim classification using the FEVER dataset, then each model is employed to assess the validity of new input claims. This approach takes into consideration only an internal knowledge source (FEVER) for fine-tuning, that is for the learning phase, which makes the prediction phase knowledge-free rather than utilizing external knowledge sources for retrieving articles and sentences.
+In this paper we present a method that is fully reliant on the powerfulness of today's best LMs. As illustrated in Figure \ref{fig:processing_pipeline}, we start by fine-tuning each model for the downstream task that is claim classification using the FEVER dataset, then each model is employed to assess the validity of new input claims. This approach takes into consideration only an internal knowledge source (FEVER) for fine-tuning, that is for the learning phase, which makes the prediction phase knowledge-free rather than utilizing external knowledge sources for retrieving articles and sentences.
 
-It is also important to mention that we only use LMs for classifying claims and not for generating evidence. We leave generating evidences with language models for future work.
+It is also important to mention we only use LMs for classifying claims and not for generating evidence. We leave generating evidences with language models for future work.
 
 \subsection{FEVER Dataset}
 FEVER (Fact Extraction and VERification) consists of 185,445 claims generated by altering sentences extracted from Wikipedia and subsequently verified without knowledge of the sentence they were derived from. The claims are classified as Supported, Refuted or NotEnoughInfo. For the first two classes, the annotators also recorded the sentence(s) forming the necessary evidence for their judgment\cite{thorne2018fever}.
@@ -125,7 +126,7 @@ FEVER (Fact Extraction and VERification) consists of 185,445 claims generated by
     \label{fig:fever_example}
 \end{figure}
 
-Since our mission is to classify claims to \textit{SUPPORTS}, \textit{REFUTES} or \textit{NEI} and not generating evidence, we omit the evidences information in the dataset. Then we map each label to an integer: \{\textit{SUPPORTS} : 1, \textit{REFUTES} : 0, \textit{NEI} : 2\} and that is all we do as far as data pre-preprocessing goes.
+Since our mission is to classify claims to \textit{SUPPORTS}, \textit{REFUTES} or \textit{NEI} and not generating evidence, we omit the evidences information in the dataset. At that point we map each label to an integer: \{\textit{SUPPORTS} : 1, \textit{REFUTES} : 0, \textit{NEI} : 2\} and that is all we do as far as data pre-preprocessing goes.
 
 \begin{table}[htp]
 \centering
@@ -143,7 +144,7 @@ Since our mission is to classify claims to \textit{SUPPORTS}, \textit{REFUTES} o
 \label{tab:fever_example}
 \end{table}
 
-Finally we split the dataset to training, validation and testing sets that we can use for LM fine-tuning and testing:
+Finally, we split the dataset to training, validation and testing sets that we can use for LM fine-tuning and testing:
 
 \begin{table}[htp]
 \centering
@@ -162,7 +163,7 @@ Test           & 3,333    & 3,333   & 3,333  & 9,999          \\ \hline
 \end{table}
 
 \subsection{Language Models}
-The year 2018 has been an inflection point for NLP as Google introduced a LM called BERT (Bidirectional Encoder Representations from Transformers)\cite{devlin2018bert}. This model was described as state-of-the-art model that solves the most difficult tasks in NLP, it is also used today in Google's search engine for text completion and translation. BERT model can be fine-tuned with just one additional output layer to create state-of-the-art models for a wide range of tasks, such as question answering and language inference, without substantial task specific architecture modifications. From there a lot of LMs were introduced that uses the same architecture as BERT but with small changes such as number of parameters and data on which the model was pre-trained.
+The year 2018 has been an inflection point for NLP as Google introduced a LM called BERT (Bidirectional Encoder Representations from Transformers)\cite{devlin2018bert}. This model was described as state-of-the-art model that solves the most difficult tasks in NLP, it is also used today in Google's search engine for text completion and translation. BERT model can be fine-tuned with just one additional output layer to create state-of-the-art models for a wide range of tasks, such as question answering and language inference, without substantial task specific architecture modifications. From there many LMs were introduced that uses the same architecture as BERT but with small changes such as number of parameters and data on which the model was pre-trained.
 
 \begin{figure}[htp]
     \centering
@@ -184,7 +185,7 @@ In this paper we will classify claims by fine-tuning the following LMs:
 \end{itemize}
 
 All of these LMs were trained on Wikipedia dataset containing cleaned articles. The datasets are built from the Wikipedia dump \footnote{\url{https://dumps.wikimedia.org/}} with one split per language. Each example contains the content of one full Wikipedia article with cleaning to strip markdown and unwanted sections (references, etc.). So in one way, all these LMs were trained on facts from Wikipedia, for example if we give the following input \textit{"Paris is the capital of [MASK]."} to BERT-base model, the output will be \textit{"Paris is the capital of France."} with a probability of 0.951.\\
-So the conjecture behind our method is that: fine-tuning LMs that were pre-trained on Wikipedia, and by exploiting the already stored knowledge within these LMs, we can create a self-knowledge-independent fact-checking classifier.
+Therefore the conjecture behind our method is that: fine-tuning LMs that were pre-trained on Wikipedia, and by exploiting the already stored knowledge within these LMs, we can create a self-knowledge-independent fact-checking classifier.
 \section{Experiment Protocol and Results}
 \subsection{Experiment Setup}
 As mentioned before, we conduct our experiment on the FEVER dataset using the splits in Table \ref{tab:fever_splits}. As for LMs fine-tuning we used one GPU, the NVIDIA RTX6000P-8C with 24Go of GDDR6 memory and a peak single precision floating point performance of 14,9 Tflops.\\
@@ -207,7 +208,7 @@ These hyperparameters may not be optimal, but they were chosen after many differ
 \subsection{Evaluation Metric}
 Most of the fact-checking methods that uses FEVER dataset employ FEVER scoring\cite{thorne2018fever}, a metric that considers classification accuracy and evidence recall, but since we don't tackle the evidence problem in our approach, we rely on accuracy, recall, precision and F1-score of the model classification as metrics for evaluation.\\
 In addition, we track other aspects of each LM such as training time, model size, and memory usage during the fine-tuning step in order to make an overall evaluation.
-\subsection{Results and Discussion}
+\subsection{Results \& Discussion}
 \begin{table*}[htp]
 	\centering
 	\resizebox{0.9\textwidth}{!}{%
@@ -264,9 +265,9 @@ The results of the six models are reported in Table \ref{tab:accuracy_res}. We c
 
 Specifically the fine-tuned \textit{RoBERTa-base} model surpasses the fine-tuned \textit{BERT-large} model created by FacebookAI in every metric. For instance our model achieved an accuracy score of 62\% and a macro precision score of 64\% which is an improvement of 5\% and 7\% respectively. Not only that, it is also worth mentioning that \textit{RoBERTa-base} has only 125 million parameters and 12 encoding layers in comparison to \textit{BERT-large} that has 340 million parameters and 24 encoding layers, thus rendering our model more efficient to train, to store and to implement.\\
 
-The improvements in classification is probably due to the fact that \textit{RoBERTa} is pre-trained on more data than \textit{BERT} as shown in Figure \ref{fig:lm_compar}. On the other hand, our fine-tuned \textit{BERT-base} model also achieved better results than FacebookAI's model which may be explained by the difference of hyperparameters choice.\\
+The improvements in classification are presumably due to the fact that \textit{RoBERTa} is pre-trained on more data than \textit{BERT} as shown in Figure \ref{fig:lm_compar}. On the other hand, our fine-tuned \textit{BERT-base} model also achieved better results than FacebookAI's model which may be explained by the difference of hyperparameters choice.\\
 
-Similarly, the fine-tuned \textit{RoBERTa-base} model achieved more accuracy score for label classification than most of the traditional pipelines, therefore it puts our approach on the top-10 best fact-checking models that were published by FEVER community\cite{thorne2018fact} (without taking into consideration the evidence generation metric). It is also safe to say that the \textit{DREAM} fact-checking model is certainly superior than all our LMs as it achieved an accuracy score of 77\% which is 15\% higher. This is a proof that there is still much room for future research and improvements.\\
+Similarly, the fine-tuned \textit{RoBERTa-base} model achieved more accuracy score for label classification than most of the traditional pipelines, therefore it puts our approach on the top-10 best fact-checking models that were published by FEVER community\cite{thorne2018fact} (without taking into consideration the evidence generation metric). It is also safe to say that the \textit{DREAM} fact-checking model is certainly superior than all our LMs as it achieved an accuracy score of 77\% which is 15\% higher. This is a proof that there is still much room for subsequent research and improvements.\\
 
 Same as FacebookAI results\cite{lee2020language}, and upon examining the results of our fine-tuned LMs closely, we also find that all our LMs struggles immensely with the NEI category (lowest F1 scores) indicating that our current approach might also need specific modules to better tackle that category.\\
 
@@ -296,7 +297,7 @@ We can also see the differences between each LM during the training and the eval
     \label{fig:eval_loss}
 \end{figure}
 
-As expected, \textit{RoBERTa-base} model reached the lowest Cross-Entropy loss of 0.878 during evaluation while \textit{ALBERT-base-v2} kept a higher loss of 0.961 during evaluation (also 0.75 during training). It is even clearer in Figure \ref{fig:eval_mcc} and Figure \ref{fig:eval_acc}  that \textit{ALBERT-base-v2} had the lowest Matthews correlation coefficient score (mcc) as well as  accuracy score during evaluation.
+As expected, \textit{RoBERTa-base} model reached the lowest Cross-Entropy loss of 0.878 during evaluation while \textit{ALBERT-base-v2} sustained a higher loss of 0.961 during evaluation (also 0.75 during training). It is even more explicit in Figure \ref{fig:eval_mcc} and Figure \ref{fig:eval_acc} that \textit{ALBERT-base-v2} had the lowest Matthews correlation coefficient score (mcc) as well as accuracy score during evaluation.
 
 \begin{figure}[htp]
     \centering
@@ -314,7 +315,7 @@ As expected, \textit{RoBERTa-base} model reached the lowest Cross-Entropy loss o
 
 Even if the other LM reached the same accuracy and mcc as \textit{RoBERTa-base} during evaluation or a lower loss during training they did not perform as well in the test set which was demonstrated in Table \ref{tab:accuracy_res}.\\
 
-Finally, it is also important to mention that training time differs from one LM to another (Figure \ref{fig:train_time}) as the number of parameters are not similar, for instance \textit{XLNET-base-cased} model spent 1h56m for training while \textit{RoBERTa-base} took 1h25m and achieved better results. The idea that we are trying to prove is that we don't need a bigger model in order to achieve greater results for a downstream task like text classification.
+Finally, it is also important to mention that training time differs from one LM to another (Figure \ref{fig:train_time}) as the number of parameters are not similar, for instance \textit{XLNET-base-cased} model spent 1h56m for training while \textit{RoBERTa-base} took 1h25m and achieved better results. The idea that we are trying to prove is we don't need a bigger model in order to achieve greater results for a downstream task like text classification.
 
 \begin{figure}[htp]
     \centering
@@ -323,7 +324,10 @@ Finally, it is also important to mention that training time differs from one LM 
     \label{fig:train_time}
 \end{figure}
 
-\section{Conclusion}
+\section{Conclusion \& Future Work}
+In this paper, we explored the capabilities of language models to be fine-tuned and utilized for a downstream task that is fact-checking claims. We have successfully proven the effectiveness of pre-trained language models as an independent source of knowledge rather than implementing modules for external information retrieval adopted by traditional approaches. Our experiment conclusively yields results that surpasses most of the existing fact-checking methods both traditional and LM-based. Nevertheless, our approach does not beat state-of-art traditional models leaving us with more paths to explore in order to produce a reliable fact-checking engine.\\
+
+In time to come, we plan to investigate solutions to deal with NEI category where our approach struggles. In addition, we will attempt to combine other models with our approach like credibility-based or style-based models, we will also implement evidence generation alongside claim classification in order to provide the user with reliable information.  
 
 \section{Acknowledgements}
 We would like to thank Massinissa Yebka for providing us with the computational power that made our calculations possible in a short time-frame.
