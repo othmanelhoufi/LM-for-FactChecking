@@ -46,7 +46,7 @@ dimitrios.kotzinos@cyu.fr}
 \begin{abstract}
 As false information and fake news are propagating throughout the internet and social networks, the need of fact-checking operations becomes necessary in order to maintain a truthful digital environment where general information can be reliably exploited whether in politics, finance or other domains. The need of this online claim assessment comes from the fact that fake news and false information can have a big negative impact on politics, economy (2016 USA Elections) and public health (COVID-19).\\ 
 A number of solutions have been proposed to deal with this problem and limit the spread of false information, both manual and automatic. Of course the manual approaches done on websites such as \textit{PolitiFact.com}, \textit{FactCheck.org} and \textit{Snopes.com} don't construct a viable solution for the long term as the speed and scale of information propagation increase exponentially rendering this manual fact-checking operation where human fact-checkers can't scale up at the same rate limited and incapable of solving the problem.\\
-Here, we present our contribution in this regard: an automated solution for fact-checking using Wikipedia as a source of truth and a state of the art language models used today for NLP tasks (BERT, RoBERTa, XLNet...) in order to classify a given claim as \textit{Supports}, \textit{Refutes} or \textit{Not enough information (NEI)}.\\
+Here, we present our contribution in this regard: an automated solution for fact-checking using FEVER dataset as a source of truth and a state of the art language models used today for NLP tasks (BERT, RoBERTa, XLNet...) in order to classify a given claim as \textit{Supports}, \textit{Refutes} or \textit{Not enough information (NEI)}. We successfully prove that fine-tuning a LM with the correct settings can achieve an accuracy of 62\% and F-score of 61\% which is better than the majority of fact-checking methods that exists today.\\
 \end{abstract}
 
 \begin{IEEEkeywords}
@@ -208,6 +208,58 @@ These hyperparameters may not be optimal, but they were chosen after many differ
 Most of the fact-checking methods that uses FEVER dataset employ FEVER scoring\cite{thorne2018fever}, a metric that considers classification accuracy and evidence recall, but since we don't tackle the evidence problem in our approach, we rely on accuracy, recall, precision and F1-score of the model classification as metrics for evaluation.\\
 In addition, we track other aspects of each LM such as training time, model size, and memory usage during the fine-tuning step in order to make an overall evaluation.
 \subsection{Results and Discussion}
+\begin{table*}[htp]
+	\centering
+	\resizebox{0.9\textwidth}{!}{%
+	\begin{tabular}{c!{\vrule width \heavyrulewidth}cccccccc} 
+	\bottomrule
+	\textbf{Fine-tuned model} & \textbf{Label} & \textbf{prec} & \textbf{recall} & \textbf{~f1} & \textbf{accuracy} & \textbf{macro prec} & \textbf{macro recall} & \textbf{macro f1} \\ 
+	\toprule
+	\multirow{3}{*}{\textit{BERT-base-uncased}} & SUPPORTS & 0.55 & 0.78 & 0.64 & \multirow{3}{*}{\textbf{0.62}} & \multirow{3}{*}{0.63} & \multirow{3}{*}{\textbf{0.62}} & \multirow{3}{*}{\textbf{0.61}} \\
+	 & REFUTES & 0.75 & 0.59 & 0.66 &  &  &  &  \\
+	 & NEI & 0.61 & 0.47 & 0.53 &  &  &  &  \\ 
+	\midrule
+	\multirow{3}{*}{\textit{ALBERT-base-v2}} & SUPPORTS & 0.46 & 0.81 & 0.59 & \multirow{3}{*}{0.53} & \multirow{3}{*}{0.58} & \multirow{3}{*}{0.53} & \multirow{3}{*}{0.52} \\
+	 & REFUTES & 0.77 & 0.46 & 0.58 &  &  &  &  \\
+	 & NEI & 0.50 & 0.33 & 0.40 &  &  &  &  \\ 
+	\midrule
+	\multirow{3}{*}{\textit{DistilBERT-base-uncased}} & SUPPORTS & 0.54 & 0.78 & 0.64 & \multirow{3}{*}{0.61} & \multirow{3}{*}{0.63} & \multirow{3}{*}{0.61} & \multirow{3}{*}{\textbf{0.61}} \\
+	 & REFUTES & 0.75 & 0.58 & 0.65 &  &  &  &  \\
+	 & NEI & 0.60 & 0.47 & 0.53 &  &  &  &  \\ 
+	\midrule
+	\multirow{3}{*}{\textit{RoBERTa-base}} & SUPPORTS & 0.54 & 0.81 & 0.65 & \multirow{3}{*}{\textbf{0.62}} & \multirow{3}{*}{\textbf{0.64}} & \multirow{3}{*}{\textbf{0.62}} & \multirow{3}{*}{\textbf{0.61}} \\
+	 & REFUTES & 0.75 & 0.59 & 0.66 &  &  &  &  \\
+	 & NEI & 0.63 & 0.45 & 0.53 &  &  &  &  \\ 
+	\midrule
+	\multirow{3}{*}{\textit{BigBird-RoBERTa-base}} & SUPPORTS & 0.53 & 0.81 & 0.64 & \multirow{3}{*}{0.61} & \multirow{3}{*}{\textbf{0.64}} & \multirow{3}{*}{0.61} & \multirow{3}{*}{0.60} \\
+	 & REFUTES & 0.75 & 0.58 & 0.66 &  &  &  &  \\
+	 & NEI & 0.63 & 0.44 & 0.52 &  &  &  &  \\ 
+	\midrule
+	\multirow{3}{*}{\textit{XLNET-base-cased}} & SUPPORTS & 0.53 & 0.81 & 0.64 & \multirow{3}{*}{0.61} & \multirow{3}{*}{0.63} & \multirow{3}{*}{0.61} & \multirow{3}{*}{0.60} \\
+	 & REFUTES & 0.74 & 0.59 & 0.65 &  &  &  &  \\
+	 & NEI & 0.63 & 0.43 & 0.51 &  &  &  &  \\
+	\bottomrule
+	\textbf{Related work} & \textbf{Label} & \textbf{prec} & \textbf{recall} & \textbf{~f1} & \textbf{accuracy} & \textbf{macro prec} & \textbf{macro recall} & \textbf{macro f1} \\ 
+	\toprule
+	\multirow{3}{*}{\textit{BERT-large} \cite{lee2020language}} & SUPPORTS & 0.54 & 0.67 & 0.59 & \multirow{3}{*}{0.57} & \multirow{3}{*}{0.57} & \multirow{3}{*}{0.57} & \multirow{3}{*}{0.57} \\
+	 & REFUTES & 0.62 & 0.55 & 0.58 &  &  &  &  \\
+	 & NEI & 0.57 & 0.49 & 0.53 &  &  &  &  \\ 
+	\midrule
+	\textit{FEVER Baseline} \cite{thorne2018fact} & - & - & - & - & 0.49 & - & - & -\\
+	\textit{Ohio State University} \cite{thorne2018fact} & - & - & - & - & 0.50 & - & - & -\\
+	\textit{Columbia NLP} \cite{thorne2018fact} & - & - & - & - & 0.58 & - & - & -\\
+	\textit{Papelo} \cite{thorne2018fact} & - & - & - & - & 0.61 & - & - & -\\
+	\textit{UNC-NLP} \cite{thorne2018fact} & - & - & - & - & 0.68 & - & - & -\\
+	\textit{DREAM} \cite{zhong2019reasoning} & - & - & - & - & \textbf{0.77} & - & - & -\\
+	
+	\end{tabular}%
+	}
+	\vspace{0.4cm}
+	\caption{Classification metrics for each fine-tuned LM using our approach vs. BERT-large fine-tuned by FacebookAI team vs. other models based on knowledge graphs and/or traditional pipelines that uses FEVER dataset (we take into consideration only the accuracy of label classification and not the FEVER scoring system).}
+	\label{tab:accuracy_res}
+\end{table*}
+
+
 The results of the six models are reported in Table \ref{tab:accuracy_res}. We can observe that our approach yields to better results than FacebookAI's model and most of the traditional methods that involves external information retrieval modules.\\
 
 Specifically the fine-tuned \textit{RoBERTa-base} model surpasses the fine-tuned \textit{BERT-large} model created by FacebookAI in every metric. For instance our model achieved an accuracy score of 62\% and a macro precision score of 64\% which is an improvement of 5\% and 7\% respectively. Not only that, it is also worth mentioning that \textit{RoBERTa-base} has only 125 million parameters and 12 encoding layers in comparison to \textit{BERT-large} that has 340 million parameters and 24 encoding layers, thus rendering our model more efficient to train, to store and to implement.\\
@@ -217,6 +269,14 @@ The improvements in classification is probably due to the fact that \textit{RoBE
 Similarly, the fine-tuned \textit{RoBERTa-base} model achieved more accuracy score for label classification than most of the traditional pipelines, therefore it puts our approach on the top-10 best fact-checking models that were published by FEVER community\cite{thorne2018fact} (without taking into consideration the evidence generation metric). It is also safe to say that the \textit{DREAM} fact-checking model is certainly superior than all our LMs as it achieved an accuracy score of 77\% which is 15\% higher. This is a proof that there is still much room for future research and improvements.\\
 
 Same as FacebookAI results\cite{lee2020language}, and upon examining the results of our fine-tuned LMs closely, we also find that all our LMs struggles immensely with the NEI category (lowest F1 scores) indicating that our current approach might also need specific modules to better tackle that category.\\
+
+% This was also confirmed when we plotted the confusion matrix of our models (for example \textit{RoBERTa-base} in Figure \ref{fig:confusion_matrix_roberta}).
+%\begin{figure}[htp]
+%    \centering
+%    \includegraphics[scale=0.3]{confusion_matrix_roberta.png}
+%    \caption[Comparison]{Confusion Matrix of the fine-tuned \textit{RoBERTa-base} using test set.}
+%    \label{fig:confusion_matrix_roberta}
+%\end{figure}
 
 Furthermore, the difference in classification performance between our LMs is not big considering the fact that each LM was pre-trained differently. The only model that performed poorly is \textit{ALBERT-base-v2}, it achieved only 53\% accuracy score and 52\% macro F1 score. This can be explained by the reduced number of the model's parameters (12 million vs. \textit{BERT}'s 110 million).\\
 
@@ -254,58 +314,14 @@ As expected, \textit{RoBERTa-base} model reached the lowest Cross-Entropy loss o
 
 Even if the other LM reached the same accuracy and mcc as \textit{RoBERTa-base} during evaluation or a lower loss during training they did not perform as well in the test set which was demonstrated in Table \ref{tab:accuracy_res}.\\
 
+Finally, it is also important to mention that training time differs from one LM to another (Figure \ref{fig:train_time}) as the number of parameters are not similar, for instance \textit{XLNET-base-cased} model spent 1h56m for training while \textit{RoBERTa-base} took 1h25m and achieved better results. The idea that we are trying to prove is that we don't need a bigger model in order to achieve greater results for a downstream task like text classification.
 
-
-\begin{table*}[t]
-\centering
-\resizebox{\textwidth}{!}{%
-\begin{tabular}{c!{\vrule width \heavyrulewidth}cccccccc} 
-\bottomrule
-\textbf{Fine-tuned model} & \textbf{Label} & \textbf{prec} & \textbf{recall} & \textbf{~f1} & \textbf{accuracy} & \textbf{macro prec} & \textbf{macro recall} & \textbf{macro f1} \\ 
-\toprule
-\multirow{3}{*}{\textit{BERT-base-uncased}} & SUPPORTS & 0.55 & 0.78 & 0.64 & \multirow{3}{*}{\textbf{0.62}} & \multirow{3}{*}{0.63} & \multirow{3}{*}{\textbf{0.62}} & \multirow{3}{*}{\textbf{0.61}} \\
- & REFUTES & 0.75 & 0.59 & 0.66 &  &  &  &  \\
- & NEI & 0.61 & 0.47 & 0.53 &  &  &  &  \\ 
-\midrule
-\multirow{3}{*}{\textit{ALBERT-base-v2}} & SUPPORTS & 0.46 & 0.81 & 0.59 & \multirow{3}{*}{0.53} & \multirow{3}{*}{0.58} & \multirow{3}{*}{0.53} & \multirow{3}{*}{0.52} \\
- & REFUTES & 0.77 & 0.46 & 0.58 &  &  &  &  \\
- & NEI & 0.50 & 0.33 & 0.40 &  &  &  &  \\ 
-\midrule
-\multirow{3}{*}{\textit{DistilBERT-base-uncased}} & SUPPORTS & 0.54 & 0.78 & 0.64 & \multirow{3}{*}{0.61} & \multirow{3}{*}{0.63} & \multirow{3}{*}{0.61} & \multirow{3}{*}{\textbf{0.61}} \\
- & REFUTES & 0.75 & 0.58 & 0.65 &  &  &  &  \\
- & NEI & 0.60 & 0.47 & 0.53 &  &  &  &  \\ 
-\midrule
-\multirow{3}{*}{\textit{RoBERTa-base}} & SUPPORTS & 0.54 & 0.81 & 0.65 & \multirow{3}{*}{\textbf{0.62}} & \multirow{3}{*}{\textbf{0.64}} & \multirow{3}{*}{\textbf{0.62}} & \multirow{3}{*}{\textbf{0.61}} \\
- & REFUTES & 0.75 & 0.59 & 0.66 &  &  &  &  \\
- & NEI & 0.63 & 0.45 & 0.53 &  &  &  &  \\ 
-\midrule
-\multirow{3}{*}{\textit{BigBird-RoBERTa-base}} & SUPPORTS & 0.53 & 0.81 & 0.64 & \multirow{3}{*}{0.61} & \multirow{3}{*}{\textbf{0.64}} & \multirow{3}{*}{0.61} & \multirow{3}{*}{0.60} \\
- & REFUTES & 0.75 & 0.58 & 0.66 &  &  &  &  \\
- & NEI & 0.63 & 0.44 & 0.52 &  &  &  &  \\ 
-\midrule
-\multirow{3}{*}{\textit{XLNET-base-cased}} & SUPPORTS & 0.53 & 0.81 & 0.64 & \multirow{3}{*}{0.61} & \multirow{3}{*}{0.63} & \multirow{3}{*}{0.61} & \multirow{3}{*}{0.60} \\
- & REFUTES & 0.74 & 0.59 & 0.65 &  &  &  &  \\
- & NEI & 0.63 & 0.43 & 0.51 &  &  &  &  \\
-\bottomrule
-\textbf{Related work} & \textbf{Label} & \textbf{prec} & \textbf{recall} & \textbf{~f1} & \textbf{accuracy} & \textbf{macro prec} & \textbf{macro recall} & \textbf{macro f1} \\ 
-\toprule
-\multirow{3}{*}{\textit{BERT-large} \cite{lee2020language}} & SUPPORTS & 0.54 & 0.67 & 0.59 & \multirow{3}{*}{0.57} & \multirow{3}{*}{0.57} & \multirow{3}{*}{0.57} & \multirow{3}{*}{0.57} \\
- & REFUTES & 0.62 & 0.55 & 0.58 &  &  &  &  \\
- & NEI & 0.57 & 0.49 & 0.53 &  &  &  &  \\ 
-\midrule
-\textit{FEVER Baseline} \cite{thorne2018fact} & - & - & - & - & 0.49 & - & - & -\\
-\textit{Ohio State University} \cite{thorne2018fact} & - & - & - & - & 0.50 & - & - & -\\
-\textit{Columbia NLP} \cite{thorne2018fact} & - & - & - & - & 0.58 & - & - & -\\
-\textit{Papelo} \cite{thorne2018fact} & - & - & - & - & 0.61 & - & - & -\\
-\textit{UNC-NLP} \cite{thorne2018fact} & - & - & - & - & 0.68 & - & - & -\\
-\textit{DREAM} \cite{zhong2019reasoning} & - & - & - & - & \textbf{0.77} & - & - & -\\
-
-\end{tabular}%
-}
-\vspace{0.4cm}
-\caption{Classification metrics for each fine-tuned LM using our approach vs. BERT-large fine-tuned by FacebookAI team vs. other models based on knowledge graphs and/or traditional pipelines that uses FEVER dataset (we take into consideration only the accuracy of label classification and not the FEVER scoring system).}
-\label{tab:accuracy_res}
-\end{table*}
+\begin{figure}[htp]
+    \centering
+    \includegraphics[scale=0.13]{train_time.png}
+    \caption[Comparison]{Training time of each LM.}
+    \label{fig:train_time}
+\end{figure}
 
 \section{Conclusion}
 
