@@ -185,7 +185,7 @@ In this paper we will classify claims by fine-tuning the following LMs:
 \end{itemize}
 
 All of these LMs were trained on Wikipedia dataset containing cleaned articles. The datasets are built from the Wikipedia dump \footnote{\url{https://dumps.wikimedia.org/}} with one split per language. Each example contains the content of one full Wikipedia article with cleaning to strip markdown and unwanted sections (references, etc.). So in one way, all these LMs were trained on facts from Wikipedia, for example if we give the following input \textit{"Paris is the capital of [MASK]."} to BERT-base model, the output will be \textit{"Paris is the capital of France."} with a probability of 0.951.\\
-Therefore the conjecture behind our method is that: fine-tuning LMs that were pre-trained on Wikipedia, and by exploiting the already stored knowledge within these LMs, we can create a self-knowledge-independent fact-checking classifier.
+Therefore the conjecture behind our method is that: by fine-tuning LMs that were pre-trained on Wikipedia, and by exploiting the already stored knowledge within these LMs, we can create a self-knowledge-independent fact-checking classifier.
 \section{Experiment Protocol and Results}
 \subsection{Experiment Setup}
 As mentioned before, we conduct our experiment on the FEVER dataset using the splits in Table \ref{tab:fever_splits}. As for LMs fine-tuning we used one GPU, the NVIDIA RTX6000P-8C with 24Go of GDDR6 memory and a peak single precision floating point performance of 14,9 Tflops.\\
@@ -206,7 +206,7 @@ For all models we chose the following hyperparameters:
 
 These hyperparameters may not be optimal, but they were chosen after many different repeated experiments. Optimizing the models is left for future work.
 \subsection{Evaluation Metric}
-Most of the fact-checking methods that uses FEVER dataset employ FEVER scoring\cite{thorne2018fever}, a metric that considers classification accuracy and evidence recall, but since we don't tackle the evidence problem in our approach, we rely on accuracy, recall, precision and F1-score of the model classification as metrics for evaluation.\\
+Most of the fact-checking methods that use FEVER dataset employ FEVER scoring\cite{thorne2018fever}, a metric that considers classification accuracy and evidence recall, but since we don't tackle the evidence problem in our approach, we rely on accuracy, recall, precision and F1-score of the model classification as metrics for evaluation.\\
 In addition, we track other aspects of each LM such as training time, model size, and memory usage during the fine-tuning step in order to make an overall evaluation.
 \subsection{Results \& Discussion}
 \begin{table*}[htp]
@@ -261,15 +261,15 @@ In addition, we track other aspects of each LM such as training time, model size
 \end{table*}
 
 
-The results of the six models are reported in Table \ref{tab:accuracy_res}. We can observe that our approach yields to better results than FacebookAI's model and most of the traditional methods that involves external information retrieval modules.\\
+The results of the six models are reported in Table \ref{tab:accuracy_res}. We can observe that our approach yields better results than FacebookAI's model and most of the traditional methods that involves external information retrieval modules.\\
 
 Specifically the fine-tuned \textit{RoBERTa-base} model surpasses the fine-tuned \textit{BERT-large} model created by FacebookAI in every metric. For instance our model achieved an accuracy score of 62\% and a macro precision score of 64\% which is an improvement of 5\% and 7\% respectively. Not only that, it is also worth mentioning that \textit{RoBERTa-base} has only 125 million parameters and 12 encoding layers in comparison to \textit{BERT-large} that has 340 million parameters and 24 encoding layers, thus rendering our model more efficient to train, to store and to implement.\\
 
 The improvements in classification are presumably due to the fact that \textit{RoBERTa} is pre-trained on more data than \textit{BERT} as shown in Figure \ref{fig:lm_compar}. On the other hand, our fine-tuned \textit{BERT-base} model also achieved better results than FacebookAI's model which may be explained by the difference of hyperparameters choice.\\
 
-Similarly, the fine-tuned \textit{RoBERTa-base} model achieved more accuracy score for label classification than most of the traditional pipelines, therefore it puts our approach on the top-10 best fact-checking models that were published by FEVER community\cite{thorne2018fact} (without taking into consideration the evidence generation metric). It is also safe to say that the \textit{DREAM} fact-checking model is certainly superior than all our LMs as it achieved an accuracy score of 77\% which is 15\% higher. This is a proof that there is still much room for subsequent research and improvements.\\
+Similarly, the fine-tuned \textit{RoBERTa-base} model achieved more accuracy score for label classification than most of the traditional pipelines. Therefore it puts our approach on the top-10 best fact-checking models that were published by FEVER community\cite{thorne2018fact} (without taking into consideration the evidence generation metric). It is also safe to say that the \textit{DREAM} fact-checking model is certainly superior than all our LMs as it achieved an accuracy score of 77\% which is 15\% higher. This is a proof that there is still much room for subsequent research and improvements.\\
 
-Same as FacebookAI results\cite{lee2020language}, and upon examining the results of our fine-tuned LMs closely, we also find that all our LMs struggles immensely with the NEI category (lowest F1 scores) indicating that our current approach might also need specific modules to better tackle that category.\\
+Same as FacebookAI results\cite{lee2020language}, and upon examining the results of our fine-tuned LMs closely, we also find that all our LMs struggle immensely with the NEI category (lowest F1 scores) indicating that our current approach might also need specific modules to better tackle that category.\\
 
 % This was also confirmed when we plotted the confusion matrix of our models (for example \textit{RoBERTa-base} in Figure \ref{fig:confusion_matrix_roberta}).
 %\begin{figure}[htp]
