@@ -137,16 +137,12 @@ In this paper we will focus on a modern approach that utilizes Language Models (
 
 \section{Use case scenario}
 Suppose that while browsing the internet or talking to people you come across a claim that says \textit{"The former U.S president John F. Kennedy died in September 22, 1963"}, as it is a general truth and not a relative truth it should be easier to verify the validity of this claim as well as find evidence that proves it.\\
-Using the platform we will create, you can simply write the claim you like to verify with no regards to a specific linguistic rule, the model will extract relevant articles from Wikipedia using an API, then it retrieves sentences relative to your claim and apply a comparison in order to assess if the claim is True, False, or Not Enough Information as well as giving a percentage of confidence and evidence of the results that were processed straight from Wikipedia's database.\\
-Coming back to our example, the model should return that \textit{"John F. Kennedy died in November 22, 1963"} so the input claim is false.
+Using our algorithm, you can simply write the claim you like to verify with no regards to a specific linguistic rule as an input, the model will assess if the claim is True, False, or Not Enough Information as well as giving a percentage of confidence and evidence of the results that were processed straight from Wikipedia's database.\\
+Coming back to our example, the model should return that \textit{"John F. Kennedy died in November 22, 1963"} so the input claim is false.\\
 
-\begin{figure}[H]
-	\centering
-	\includegraphics[scale=0.6]{img/use_case.png}
-	\caption{General Model Processing Pipeline}
-\end{figure}
+During this project we created an algorithm that can only classify claims, and in a future work the algorithm will be able to provide detailed explanations and evidences of the classified claim.
 
-\textbf{Note:} this is a first draft architecture of the model to be studied, many changes will be implemented across multiple levels during the experimental procedure.
+\section{Tools used}
 
 \chapter{Potential Datasets}
 The rise of fake news in the internet created the need of setting-up databases that contains as much claims as possible checked and approved manually by journalists and fact-checkers worldwide in order to be used as a dataset for experiments in automatic fact-checking models or just simply to be a reference to other journalists and the general public.
@@ -651,6 +647,9 @@ Finally, it is also important to mention that training time differs from one LM 
     \caption[Comparison]{Training time of each LM.}
     \label{fig:train_time}
 \end{figure}
+
+\section{Additional results}
+
 
 \chapter{Conclusion \& Future Work}
 
