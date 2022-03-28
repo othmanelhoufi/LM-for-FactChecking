@@ -16,6 +16,36 @@
 \usepackage{arydshln}
 \usepackage{tablefootnote}
 \usepackage[numbers]{natbib}
+%\usepackage{subcaption}
+%\usepackage[export]{adjustbox}
+%\usepackage{wrapfig}
+
+%\usepackage[toc,page]{appendix}
+
+\usepackage{listings}
+\usepackage{color}
+
+\definecolor{dkgreen}{rgb}{0,0.6,0}
+\definecolor{gray}{rgb}{0.5,0.5,0.5}
+\definecolor{mauve}{rgb}{0.58,0,0.82}
+
+\lstset{frame=tb,
+  language=Java,
+  aboveskip=3mm,
+  belowskip=3mm,
+  showstringspaces=false,
+  columns=flexible,
+  basicstyle={\small\ttfamily},
+  numbers=none,
+  numberstyle=\tiny\color{gray},
+  keywordstyle=\color{blue},
+  commentstyle=\color{dkgreen},
+  stringstyle=\color{mauve},
+  breaklines=true,
+  breakatwhitespace=true,
+  tabsize=3
+}
+
 
 \setlength\heavyrulewidth{0.25ex}
 
@@ -101,18 +131,18 @@ They took into consideration the accuracy and the F1-Macro metrics for the evalu
 tasks in all settings. For instance, $PPL_{GPT2-B}$ achieved accuracy of 67.48\% and F1-macro score of 64.70\% on FEVER dataset.\\
 On the other hand the classification was limited to two labels (\emph{Supported} and \emph{Unsupported}) which does not solve the entire classification problem in the FEVER dataset that provides three labels (\textit{Supports}, \textit{Refutes} or \textit{Not enough information (NEI)}).
 
-\section{Proposed method}
+\section{Proposed Architecture}
 Most of the fact-checking algorithms today involving knowledge-based verification use a traditional pipeline that puts in place a module for retrieving articles from an external source, another module for retrieving relevant sentences from each article and a last module for natural language inferencing (NLI) to classify a claim.
 
 \begin{figure}[htp]
     \centering
     \includegraphics[scale=0.4]{processing_pipeline.png}
-    \caption{Proposed method pipeline.}
+    \caption{Proposed architecture pipeline.}
     \label{fig:processing_pipeline}
 \end{figure}
 
 
-In this paper we present a method that is fully reliant on the powerfulness of today's best LMs. As illustrated in Figure \ref{fig:processing_pipeline}, we start by fine-tuning each model for the downstream task that is claim classification using the FEVER dataset, then each model is employed to assess the validity of new input claims. This approach takes into consideration only an internal knowledge source (FEVER) for fine-tuning, that is for the learning phase, which makes the prediction phase knowledge-free rather than utilizing external knowledge sources for retrieving articles and sentences.
+In this paper we present a new architecture that is fully reliant on the powerfulness of today's best LMs. As illustrated in Figure \ref{fig:processing_pipeline}, we start by fine-tuning each model for the downstream task that is claim classification using the FEVER dataset, then each model is employed to assess the validity of new input claims. This approach takes into consideration only an internal knowledge source (FEVER) for fine-tuning, that is for the learning phase, which makes the prediction phase knowledge-free rather than utilizing external knowledge sources for retrieving articles and sentences.
 
 It is also important to mention we only use LMs for classifying claims and not for generating evidence. We leave generating evidences with language models for future work.
 
@@ -186,7 +216,7 @@ In this paper we will classify claims by fine-tuning the following LMs:
 
 All of these LMs were trained on Wikipedia dataset containing cleaned articles. The datasets are built from the Wikipedia dump \footnote{\url{https://dumps.wikimedia.org/}} with one split per language. Each example contains the content of one full Wikipedia article with cleaning to strip markdown and unwanted sections (references, etc.). So in one way, all these LMs were trained on facts from Wikipedia, for example if we give the following input \textit{"Paris is the capital of [MASK]."} to BERT-base model, the output will be \textit{"Paris is the capital of France."} with a probability of 0.951.\\
 Therefore the conjecture behind our method is that: by fine-tuning LMs that were pre-trained on Wikipedia, and by exploiting the already stored knowledge within these LMs, we can create a self-knowledge-independent fact-checking classifier.
-\section{Experiment Protocol and Results}
+\section{Experiment Protocol \& Results}
 \subsection{Experiment Setup}
 As mentioned before, we conduct our experiment on the FEVER dataset using the splits in Table \ref{tab:fever_splits}. As for LMs fine-tuning we used one GPU, the NVIDIA RTX6000P-8C with 24Go of GDDR6 memory and a peak single precision floating point performance of 14,9 Tflops.\\
 
@@ -342,5 +372,226 @@ We would like to thank Massinissa Yebka for providing us the computational power
 %    \caption{Prototype Clustering algorithm.}
 %    \label{fig:clustering_algo}
 %\end{figure}
+
+\newpage
+\onecolumn
+\begin{appendices}
+
+\section{Development environment \& Tools}
+For the development of the LMs we used \textit{Python} programming language and \textit{Hugging Face} library\footnote{\url{https://huggingface.co/}} that provides Transformers APIs to easily download and train state-of-the-art pretrained models. Using pretrained models can reduce your compute costs, carbon footprint, and save time from training a model from scratch.\\
+
+In order to track training metrics, validation metrics, disk usage, CPU usage and other environment changes during our experiments we used \textit{Weights \& Biases} API\footnote{\url{https://wandb.ai/}} (wandb). For each step or epoch we send all metrics and changes to our wandb project profile and visualize everything in real time.\\
+
+We created a generic code for each LM in order to provide other developers with an easy plug and play application. If you prefer to fine-tune LMs with different parameters you only change the following global variables in the LM Python file:
+
+\begin{lstlisting}
+# Transformer model
+MODEL_NAME = 'bert-base-uncased'
+
+# hyperparams
+MAX_SEQ_LEN = 128
+TRAIN_BATCH_SIZE = 20
+EVAL_BATCH_SIZE = 20
+EPOCHS = 3
+LR = 3e-5
+OPTIM = 'adamw_hf'
+SAVE_STEPS = 1000
+EVAL_STEPS = 500
+SAVE_STRATEGY = 'epoch'
+SAVE_TOTAL_LIMIT = 3
+EARLY_STOPPING_PATIENCE = 3
+REPORT="none"
+\end{lstlisting}
+
+The open source code of our application can be found in the following \textit{GitHub} repository: \url{https://github.com/othmanelhoufi/LM_for_fact_checking}
+
+\section{Final application}
+We created an interactive user interface console to make our application easy to use. The following Figure \ref{fig:app_options} shows the user input options, for each option informations are printed in the console.
+
+\begin{figure}[htp]
+    \centering
+    \includegraphics[scale=0.6]{app_options.png}
+    \caption[Comparison]{Application console UI.}
+    \label{fig:app_options}
+\end{figure}
+
+\newpage
+\section{Other results}
+
+\begin{figure}[htp]
+    \centering
+    \includegraphics[scale=0.17]{cpu_use.png}
+    \includegraphics[scale=0.17]{disk_util.png}
+    \includegraphics[scale=0.17]{memory_used.png}
+    \caption{CPU, disk and memory usage.}
+    \label{fig:cpu_disk_memory}
+\end{figure}
+
+\begin{figure}[htp]
+    \centering
+    \includegraphics[scale=0.5]{cm_distilbert.png}\hfill
+    \caption{DistilBERT confusion matrix.}
+    \label{fig:cm_distilbert}
+\end{figure}
+
+\begin{figure}[htp]
+    \centering
+    \includegraphics[scale=0.5]{cm_bigbird.png}\hfill
+    \caption{BigBird confusion matrix.}
+    \label{fig:cm_bigbird}
+\end{figure}
+
+\begin{figure}[htp]
+    \centering
+    \includegraphics[scale=0.5]{confusion_matrix_roberta.png}\hfill
+    \caption{RoBERTa confusion matrix.}
+    \label{fig:confusion_matrix_roberta}
+\end{figure}
+
+
+\begin{figure}[htp]
+    \centering
+    \includegraphics[scale=0.5]{cm_bert.png}\hfill
+    \caption{BERT confusion matrix.}
+    \label{fig:cm_bert}
+\end{figure}
+
+\begin{figure}[htp]
+    \centering
+    \includegraphics[scale=0.5]{cm_albert.png}\hfill
+    \caption{ALBERT confusion matrix.}
+    \label{fig:cm_albert}
+\end{figure}
+
+\begin{figure}[htp]
+    \centering
+    \includegraphics[scale=0.5]{cm_xlnet.png}\hfill
+    \caption{XLNET confusion matrix.}
+    \label{fig:cm_xlnet}
+\end{figure}
+
+\newpage
+\section{Other related work \& fake news detection methods}
+
+\subsection{Styled based fake news detection \cite{przybyla2020capturing}}
+A study done by \textit{Piotr Przybyła} named \textit{Capturing the Style of Fake News} in 2020 from Institute of Computer Science, Polish Academy of Sciences, in order to detect fake news or in other words assess the credibility of an article by looking at the style of writing rather than the meaning of the words and sentences.\\
+The purpose of this study was to prove that general-purpose text classifiers, despite their good performance when evaluating simplistically, they overfit to sources of documents in training data. In contrast to this method, a truly style-based prediction that uses an analysis of the stylometric model shows that it focuses on sensational and affective vocabulary, known to be typical for fake news.\\
+
+Fake news sources usually attempt to attract attention for short-time financial or political goal \cite{allcott2017social} rather than to build a long-term relationship with the reader, in this perspective, the language used by these sources tend to be informal, sensational and affective \cite{bakir2017fake}. This can be used to build a classifier for indicating low credibility.\\
+
+First of all they started by gathering a corpus of 103,219 documents from 223 online sources labeled by media experts like \textit{PolitiFact} and \textit{Pew Research Center}. Then they designed two models: a neural network and a model based on features used in stylometric analysis. This has a purpose to demonstrate that the stylometric features based model captures the affective language elements.\\
+
+\begin{figure}[htp]
+	\centering
+	\includegraphics[scale=0.4]{documents_in_topic.png}
+	\caption{The largest 15 LDA (Latent Dirichlet Allocation) topics in the corpus, each shown with the six most signiﬁcant keywords, an identiﬁer and bars illustrating number of credible and non-credible documents associated with it \cite{przybyla2020capturing}}
+\end{figure}
+
+\textbf{Stylometric classifier:} the architecture of this classifier is generally based on a collection of stylystic features followed by a linear modeling. The features are: 
+	\begin{itemize}
+	\item number of sentences, average sentence length (in words) and average word length (in characters),
+	\item number of words matching different letter case schemes (all lower case, all upper case, just first letter upper case, other), represented as counts normalized by the document length,
+	\item frequencies of POS uni-grams, bi-grams and trigrams, represented as counts normalized by the document length (if present in at least 5 documents),
+	\item frequencies of words belonging to the 182 word categories in the expanded GI dictionary, represented as counts normalized by the document length.
+	\end{itemize}
+
+\textbf{Neural network classifier:} the applied solution was BiLSTMAvg a neural network with architecture based on elements used in natural language processing, i.e. word embeddings \cite{mikolov2013efficient} and bidirectional LSTM (Hochreiter and Schmidhuber 1997). The following layers are included:
+	\begin{itemize}
+	\item An embedding layer, representing each token using a 300-dimensional word2vec vector trained on Google News,
+	\item Two LSTM layers, forward and backward, representing each sentence by two 100-dimensional vectors (output of the last cell in a sequence),
+	\item A densely-connected layer, reducing the dimensionality to 2 and applying softmax to compute class probability,
+	\item An averaging layer, representing each document’s class probability scores by averaging the scores for all its sentences.
+	\end{itemize}
+The neural network is implemented and trained in TensorFlow for 10 epochs with sentence length limited to 120 tokens and document length limited to 50 sentences.\\
+
+In order to understand if general-purpose text classifiers can capture document style without overfitting to features like the source or topic of document and to compare with the two classifiers they created, they evaluated two baseline models: bag of words and BERT.\\
+
+The evaluation protocol consisted on running the model learning and prediction in a 5-fold cross validation (CV) scenario and comparing it's output to target labels. They used accuracy as a metric of evaluation rather than precision or recall.
+
+\begin{figure}[htp]
+	\centering
+	\includegraphics[scale=0.3]{styled_model_result.png}
+	\caption{Classiﬁcation accuracy of our stylometric and neural classiﬁers compared to baselines in three evaluation scenarios, simulating, respectively, a new document from known sources and topics, a document from unknown topic and a document from unseen source. \cite{przybyla2020capturing}}
+\end{figure}
+
+The obtained results shows that stylometric based classifier loses 10\% of the accuracy on unseen sources even if it has more consistent performance over evaluation scenarios. Piotr Przybyła explains this drop in accuracy by assuming that the model specialize in the style of individual sources rather than the general style of fake news. Nevertheless, he was able to prove that his model takes into account the affective words in order to classify fake news.
+\subsection{Knowledge graph based fake news detection \cite{mayank2021deap} \cite{gad2019tracy}}
+Studying the \textit{"DEAP-FAKED"} paper published in 2021 by \textit{Mohit Mayank}, \textit{Shakshi Sharma} and \textit{Rajesh Sharma}, it turned out that by exploiting techniques related to network analysis, Natural Language Processing (NLP) and the implementation of Graph Neural Networks (GNNs) we can detect fake news with an F1 score of 88\%.\\
+
+The \textit{"DEAP-FAKED"} consists of three individual components:
+
+\begin{itemize}
+\item \textbf{News encoder:} this component performs the contextual encoding of news title. trying both unidirectional and bidirectional sequence encoders, they implemented a 2-layer stacked biLSTM as the main subcomponent the news encoder.
+\item \textbf{Entity encoder:} this component identifies the named entities present in the news title and encodes the individual entities using knowledge graph (KG).
+For example, a news title with text \textit{"US Officials See No Link Between Trump and Russia"}, contains two entities \textit{"Trump"} of person type and \textit{"Russia"} of geolocation type.
+The framework includes relevant entities in the news then encodes them. They used Wikidata, an open-source KG, as the source to match the entities and ComplEx KG embedding technique to embed entities.
+\item \textbf{Classification Layer:} this component consolidates the news encoder's and entity encoder's representations to perform the final downstream Fake News classification learning.
+In this framework, the two representations are concatenated to create a super representation of the news content and entities. This representation is then passed to further non-linear activated layers with decreasing layer dimensionality. The final layer consolidated the information into a single dimension which is activated by a sigmoid layer, where the final output represents the probability of the news as either true or fake.
+\end{itemize}
+
+\begin{figure}[htp]
+	\centering
+	\includegraphics[scale=0.45]{deap_fake_framework.png}
+	\caption{Illustration of the proposed DEAP-FAKED framework. The left sub-figure shows the entity encoder module. The right sub-figure shows the news encoder module. The top sub-figure is the Fake News classifier module. The bottom shows the tokenized news as the input to the entity encoder and news encoder. \cite{mayank2021deap}}
+\end{figure}
+
+The dataset used for \textit{DEAP-FAKED} framework can be described as following:
+
+\begin{itemize}
+\item \textbf{Fake News dataset:} The first dataset is the Kaggle Fake News dataset, which consists of 20,387 news items, having a near equal combination of true and Fake News. The news covers several domains such as Politics, Business, and Technology.
+The complete pre-processing step brought down the news item count to  $\sim$14k with a distribution of 60\% - 40\% of true and Fake News classes, respectively.They called this dataset KFN-UB.\\
+The second dataset is CoAID, which contains diverse COVID-19 healthcare misinformation, including Fake News from websites and social platforms. CoAID includes 4,251 news items. After pre-processing it only 632 news item and called CoAID-UB.
+\item \textbf{Knowledge Graph:} the framework uses Wikidata5M as a knowledge graph, it is created by only considering the "valid" facts, where the validity is confirmed if all entities and relations in the fact have a Wikipedia article and long description.
+\end{itemize}
+
+As for the evaluation procedure, they chose five baseline models for comparison with \textit{DEAP-FAKED} framework: ExtraTreeClassifier, LSTM, SentRoBERTa, StackedBiLSTM, and StackedBiLSTM.
+
+\begin{figure}[htp]
+	\centering
+	\includegraphics[scale=0.4]{deap_faked_evaluation.png}
+	\caption{Performance score of the models detailed in the paper is presented here. For each of the dataset, we report F1 macro and Accuracy metric values. We present average and standard deviation of the performance observed after performing 3 trials with different starting seed. For both the datasets, DEAP-FAKED reports the best performance value. \cite{mayank2021deap}}
+\end{figure}
+
+As evident by the results, \textit{DEAP-FAKED} reports the highest score on both of the datasets.
+
+
+\subsection{Hierarchical Propagation based fake news detection \cite{shu2020hierarchical} \cite{castillo2011information}}
+In a paper wrote by \textit{Kai Shu}, \textit{Deepak Mahudeswaran}, \textit{Suhang Wang}, and \textit{Huan Liu} with the name of \textit{Hierarchical Propagation Networks for Fake News Detection: Investigation and Exploitation}, the detection of fake news can be done by looking at the correlation between news and the hierarchical characteristics of a social network.\\
+
+The datasets used for this study were the public fake news repository \textit{FakeNewsNet} \cite{shu2018fakenewsnet} that contains data related to different fact-checking websites that offers news content, social context and dynamic information. In addition, they used the data from fact-checking websites \textit{GossipCop} and \textit{PolitiFact} that contains news articles with labels annotated by professional journalists. News content includes meta attributes of the news like body text, he social context includes the related user interactions with the news like posting, sharing, commenting on Twitter, and dynamic information contains the timestamps of user's interactions.\\
+
+After collecting all of this data, building a hierarchical propagation network was the next step. First of all they defined two major levels of the hierarchy: 
+
+\begin{itemize}
+\item \textbf{Micro-level:} involves users conversations towards news pieces on social media over time. It contains rich information of user opinions towards news pieces.
+\item \textbf{Macro-level:} encompasses information on tweets posting pattern and information sharing pattern. It represents the global propagation of information through a cascade of re-tweets.
+\end{itemize}
+
+\begin{figure}[htp]
+	\centering
+	\includegraphics[scale=0.3]{fake_news_net_content.png}
+	\caption{The statistics of FakeNewsNet}
+\end{figure}
+
+
+%\begin{figure}[htp]
+%	\centering
+%	\includegraphics[scale=0.35]{hierarchy_network.png}
+%	\caption{An example of the hierarchical propagation network of a fake news piece fact-checked by Politifact. It consists of two types: macro-level and micro-level. The macro-level propagation network includes the news nodes, tweet nodes, and retweet nodes. The micro-level propagation network indicates the conversation tree represented by cascade of reply nodes.}
+%\end{figure}
+
+
+In both these levels they used \textit{Structural Analysis} to identify patterns in conversations, \textit{Temporal Analysis} to understand the exchange of opinions in terms of time. For the Micro-level they added a \textit{Linguistic Analysis} to inference the sentiment of people around news pieces, thus obtaining linguistic features for statistical comparison.\\
+
+To evaluate the performance of fake news detection of the model they choose randomly 80\% of news articles for training and the remaining 20\% for testing. The results shows high scores for both datasets:
+
+\begin{figure}[htp]
+	\centering
+	\includegraphics[scale=0.4]{hierarchical_evaluation_results.png}
+	\caption{Evaluation of the model. \cite{shu2020hierarchical}}
+\end{figure}
+
+
+\end{appendices}
 
 \end{document}
