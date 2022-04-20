@@ -30,3 +30,9 @@ SAVE_TOTAL_LIMIT = 3
 EARLY_STOPPING_PATIENCE = 3
 REPORT="none"
 ```
+
+To execute this program just follow these steps:
+
+1. Make sure you have the fever dataset in place and in the correct repository (code/dataset)
+2. Go to code/model repository
+3. Execute a language model of your choice: $ python3 bert_model.py
