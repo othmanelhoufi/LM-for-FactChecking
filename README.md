@@ -6,6 +6,16 @@ The need of this online claim assessment comes from the fact that fake news and 
 A number of solutions have been proposed to deal with this problem and limit the spread of false information, both manual and automatic. Undoubtedly the manual approaches done on websites such as PolitiFact.com, FactCheck.org and Snopes.com don’t construct a viable solution for the long term as the speed and scale of information propagation increase exponentially rendering this manual fact-checking operation where human fact- checkers can’t scale up at the same rate limited and incapable of solving the problem.
 Here, we present our contribution in this regard: an automated solution for fact-checking using FEVER dataset as a source of truth and a state of the art language models used today for NLP tasks (BERT, RoBERTa, XLNet...) in order to classify a given claim as Supports, Refutes or Not enough information (NEI). We successfully prove that fine-tuning a LM with the correct settings can achieve an accuracy of 62% and F1-score of 61% which is more advanced than the majority of fact-checking methods that exists today.
 
+### Dependencies Installation
+In order to run the python file of each language model you must first install the following packages:
+
+```shell
+$ pip3 install numpy pandas sklearn transformers wandb texttable
+$ pip3 install torch torchvision torchaudio
+$ pip3 install torch torchvision torchaudio --extra-index-url https://download.pytorch.org/whl/cpu
+```
+
+
 ### Setup & Execution
 For the development of the LMs we used Python programming language and Hugging Face library that provides Transformers APIs to easily download and train state-of-the-art pretrained models. Using pretrained models can reduce your compute costs, carbon footprint, and save time from training a model from scratch.
 
