@@ -15,6 +15,7 @@ $ pip3 install torch torchvision torchaudio
 $ pip3 install torch torchvision torchaudio --extra-index-url https://download.pytorch.org/whl/cpu
 ```
 
+It is recommended to use a GPU for fine-tuning LMs as it's a hard task that requiers computational power. The code can still work on a CPU. 
 
 ### Setup & Execution
 For the development of the LMs we used Python programming language and Hugging Face library that provides Transformers APIs to easily download and train state-of-the-art pretrained models. Using pretrained models can reduce your compute costs, carbon footprint, and save time from training a model from scratch.
