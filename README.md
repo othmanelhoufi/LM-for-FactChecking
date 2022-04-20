@@ -1,2 +1,8 @@
-# fact_checking_engine
-Fact Checking Claims Against Wikipedia.
+# NLP for Fact-Checking and Claim Assessment
+## A Language Model based approach
+### Abstract
+As false information and fake news are propagating throughout the internet and social networks, the need of fact-checking operations becomes necessary in order to maintain a truthful digital environment where general information can be reliably exploited whether in politics, finance or other domains.
+The need of this online claim assessment comes from the fact that fake news and false information can have a big negative impact on politics, economy (2016 USA Elections) and public health (COVID-19).
+A number of solutions have been proposed to deal with this problem and limit the spread of false information, both manual and automatic. Undoubtedly the manual approaches done on websites such as PolitiFact.com, FactCheck.org and Snopes.com don’t construct a viable solution for the long term as the speed and scale of information propagation increase exponentially rendering this manual fact-checking operation where human fact- checkers can’t scale up at the same rate limited and incapable of solving the problem.
+Here, we present our contribution in this regard: an automated solution for fact-checking using FEVER dataset as a source of truth and a state of the art language models used today for NLP tasks (BERT, RoBERTa, XLNet...) in order to classify a given claim as Supports, Refutes or Not enough information (NEI). We successfully prove that fine-tuning a LM with the correct settings can achieve an accuracy of 62% and F1-score of 61% which is more advanced than the majority of fact-checking methods that exists today.
+
