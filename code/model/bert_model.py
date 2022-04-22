@@ -20,10 +20,14 @@ device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
 print('USING DEVICE:', device)
 #Additional Info when using cuda
 if device.type == 'cuda':
-    print(torch.cuda.get_device_name(0))
-    print('Memory Usage:')
-    print('Allocated:', round(torch.cuda.memory_allocated(0)/1024**3,1), 'GB')
-    print('Cached:   ', round(torch.cuda.memory_reserved(0)/1024**3,1), 'GB')
+    print('__CUDNN VERSION:', torch.backends.cudnn.version())
+    print('__Number CUDA Devices:', torch.cuda.device_count())
+    print('__CUDA Device Name:',torch.cuda.get_device_name(0))
+    print('__CUDA Device Total Memory [GB]:',torch.cuda.get_device_properties(0).total_memory/1e9)
+
+
+# Dataset name
+DATASET_NAME = 'SciFact'
 
 # Transformer model
 MODEL_NAME = 'bert-base-uncased'
@@ -71,9 +75,9 @@ def split_dataset(dataset):
 
 
 # Import BERT Model and BERT Tokenizer
-def init_bert_model(model_name=MODEL_NAME):
+def init_bert_model(num_of_labels, model_name=MODEL_NAME):
     # import BERT-base pretrained model
-    bert = BertForSequenceClassification.from_pretrained(MODEL_NAME, num_labels=3)
+    bert = BertForSequenceClassification.from_pretrained(MODEL_NAME, num_labels=num_of_labels)
 
     # Load the BERT tokenizer
     tokenizer = BertTokenizer.from_pretrained(model_name)
@@ -94,7 +98,6 @@ def init_tokens(X_train, X_val, X_test, tokenizer, max_seq_len=MAX_SEQ_LEN):
     tokens_test = tokenizer(X_test, padding=True, truncation=True, max_length=max_seq_len)
 
     return tokens_train, tokens_val, tokens_test
-
 
 # Define Trainer parameters
 def compute_metrics(p):
@@ -124,13 +127,16 @@ def start():
 
     print("\n**************** ", MODEL_NAME , "Model ****************\n")
 
-    # FEVER dataset
-    fever = preproc_dataset.FeverDataset()
-    train_dataset = fever.get_train_dataset()
-    val_dataset = fever.get_val_dataset()
-    test_dataset = fever.get_test_dataset()
+    # Init dataset
+    dataset = preproc_dataset.Dataset(name=DATASET_NAME, split_dev=True)
+    train_dataset = dataset.get_train_dataset()
+    val_dataset = dataset.get_val_dataset()
+    test_dataset = dataset.get_test_dataset()
+    labels, encoded_labels, decoded_labels = dataset.get_encodings()
+    num_of_labels = len(encoded_labels)
 
-    bert, tokenizer = init_bert_model(MODEL_NAME)
+
+    bert, tokenizer = init_bert_model(num_of_labels, model_name=MODEL_NAME)
     train_text, train_labels = split_dataset(train_dataset)
     val_text, val_labels = split_dataset(val_dataset)
     test_text, test_labels = split_dataset(test_dataset)
@@ -146,8 +152,8 @@ def start():
         print("\n")
 
         if(answer == 1):
-            fever.get_describtion()
-            fever.print_data_example()
+            dataset.get_describtion()
+            dataset.print_data_example()
         elif(answer == 2):
             print("STARTING LEARNING ...\n")
 
@@ -192,7 +198,7 @@ def start():
             test_dataset_torch = Dataset(tokens_test, test_labels)
             # Load trained model
             model_path = "outputs/" + MODEL_NAME + "/checkpoint-" + checkpoint_num
-            bert = BertForSequenceClassification.from_pretrained(model_path, num_labels=3)
+            bert = BertForSequenceClassification.from_pretrained(model_path, num_labels=num_of_labels)
             # Define test trainer
             test_trainer = Trainer(bert)
             # Make prediction
@@ -206,13 +212,12 @@ def start():
         #     print("LEARNING LOSS & ACCURACY ...\n")
         elif(answer == 4):
             print("MODEL METRICS ...\n")
-            labels = {'REFUTES':0, 'SUPPORTS':1, 'NOT ENOUGH INFO':2}
 
             if len(y_pred) > 0:
-                print(classification_report(test_labels, y_pred, target_names=labels, digits=4))
+                print(classification_report(test_labels, y_pred, target_names=encoded_labels, digits=4))
                 # Confusion Matrices
                 if REPORT == "wandb":
-                    wandb.sklearn.plot_confusion_matrix(test_labels, y_pred, ['REFUTES', 'SUPPORTS', 'NEI'])
+                    wandb.sklearn.plot_confusion_matrix(test_labels, y_pred, labels)
             else:
                 print("START PREDICTIONS FIRST !!\n")
 
