@@ -51,5 +51,6 @@ To execute this program just follow these steps:
 ### To-Do List
 1. Reduce code reproducibility, merge all models in one program: One code to rule them all.
 2. Save metric logs related to each model in file.
-3. Add more datasets.
-4. Run more experiments.
+3. Handle warnings
+4. Add more datasets.
+5. Run more experiments.
