@@ -15,7 +15,7 @@ $ pip3 install torch torchvision torchaudio
 $ pip3 install torch torchvision torchaudio --extra-index-url https://download.pytorch.org/whl/cpu
 ```
 
-It is recommended to use a GPU for fine-tuning LMs as it's a hard task that requiers computational power. The code can still work on a CPU. 
+It is recommended to use a GPU for fine-tuning LMs as it's a hard task that requiers computational power. The code can still work on a CPU.
 
 ### Setup & Execution
 For the development of the LMs we used Python programming language and Hugging Face library that provides Transformers APIs to easily download and train state-of-the-art pretrained models. Using pretrained models can reduce your compute costs, carbon footprint, and save time from training a model from scratch.
@@ -47,3 +47,9 @@ To execute this program just follow these steps:
 1. Make sure you have the fever dataset in place and in the correct repository (code/dataset)
 2. Go to code/model repository
 3. Execute a language model of your choice: $ python3 bert_model.py
+
+### To-Do List
+1. Reduce code reproducibility, merge all models in one program: One code to rule them all.
+2. Save metric logs related to each model in file.
+3. Add more datasets.
+4. Run more experiments.
