@@ -1,4 +1,6 @@
 # Ignore dataset files
 # code/dataset
 # Ignore python cache files
-code/model/__pycache__/
+model/__pycache__/
+model/outputs/
+
