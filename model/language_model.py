@@ -1,4 +1,4 @@
-#!/usr/bin/env python3.9
+#!/usr/bin/env python3
 import numpy as np
 from sklearn.model_selection import train_test_split
 from sklearn.metrics import accuracy_score, recall_score, precision_score, f1_score, matthews_corrcoef
@@ -8,11 +8,11 @@ from transformers import AutoTokenizer, AutoModelForSequenceClassification
 from transformers import EarlyStoppingCallback
 from transformers.utils import logging
 from sklearn.metrics import classification_report, confusion_matrix
-
-
 import preproc_dataset
-
 import wandb
+import datetime
+import warnings
+
 
 # specify GPU
 torch.cuda.empty_cache()
@@ -110,6 +110,27 @@ def compute_metrics(p):
     mcc = matthews_corrcoef(y_true=labels, y_pred=pred)
 
     return {"accuracy": accuracy, "mcc": mcc}
+
+def log_metrics(metrics):
+    # Append-adds at last
+    f = open("log.txt", "a+")
+    now = datetime.datetime.now()
+    header = "#"*20 + "  " + MODEL_NAME + " | " + DATASET_NAME + " | " + now.strftime("%Y-%m-%d %H:%M:%S") + "  " + "#"*20 + "\n" + "#"*90 + "\n\n"
+    hyperparams = {
+        'MAX_SEQ_LEN' : MAX_SEQ_LEN,
+        'TRAIN_BATCH_SIZE' : TRAIN_BATCH_SIZE,
+        'EVAL_BATCH_SIZE' : EVAL_BATCH_SIZE,
+        'EPOCHS' : EPOCHS,
+        'LR' : LR,
+        'OPTIM' : OPTIM,
+        'EVAL_STEPS' : EVAL_STEPS
+    }
+
+    f.write(header)
+    f.write(str(hyperparams) + "\n\n")
+    f.write(metrics + "\n")
+    f.write("#"*90 + "\n\n")
+    f.close()
 
 def ask_user_for_model():
     print("\nHi, choose a Language Model:")
@@ -225,7 +246,7 @@ def models_training_loop():
             test_dataset_torch = Dataset(tokens_test, test_labels)
             # Load trained model
             model_path = "outputs/" + MODEL_NAME + "/checkpoint-" + checkpoint_num
-            model = AutoModelForSequenceClassification.from_pretrained(model_path, num_labels=num_of_labels)
+            model = AutoModelForSequenceClassification.from_pretrained(pretrained_model_name_or_path=model_path, num_labels=num_of_labels)
             # Define test trainer
             test_trainer = Trainer(model)
             # Make prediction
@@ -235,10 +256,12 @@ def models_training_loop():
 
         elif(answer == 4):
             print("MODEL METRICS ...\n")
-            labels = {'REFUTES':0, 'SUPPORTS':1, 'NOT ENOUGH INFO':2}
 
             if len(y_pred) > 0:
-                print(classification_report(test_labels, y_pred, target_names=encoded_labels, digits=4))
+                report = classification_report(test_labels, y_pred, target_names=encoded_labels, digits=4)
+                log_metrics(report)
+                print(report)
+                # print(classification_report(test_labels, y_pred, target_names=encoded_labels, digits=4))
                 # Confusion Matrices
                 if REPORT == "wandb":
                     wandb.sklearn.plot_confusion_matrix(test_labels, y_pred, labels)
@@ -251,9 +274,10 @@ def models_training_loop():
 
 
 def start():
-    # logging.set_verbosity(40)
-    # logging.enable_progress_bar()
-    logging.set_verbosity_error()
+
+    # logging.set_verbosity_error()
+    # warnings.filterwarnings("ignore", category=DeprecationWarning)
+
     modules_initiation_loop()
     models_training_loop()
 
