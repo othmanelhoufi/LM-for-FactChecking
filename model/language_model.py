@@ -27,7 +27,7 @@ if device.type == 'cuda':
 
 
 # Dataset name
-DATASET_NAME = 'SciFact'
+DATASET_NAME = 'FEVER'
 
 # Transformer model
 MODEL_NAME = None
@@ -44,12 +44,7 @@ EVAL_STEPS = 500
 SAVE_STRATEGY = 'epoch'
 SAVE_TOTAL_LIMIT = 3
 EARLY_STOPPING_PATIENCE = 3
-REPORT="none"
-
-if REPORT == "wandb":
-    # init wandb
-    wandb.init(project="NLP-for-fact-checking-using-FEVER-dataset", name=MODEL_NAME + '-b' + str(TRAIN_BATCH_SIZE), entity="othmanelhoufi")
-
+REPORT="wandb"
 
 # Create torch dataset
 class Dataset(torch.utils.data.Dataset):
@@ -279,6 +274,11 @@ def start():
     # warnings.filterwarnings("ignore", category=DeprecationWarning)
 
     modules_initiation_loop()
+
+    if REPORT == "wandb":
+        # init wandb
+        wandb.init(project="LM-for-fact-checking", name=MODEL_NAME + '-' + DATASET_NAME, entity="othmanelhoufi")
+
     models_training_loop()
 
 

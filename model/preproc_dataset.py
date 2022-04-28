@@ -85,6 +85,7 @@ class Dataset:
         t2.append(count_test['text'].sum())
 
         table = Texttable()
+        table.set_max_width(0)
         table.header(header)
         table.add_row(t0)
         table.add_row(t1)
@@ -138,6 +139,47 @@ def preprocess_scifact(data_path, export_path):
     df.dropna(inplace=True)
     df.to_csv(export_path, index=False)
 
+
+def preprocess_multifc(data_path, export_path):
+
+    ############## preprocessing dataset and maping labels to new space ##############
+    df = pd.read_csv('../dataset/MultiFC/train_raw.tsv', sep='\t')
+    df.columns = [str(i) for i in range(0, 13)]
+    df = df[['1','2']]
+    df.columns = ['claim', 'label']
+
+    true_set = ['true', 'truth!', 'promise kept', 'true messages', 'determination: true', 'verdict: true', 'confirmed authorship!', 'verdict: true', 'authorship confirmed!',
+                'in-the-green', 'truth! & outdated!', 'correct', 'factscan score: true', 'fact', 'accurate', 'correct attribution!', 'correct attribution', 'conclusion: accurate']
+    false_set = ['false', 'full flop', 'pants on fire!', 'determination: misleading', 'bogus warning', 'determination: false', 'incorrect', 'compromise', 'a lot of baloney', 'facebook scams',
+                 'promise broken', 'misleading', 'verdict: false', 'unsubstantiated messages', 'in-the-red', 'verdict: unsubstantiated', 'factscan score: false', 'miscaptioned', 'scam!',
+                 'fake news', 'fake', 'scam', 'unsupported', 'factscan score: misleading', 'rating: false', 'determination: huckster propaganda', 'inaccurate attribution!', 'incorrect attribution!',
+                 'virus!', 'distorts the facts', 'we rate this claim false', 'exaggerates']
+    mostly_true = ['determination: mostly true', 'mostly true', 'mostly truth!', 'mostly-correct', 'mostly_true', 'a little baloney', 'determination: a stretch', 'truth! & disputed!']
+    mostly_false = ['mostly false', 'determination: barely true', 'mostly_false']
+    mixture = ['half-true', 'mixture', 'in-between', 'not the whole story', 'half true', 'some baloney', 'half flip', 'partly true', 'truth! & fiction!']
+    fiction = ['fiction!', 'mostly fiction!', 'fiction! & satire!', 'fiction']
+
+    def map_label_values(v):
+        if v in true_set : return 'TRUE'
+        elif v in false_set : return 'FALSE'
+        elif v in mostly_true : return 'MOSTLY TRUE'
+        elif v in mostly_false : return 'MOSTLY FALSE'
+        elif v in mixture : return 'MIXTURE'
+        elif v in fiction : return 'FALSE'
+        else: return float("NaN")
+
+
+    df['label'] = df['label'].map(lambda x: map_label_values(x))
+    #####################################################################################
+
+    nan_value = float("NaN")
+    df.columns = ['text', 'label']
+    df.dropna(inplace=True)
+    print(df.head(10))
+    print(df.describe())
+    df.to_csv(export_path, index=False)
+
+
 if __name__ == '__main__':
 
     # fever = FeverDataset()
@@ -147,20 +189,23 @@ if __name__ == '__main__':
     # fever.get_describtion()
     # fever.print_data_example()
 
-    dataset = Dataset(name='FEVER', split_dev=True)
-    dataset.get_describtion()
-    dataset.print_data_example()
-
-    dataset = Dataset(name='SciFact', split_dev=True)
-    dataset.get_describtion()
-    dataset.print_data_example()
+    # dataset = Dataset(name='FEVER', split_dev=True)
+    # dataset.get_describtion()
+    # dataset.print_data_example()
+    #
+    # dataset = Dataset(name='SciFact', split_dev=True)
+    # dataset.get_describtion()
+    # dataset.print_data_example()
 
     # preprocess_scifact('../dataset/SciFact/train_raw.jsonl', '../dataset/SciFact/train.jsonl')
     # preprocess_scifact('../dataset/SciFact/dev_raw.jsonl', '../dataset/SciFact/dev.jsonl')
+
     # preprocess_fever('../dataset/FEVER/train_raw.jsonl', '../dataset/FEVER/train.jsonl')
     # preprocess_fever('../dataset/FEVER/dev_raw.jsonl', '../dataset/FEVER/dev.jsonl')
-    #
-    # df = pd.read_csv ('../dataset/FEVER/dev.jsonl')
-    #
-    # print(df.head(10))
-    # print(df.describe())
+
+    # preprocess_multifc('../dataset/MultiFC/train_raw.tsv', '../dataset/MultiFC/train.jsonl')
+    # preprocess_multifc('../dataset/MultiFC/dev_raw.tsv', '../dataset/MultiFC/dev.jsonl')
+
+    # dataset = Dataset(name='MultiFC', split_dev=True)
+    # dataset.get_describtion()
+    # dataset.print_data_example()
