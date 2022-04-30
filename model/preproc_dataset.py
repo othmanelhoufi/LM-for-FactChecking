@@ -206,6 +206,7 @@ if __name__ == '__main__':
     # preprocess_multifc('../dataset/MultiFC/train_raw.tsv', '../dataset/MultiFC/train.jsonl')
     # preprocess_multifc('../dataset/MultiFC/dev_raw.tsv', '../dataset/MultiFC/dev.jsonl')
 
-    # dataset = Dataset(name='MultiFC', split_dev=True)
-    # dataset.get_describtion()
-    # dataset.print_data_example()
+    dataset = Dataset(name='MultiFC', split_dev=True)
+    dataset.get_describtion()
+    dataset.print_data_example()
+    pass

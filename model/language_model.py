@@ -1,4 +1,7 @@
 #!/usr/bin/env python3
+import os
+os.environ['CUDA_VISIBLE_DEVICES']="1,2"
+
 import numpy as np
 from sklearn.model_selection import train_test_split
 from sklearn.metrics import accuracy_score, recall_score, precision_score, f1_score, matthews_corrcoef
@@ -134,7 +137,8 @@ def ask_user_for_model():
           "\n3 - albert-base-v2",
           "\n4 - distilbert-base-uncased",
           "\n5 - xlnet-base-cased",
-          "\n6 - bigbird-roberta-base")
+          "\n6 - google/bigbird-roberta-base",
+          "\n7 - YituTech/conv-bert-base")
     answer = input()
     return int(answer)
 
@@ -151,7 +155,7 @@ def ask_user_for_tasks():
 
 def modules_initiation_loop():
     answer = -1
-    while answer not in [i for i in range(1, 7)] :
+    while answer not in [i for i in range(1, 8)] :
         answer = ask_user_for_model()
 
     global MODEL_NAME
@@ -166,7 +170,9 @@ def modules_initiation_loop():
     elif answer == 5:
         MODEL_NAME = 'xlnet-base-cased'
     elif answer == 6:
-        MODEL_NAME = 'bigbird-roberta-base'
+        MODEL_NAME = 'google/bigbird-roberta-base'
+    elif answer == 7:
+        MODEL_NAME = 'YituTech/conv-bert-base'
 
 def models_training_loop():
     print("\n**************** ", MODEL_NAME , "Model ****************\n")
@@ -253,7 +259,7 @@ def models_training_loop():
             print("MODEL METRICS ...\n")
 
             if len(y_pred) > 0:
-                report = classification_report(test_labels, y_pred, target_names=encoded_labels, digits=4)
+                report = classification_report(test_labels, y_pred, target_names=encoded_labels, digits=2)
                 log_metrics(report)
                 print(report)
                 # print(classification_report(test_labels, y_pred, target_names=encoded_labels, digits=4))
