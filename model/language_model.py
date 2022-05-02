@@ -227,6 +227,7 @@ def models_training_loop():
                 report_to=REPORT,
                 run_name = MODEL_NAME + '-b' + str(TRAIN_BATCH_SIZE),
                 load_best_model_at_end=False,
+                dataloader_drop_last=True,
             )
 
             trainer = Trainer(
