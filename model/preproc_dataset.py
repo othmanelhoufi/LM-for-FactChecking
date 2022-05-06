@@ -22,7 +22,7 @@ class Dataset:
         self.val_dataset, self.test_dataset = self.__init_dev_data__(name, split_dev)
 
     def __init_train_data__(self, name):
-        df = pd.read_csv ('../dataset/'+ name +'/train.jsonl')
+        df = pd.read_csv ('../dataset/'+ name +'/train.jsonl', dtype={'label': str})
         self.labels = df['label'].unique()
         self.encoded_labels, self.decoded_labels = encode_labels(self.labels)
 
@@ -30,7 +30,7 @@ class Dataset:
         return df
 
     def __init_dev_data__(self,name, split_dev):
-        df = pd.read_csv ('../dataset/'+ name +'/dev.jsonl')
+        df = pd.read_csv ('../dataset/'+ name +'/dev.jsonl', dtype={'label': str})
         df['label'] = df.label.replace(self.encoded_labels)
         if split_dev:
             half_df = len(df) // 2
@@ -60,7 +60,6 @@ class Dataset:
         count_test = self.test_dataset.groupby('label').count()
 
         labels = self.val_dataset['label'].unique()
-        encoded_labels = encode_labels(labels)
 
         count_obj = {}
         for l in labels:
@@ -74,7 +73,7 @@ class Dataset:
         t2 = ['Testing']
 
         for l in labels:
-            header.append(self.decoded_labels.get(l))
+            header.append(self.decoded_labels[l])
             t0.append(count_obj[str(l)+'_train'])
             t1.append(count_obj[str(l)+'_dev'])
             t2.append(count_obj[str(l)+'_test'])
@@ -143,7 +142,7 @@ def preprocess_scifact(data_path, export_path):
 def preprocess_multifc(data_path, export_path):
 
     ############## preprocessing dataset and maping labels to new space ##############
-    df = pd.read_csv('../dataset/MultiFC/train_raw.tsv', sep='\t')
+    df = pd.read_csv(data_path, sep='\t')
     df.columns = [str(i) for i in range(0, 13)]
     df = df[['1','2']]
     df.columns = ['claim', 'label']
@@ -162,10 +161,10 @@ def preprocess_multifc(data_path, export_path):
     def map_label_values(v):
         if v in true_set : return 'TRUE'
         elif v in false_set : return 'FALSE'
-        elif v in mostly_true : return 'MOSTLY TRUE'
-        elif v in mostly_false : return 'MOSTLY FALSE'
+        elif v in mostly_true : return float("NaN")
+        elif v in mostly_false : return float("NaN")
         elif v in mixture : return 'MIXTURE'
-        elif v in fiction : return 'FALSE'
+        elif v in fiction : return float("NaN")
         else: return float("NaN")
 
 
@@ -180,14 +179,33 @@ def preprocess_multifc(data_path, export_path):
     df.to_csv(export_path, index=False)
 
 
+
+def preprocess_liar(data_path, export_path):
+    df = pd.read_csv(data_path, sep='\t')
+    df.columns = [str(i) for i in range(0, 14)]
+    df = df[['1','2']]
+    df.columns = ['label', 'text']
+    df['label'] = df['label'].str.upper()
+    columns_titles = ['text','label']
+    df=df.reindex(columns=columns_titles)
+
+    nan_value = float("NaN")
+    df.replace("", nan_value, inplace=True)
+    df.dropna(inplace=True)
+    df.to_csv(export_path, index=False)
+
 if __name__ == '__main__':
 
-    # fever = FeverDataset()
-    # train_dataset = fever.get_train_dataset()
-    # val_dataset = fever.get_val_dataset()
-    # test_dataset = fever.get_test_dataset()
-    # fever.get_describtion()
-    # fever.print_data_example()
+    # preprocess_scifact('../dataset/SciFact/train_raw.jsonl', '../dataset/SciFact/train.jsonl')
+    # preprocess_scifact('../dataset/SciFact/dev_raw.jsonl', '../dataset/SciFact/dev.jsonl')
+
+    # preprocess_fever('../dataset/FEVER/train_raw.jsonl', '../dataset/FEVER/train.jsonl')
+    # preprocess_fever('../dataset/FEVER/dev_raw.jsonl', '../dataset/FEVER/dev.jsonl')
+
+    preprocess_multifc('../dataset/MultiFC/train_raw.tsv', '../dataset/MultiFC/train.jsonl')
+    preprocess_multifc('../dataset/MultiFC/dev_raw.tsv', '../dataset/MultiFC/dev.jsonl')
+
+    # preprocess_liar('../dataset/Liar/train_raw.tsv', '../dataset/Liar/train.jsonl')
 
     # dataset = Dataset(name='FEVER', split_dev=True)
     # dataset.get_describtion()
@@ -197,16 +215,13 @@ if __name__ == '__main__':
     # dataset.get_describtion()
     # dataset.print_data_example()
 
-    # preprocess_scifact('../dataset/SciFact/train_raw.jsonl', '../dataset/SciFact/train.jsonl')
-    # preprocess_scifact('../dataset/SciFact/dev_raw.jsonl', '../dataset/SciFact/dev.jsonl')
-
-    # preprocess_fever('../dataset/FEVER/train_raw.jsonl', '../dataset/FEVER/train.jsonl')
-    # preprocess_fever('../dataset/FEVER/dev_raw.jsonl', '../dataset/FEVER/dev.jsonl')
-
-    # preprocess_multifc('../dataset/MultiFC/train_raw.tsv', '../dataset/MultiFC/train.jsonl')
-    # preprocess_multifc('../dataset/MultiFC/dev_raw.tsv', '../dataset/MultiFC/dev.jsonl')
-
     dataset = Dataset(name='MultiFC', split_dev=True)
     dataset.get_describtion()
     dataset.print_data_example()
+
+    # dataset = Dataset(name='Liar', split_dev=True)
+    # dataset.get_describtion()
+    # dataset.print_data_example()
+
+
     pass
