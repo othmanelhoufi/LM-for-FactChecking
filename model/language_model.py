@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 import os
-os.environ['CUDA_VISIBLE_DEVICES']="1,2"
+os.environ['CUDA_VISIBLE_DEVICES']="1"
 
 import numpy as np
 from sklearn.model_selection import train_test_split
@@ -16,6 +16,8 @@ import wandb
 import datetime
 import warnings
 
+from torchinfo import summary
+
 
 # specify GPU
 torch.cuda.empty_cache()
@@ -30,7 +32,7 @@ if device.type == 'cuda':
 
 
 # Dataset name
-DATASET_NAME = 'FEVER'
+DATASET_NAME = 'MultiFC'
 
 # Transformer model
 MODEL_NAME = None
@@ -42,12 +44,13 @@ EVAL_BATCH_SIZE = 20
 EPOCHS = 3
 LR = 3e-5
 OPTIM = 'adamw_hf'
-SAVE_STEPS = 4362
-EVAL_STEPS = 500
+SAVE_STEPS = 1000
+EVAL_STEPS = 100
 SAVE_STRATEGY = 'epoch'
-SAVE_TOTAL_LIMIT = 3
+LOGGING_STEPS = 500
+SAVE_TOTAL_LIMIT = 1
 EARLY_STOPPING_PATIENCE = 3
-REPORT="wandb"
+REPORT="none"
 
 # Create torch dataset
 class Dataset(torch.utils.data.Dataset):
@@ -194,6 +197,11 @@ def models_training_loop():
 
     y_pred = []
 
+    # model_size = model.num_parameters()
+    # print("SIZE = ", model_size)
+
+    # summary(model)
+
     answer = -1
     while answer != 5 :
 
@@ -224,6 +232,7 @@ def models_training_loop():
                 learning_rate=LR,
                 optim=OPTIM,
                 seed=0,
+                logging_steps=LOGGING_STEPS,
                 report_to=REPORT,
                 run_name = MODEL_NAME + '-b' + str(TRAIN_BATCH_SIZE),
                 load_best_model_at_end=False,
