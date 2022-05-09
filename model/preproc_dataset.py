@@ -17,20 +17,20 @@ def encode_labels(labels):
     return encoded_labels, decoded_labels
 
 class Dataset:
-    def __init__(self, name, split_dev=False): # name can be : FEVER, SciFact
-        self.train_dataset = self.__init_train_data__(name)
-        self.val_dataset, self.test_dataset = self.__init_dev_data__(name, split_dev)
+    def __init__(self, name, split_dev=False, num_labels=2): # name can be : FEVER, SciFact, Liar...
+        self.train_dataset = self.__init_train_data__(name, num_labels)
+        self.val_dataset, self.test_dataset = self.__init_dev_data__(name, num_labels, split_dev)
 
-    def __init_train_data__(self, name):
-        df = pd.read_csv ('../dataset/'+ name +'/train.jsonl', dtype={'label': str})
+    def __init_train_data__(self, name, num_labels):
+        df = pd.read_csv ('../dataset/'+ name +'/train-' + str(num_labels) +'L.jsonl', dtype={'label': str})
         self.labels = df['label'].unique()
         self.encoded_labels, self.decoded_labels = encode_labels(self.labels)
 
         df['label'] = df.label.replace(self.encoded_labels)
         return df
 
-    def __init_dev_data__(self,name, split_dev):
-        df = pd.read_csv ('../dataset/'+ name +'/dev.jsonl', dtype={'label': str})
+    def __init_dev_data__(self,name, num_labels, split_dev):
+        df = pd.read_csv ('../dataset/'+ name +'/dev-' + str(num_labels) +'L.jsonl', dtype={'label': str})
         df['label'] = df.label.replace(self.encoded_labels)
         if split_dev:
             half_df = len(df) // 2
@@ -114,6 +114,13 @@ def preprocess_fever(data_path, export_path):
     df.replace("", nan_value, inplace=True)
     df.columns = ['text', 'label']
     df.dropna(inplace=True)
+
+    # print(df.head(10))
+    # print(df['label'].unique())
+    #
+    # df = df[(df.label == 'SUPPORTS') | (df.label == 'REFUTES')]
+    # print(df.head(10))
+    # print(df['label'].unique())
     df.to_csv(export_path, index=False)
 
 
@@ -153,7 +160,7 @@ def preprocess_multifc(data_path, export_path):
                  'promise broken', 'misleading', 'verdict: false', 'unsubstantiated messages', 'in-the-red', 'verdict: unsubstantiated', 'factscan score: false', 'miscaptioned', 'scam!',
                  'fake news', 'fake', 'scam', 'unsupported', 'factscan score: misleading', 'rating: false', 'determination: huckster propaganda', 'inaccurate attribution!', 'incorrect attribution!',
                  'virus!', 'distorts the facts', 'we rate this claim false', 'exaggerates']
-    mostly_true = ['determination: mostly true', 'mostly true', 'mostly truth!', 'mostly-correct', 'mostly_true', 'a little baloney', 'determination: a stretch', 'truth! & disputed!']
+    mostly_true = ['determination: mostly true', 'mostly true', 'mostly truth!', 'mostly-correct', 'mostly_true', 'a little baloney']
     mostly_false = ['mostly false', 'determination: barely true', 'mostly_false']
     mixture = ['half-true', 'mixture', 'in-between', 'not the whole story', 'half true', 'some baloney', 'half flip', 'partly true', 'truth! & fiction!']
     fiction = ['fiction!', 'mostly fiction!', 'fiction! & satire!', 'fiction']
@@ -161,9 +168,9 @@ def preprocess_multifc(data_path, export_path):
     def map_label_values(v):
         if v in true_set : return 'TRUE'
         elif v in false_set : return 'FALSE'
-        elif v in mostly_true : return float("NaN")
-        elif v in mostly_false : return float("NaN")
-        elif v in mixture : return 'MIXTURE'
+        elif v in mostly_true : return 'MOSTLY-TRUE'
+        elif v in mostly_false : return 'MOSTLY-FALSE'
+        elif v in mixture : return 'IN-BETWEEN'
         elif v in fiction : return float("NaN")
         else: return float("NaN")
 
@@ -174,8 +181,14 @@ def preprocess_multifc(data_path, export_path):
     nan_value = float("NaN")
     df.columns = ['text', 'label']
     df.dropna(inplace=True)
-    print(df.head(10))
-    print(df.describe())
+
+    # print(df.head(10))
+    # print(df['label'].unique())
+
+    # df = df[(df.label == 'TRUE') | (df.label == 'FALSE') | (df.label == 'MOSTLY-TRUE') | (df.label == 'MOSTLY-FALSE') | (df.label == 'IN-BETWEEN') ]
+    # print(df.head(10))
+    # print(df['label'].unique())
+
     df.to_csv(export_path, index=False)
 
 
@@ -192,6 +205,14 @@ def preprocess_liar(data_path, export_path):
     nan_value = float("NaN")
     df.replace("", nan_value, inplace=True)
     df.dropna(inplace=True)
+
+    # print(df.head(10))
+    # print(df['label'].unique())
+
+    # df = df[(df.label == 'TRUE') | (df.label == 'FALSE') | (df.label == 'MOSTLY-TRUE') | (df.label == 'HALF-TRUE') | (df.label == 'BARELY-TRUE') | (df.label == 'PANTS-FIRE') ]
+    # print(df.head(10))
+    # print(df['label'].unique())
+
     df.to_csv(export_path, index=False)
 
 if __name__ == '__main__':
@@ -199,15 +220,16 @@ if __name__ == '__main__':
     # preprocess_scifact('../dataset/SciFact/train_raw.jsonl', '../dataset/SciFact/train.jsonl')
     # preprocess_scifact('../dataset/SciFact/dev_raw.jsonl', '../dataset/SciFact/dev.jsonl')
 
-    # preprocess_fever('../dataset/FEVER/train_raw.jsonl', '../dataset/FEVER/train.jsonl')
-    # preprocess_fever('../dataset/FEVER/dev_raw.jsonl', '../dataset/FEVER/dev.jsonl')
+    # preprocess_fever('../dataset/FEVER/train_raw.jsonl', '../dataset/FEVER/train-2L.jsonl')
+    # preprocess_fever('../dataset/FEVER/dev_raw.jsonl', '../dataset/FEVER/dev-2L.jsonl')
 
-    preprocess_multifc('../dataset/MultiFC/train_raw.tsv', '../dataset/MultiFC/train.jsonl')
-    preprocess_multifc('../dataset/MultiFC/dev_raw.tsv', '../dataset/MultiFC/dev.jsonl')
+    # preprocess_multifc('../dataset/MultiFC/train_raw.tsv', '../dataset/MultiFC/train-5L.jsonl')
+    # preprocess_multifc('../dataset/MultiFC/dev_raw.tsv', '../dataset/MultiFC/dev-5L.jsonl')
 
-    # preprocess_liar('../dataset/Liar/train_raw.tsv', '../dataset/Liar/train.jsonl')
+    # preprocess_liar('../dataset/Liar/train_raw.tsv', '../dataset/Liar/train-6L.jsonl')
+    # preprocess_liar('../dataset/Liar/dev_raw.tsv', '../dataset/Liar/dev-6L.jsonl')
 
-    # dataset = Dataset(name='FEVER', split_dev=True)
+    # dataset = Dataset(name='FEVER', split_dev=True, num_labels=3)
     # dataset.get_describtion()
     # dataset.print_data_example()
     #
@@ -215,11 +237,11 @@ if __name__ == '__main__':
     # dataset.get_describtion()
     # dataset.print_data_example()
 
-    dataset = Dataset(name='MultiFC', split_dev=True)
+    dataset = Dataset(name='MultiFC', split_dev=True, num_labels=5)
     dataset.get_describtion()
     dataset.print_data_example()
 
-    # dataset = Dataset(name='Liar', split_dev=True)
+    # dataset = Dataset(name='Liar', split_dev=True, num_labels=6)
     # dataset.get_describtion()
     # dataset.print_data_example()
 

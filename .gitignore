@@ -3,4 +3,4 @@
 # Ignore python cache files
 model/__pycache__/
 model/outputs/
-
+outputs/
