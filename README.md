@@ -44,13 +44,7 @@ REPORT="none"
 
 To execute this program just follow these steps:
 
-1. Make sure you have the fever dataset in place and in the correct repository (code/dataset)
-2. Go to code/model repository
-3. Execute a language model of your choice: $ python3 bert_model.py
+1. Make sure you have the fever dataset in place and in the correct repository (./dataset)
+2. Go to ./model repository
+3. Execute a language model of your choice: $ python3 language_model.py
 
-### To-Do List
-1. Reduce code reproducibility, merge all models in one program: One code to rule them all.
-2. Save metric logs related to each model in file.
-3. Handle warnings
-4. Add more datasets.
-5. Run more experiments.
