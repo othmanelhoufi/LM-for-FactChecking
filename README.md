@@ -48,3 +48,9 @@ To execute this program just follow these steps:
 2. Go to ./model repository
 3. Execute a language model of your choice: $ python3 language_model.py
 
+### To-Do List
+1. Complete all necessary experiments
+2. Organize charts and table of experimental data
+3. Clean the code, Clean the code and Clean the code
+4. Add args to the python execution process
+5. Handle exceptions.
