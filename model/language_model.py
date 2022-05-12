@@ -13,14 +13,14 @@ from transformers.utils import logging
 from sklearn.metrics import classification_report, confusion_matrix
 import preproc_dataset
 import wandb
-import datetime
 import pathlib
 import warnings
-
 from torchinfo import summary
+from conf import DEFAULT_PARAMS, MODEL_LIST, WANDB_PARAMS
+from utils import *
 
-
-# specify GPU
+#**************************************************************************************************#
+""" Logging GPU specs if it exists """
 torch.cuda.empty_cache()
 device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
 print('USING DEVICE:', device)
@@ -30,28 +30,13 @@ if device.type == 'cuda':
     print('__Number CUDA Devices:', torch.cuda.device_count())
     print('__CUDA Device Name:',torch.cuda.get_device_name(0))
     print('__CUDA Device Total Memory [GB]:',torch.cuda.get_device_properties(0).total_memory/1e9)
+#**************************************************************************************************#
 
+#**************************************************************************************************#
+""" Initiating default parameters """
+DEFAULTS = DEFAULT_PARAMS.copy()
+#**************************************************************************************************#
 
-# Transformer model
-MODEL_NAME = None
-
-# Dataset name
-DATASET_NAME = 'FEVER'
-DATA_NUM_LABEL = 2 # minimum 2 labels
-
-# hyperparams
-MAX_SEQ_LEN = 128
-TRAIN_BATCH_SIZE = 20
-EVAL_BATCH_SIZE = 20
-EPOCHS = 3
-LR = 3e-5
-OPTIM = 'adamw_hf'
-EVAL_STEPS = 100
-SAVE_STEPS = EVAL_STEPS * 3
-LOGGING_STEPS = 500
-SAVE_TOTAL_LIMIT = 1
-EARLY_STOPPING_PATIENCE = 3
-REPORT="none"
 
 # Create torch dataset
 class Dataset(torch.utils.data.Dataset):
@@ -78,21 +63,21 @@ def split_dataset(dataset):
 
 
 # Import Model
-def init_model(num_of_labels, model_name=MODEL_NAME):
+def init_model(num_of_labels=2, name=DEFAULTS['MODEL_NAME']):
     # import pretrained model
-    model = AutoModelForSequenceClassification.from_pretrained(pretrained_model_name_or_path=MODEL_NAME, num_labels=num_of_labels)
+    model = AutoModelForSequenceClassification.from_pretrained(pretrained_model_name_or_path=name, num_labels=num_of_labels)
     return model
 
 # Import Tokenizer
-def init_tokenizer(model_name=MODEL_NAME):
+def init_tokenizer(name=DEFAULTS['MODEL_NAME']):
     # Load the tokenizer
-    tokenizer = AutoTokenizer.from_pretrained(pretrained_model_name_or_path=MODEL_NAME)
+    tokenizer = AutoTokenizer.from_pretrained(pretrained_model_name_or_path=name)
     return tokenizer
 
 
 
 # Tokenization
-def init_tokens(X_train, X_val, X_test, tokenizer, max_seq_len=MAX_SEQ_LEN):
+def init_tokens(X_train, X_val, X_test, tokenizer, max_seq_len=DEFAULTS['MAX_SEQ_LEN']):
     # tokenize and encode sequences in the training set
     tokens_train = tokenizer(X_train, padding=True, truncation=True, max_length=max_seq_len)
 
@@ -105,7 +90,7 @@ def init_tokens(X_train, X_val, X_test, tokenizer, max_seq_len=MAX_SEQ_LEN):
     return tokens_train, tokens_val, tokens_test
 
 
-# Define Trainer parameters
+# Define Trainer eval metrics
 def compute_metrics(p):
     pred, labels = p
     pred = np.argmax(pred, axis=1)
@@ -115,104 +100,28 @@ def compute_metrics(p):
 
     return {"accuracy": accuracy, "mcc": mcc}
 
-def log_metrics(metrics):
-    # Append-adds at last
-    f = open("log.txt", "a+")
-    now = datetime.datetime.now()
-    header = "#"*20 + "  " + MODEL_NAME + " | " + DATASET_NAME + '-' + str(DATA_NUM_LABEL) + 'L' + " | " + now.strftime("%Y-%m-%d %H:%M:%S") + "  " + "#"*20 + "\n" + "#"*90 + "\n\n"
-    hyperparams = {
-        'MAX_SEQ_LEN' : MAX_SEQ_LEN,
-        'TRAIN_BATCH_SIZE' : TRAIN_BATCH_SIZE,
-        'EVAL_BATCH_SIZE' : EVAL_BATCH_SIZE,
-        'EPOCHS' : EPOCHS,
-        'LR' : LR,
-        'OPTIM' : OPTIM,
-        'EVAL_STEPS' : EVAL_STEPS
-    }
-
-    f.write(header)
-    f.write(str(hyperparams) + "\n\n")
-    f.write(metrics + "\n")
-    f.write("#"*90 + "\n\n")
-    f.close()
-
-def ask_user_for_model():
-    answer = None
-    while True:
-        try:
-            print("\nHi, choose a Language Model:")
-            print("\n1 - bert-base-uncased",
-                  "\n2 - roberta-base",
-                  "\n3 - albert-base-v2",
-                  "\n4 - distilbert-base-uncased",
-                  "\n5 - xlnet-base-cased",
-                  "\n6 - google/bigbird-roberta-base",
-                  "\n7 - YituTech/conv-bert-base")
-            answer = input()
-            answer = int(answer)
-            break
-        except ValueError:
-            print("Oops!  That was no valid number.  Try again...")
-
-    return answer
-
-def ask_user_for_tasks():
-    answer = None
-    while True:
-        try:
-            print("\n1 - Show dataset description",
-                  "\n2 - Start model fine-tuning",
-                  "\n3 - Start model predictions",
-                  # "\n4 - Delete pre-fine-tuned model",
-                  # "\n5 - Show learning loss and accuracy",
-                  "\n4 - Show model metrics",
-                  "\n5 - Quit program")
-            answer = input()
-            answer = int(answer)
-            break
-        except ValueError:
-            print("Oops!  That was no valid number.  Try again...")
-
-    return answer
-
-def modules_initiation_loop():
-    answer = -1
-    while answer not in [i for i in range(1, 8)] :
-        answer = ask_user_for_model()
-
-    global MODEL_NAME
-    if answer == 1:
-        MODEL_NAME = 'bert-base-uncased'
-    elif answer == 2:
-        MODEL_NAME = 'roberta-base'
-    elif answer == 3:
-        MODEL_NAME = 'albert-base-v2'
-    elif answer == 4:
-        MODEL_NAME = 'distilbert-base-uncased'
-    elif answer == 5:
-        MODEL_NAME = 'xlnet-base-cased'
-    elif answer == 6:
-        MODEL_NAME = 'google/bigbird-roberta-base'
-    elif answer == 7:
-        MODEL_NAME = 'YituTech/conv-bert-base'
-
-def models_training_loop(EXPERIMENT_NAME):
-    print("\n**************** ", MODEL_NAME , "Model ****************\n")
+# Big loop for training, and testing
+def model_training_loop(EXPERIMENT_NAME):
+    print("\n**************** ", DEFAULTS['MODEL_NAME'] , "Model ****************\n")
 
     # Init dataset
-    dataset = preproc_dataset.Dataset(name=DATASET_NAME, split_dev=True, num_labels=DATA_NUM_LABEL)
+    dataset = preproc_dataset.Dataset(name=DEFAULTS['DATASET_NAME'], split_dev=True, num_labels=DEFAULTS['DATA_NUM_LABEL'])
     train_dataset = dataset.get_train_dataset()
     val_dataset = dataset.get_val_dataset()
     test_dataset = dataset.get_test_dataset()
     labels, encoded_labels, decoded_labels = dataset.get_encodings()
+
+    train_dataset = train_dataset[:10]
+    val_dataset = val_dataset[:10]
+    test_dataset = test_dataset[:10]
 
     train_text, train_labels = split_dataset(train_dataset)
     val_text, val_labels = split_dataset(val_dataset)
     test_text, test_labels = split_dataset(test_dataset)
 
     model = None
-    tokenizer = init_tokenizer(model_name=MODEL_NAME)
-    tokens_train, tokens_val, tokens_test = init_tokens(train_text, val_text, test_text, tokenizer, MAX_SEQ_LEN)
+    tokenizer = init_tokenizer(name=DEFAULTS['MODEL_NAME'])
+    tokens_train, tokens_val, tokens_test = init_tokens(train_text, val_text, test_text, tokenizer, DEFAULTS['MAX_SEQ_LEN'])
 
     y_pred = []
 
@@ -222,7 +131,7 @@ def models_training_loop(EXPERIMENT_NAME):
     # summary(model)
 
     answer = -1
-    while answer != 5 :
+    while answer != 0 :
 
         answer = ask_user_for_tasks()
         print("\n")
@@ -232,7 +141,8 @@ def models_training_loop(EXPERIMENT_NAME):
             dataset.print_data_example()
         elif(answer == 2):
             print("STARTING LEARNING ...\n")
-            model = init_model(DATA_NUM_LABEL, model_name=MODEL_NAME)
+            print('POOOOOOP : ', type(DEFAULTS['DATA_NUM_LABEL']))
+            model = init_model(DEFAULTS['DATA_NUM_LABEL'], name=DEFAULTS['MODEL_NAME'])
 
             train_dataset_torch = Dataset(tokens_train, train_labels)
             val_dataset_torch = Dataset(tokens_val, val_labels)
@@ -241,19 +151,19 @@ def models_training_loop(EXPERIMENT_NAME):
             args = TrainingArguments(
                 output_dir="outputs/" + EXPERIMENT_NAME,
                 overwrite_output_dir=True,
-                save_strategy='no',
-                save_total_limit=SAVE_TOTAL_LIMIT,
+                save_strategy='steps',
+                save_total_limit=DEFAULTS['SAVE_TOTAL_LIMIT'],
                 evaluation_strategy='steps',
-                eval_steps=EVAL_STEPS,
-                save_steps=SAVE_STEPS,
-                per_device_train_batch_size=TRAIN_BATCH_SIZE,
-                per_device_eval_batch_size=EVAL_BATCH_SIZE,
-                num_train_epochs=EPOCHS,
-                learning_rate=LR,
-                optim=OPTIM,
+                eval_steps=DEFAULTS['EVAL_STEPS'],
+                save_steps=DEFAULTS['SAVE_STEPS'],
+                per_device_train_batch_size=DEFAULTS['TRAIN_BATCH_SIZE'],
+                per_device_eval_batch_size=DEFAULTS['EVAL_BATCH_SIZE'],
+                num_train_epochs=DEFAULTS['EPOCHS'],
+                learning_rate=DEFAULTS['LR'],
+                optim=DEFAULTS['OPTIM'],
                 seed=0,
-                logging_steps=LOGGING_STEPS,
-                report_to=REPORT,
+                logging_steps=DEFAULTS['LOGGING_STEPS'],
+                report_to=DEFAULTS['REPORT'],
                 load_best_model_at_end=True,
                 metric_for_best_model='accuracy',
                 dataloader_drop_last=True,
@@ -265,7 +175,7 @@ def models_training_loop(EXPERIMENT_NAME):
                 train_dataset=train_dataset_torch,
                 eval_dataset=val_dataset_torch,
                 compute_metrics=compute_metrics,
-                callbacks=[EarlyStoppingCallback(early_stopping_patience=EARLY_STOPPING_PATIENCE)],
+                callbacks=[EarlyStoppingCallback(early_stopping_patience=DEFAULTS['EARLY_STOPPING_PATIENCE'])],
             )
 
             # Train pre-trained model
@@ -297,7 +207,7 @@ def models_training_loop(EXPERIMENT_NAME):
                     file = pathlib.Path(model_path)
 
                 # Load trained model
-                model = AutoModelForSequenceClassification.from_pretrained(pretrained_model_name_or_path=model_path, num_labels=DATA_NUM_LABEL)
+                model = AutoModelForSequenceClassification.from_pretrained(pretrained_model_name_or_path=model_path, num_labels=DEFAULTS['DATA_NUM_LABEL'])
 
                 # Define test trainer
                 test_trainer = Trainer(model)
@@ -315,35 +225,36 @@ def models_training_loop(EXPERIMENT_NAME):
 
             if len(y_pred) > 0:
                 report = classification_report(test_labels, y_pred, target_names=encoded_labels, digits=2)
-                log_metrics(report)
+                log_metrics(report, DEFAULTS)
                 print(report)
                 # print(classification_report(test_labels, y_pred, target_names=encoded_labels, digits=4))
                 # Confusion Matrices
-                if REPORT == "wandb":
+                if DEFAULTS['REPORT'] == "wandb":
                     wandb.sklearn.plot_confusion_matrix(test_labels, y_pred, labels)
             else:
                 print("START PREDICTIONS FIRST !!\n")
 
-        elif(answer == 5):
-            if REPORT == "wandb": wandb.finish()
-            print("GOODBYE ...")
+        elif(answer == 0):
+            if DEFAULTS['REPORT'] == "wandb": wandb.finish()
+            break
 
 
 def start():
 
-    # logging.set_verbosity_error()
-    # warnings.filterwarnings("ignore", category=DeprecationWarning)
+    e = models_initiation_loop(MODEL_LIST, DEFAULTS)
+    if e != 0:
+        EXPERIMENT_NAME = DEFAULTS['MODEL_NAME'] + '-' + DEFAULTS['DATASET_NAME'] + '-' + str(DEFAULTS['DATA_NUM_LABEL']) + 'L'
 
-    modules_initiation_loop()
-    EXPERIMENT_NAME = MODEL_NAME + '-' + DATASET_NAME + '-' + str(DATA_NUM_LABEL) + 'L'
+        if DEFAULTS['REPORT'] == "wandb":
+            # init wandb
+            wandb.init(project=WANDB_PARAMS['project'], name=EXPERIMENT_NAME, entity=WANDB_PARAMS['entity'])
 
-    if REPORT == "wandb":
-        # init wandb
-        wandb.init(project="LM-for-fact-checking", name=EXPERIMENT_NAME, entity="othmanelhoufi")
-
-    models_training_loop(EXPERIMENT_NAME)
+        model_training_loop(EXPERIMENT_NAME)
 
 
 
 if __name__ == '__main__':
+    init_args(DEFAULTS)
+    print(DEFAULTS)
     start()
+    print(DEFAULTS)
