@@ -16,8 +16,8 @@ DEFAULT_PARAMS = {
 
     # Huggingface Trainer params
     'EVAL_STEPS' : 100,
-    'SAVE_STEPS' : 300,
-    'LOGGING_STEPS' : 500,
+    'SAVE_STEPS' : 100,
+    'LOGGING_STEPS' : 100,
     'SAVE_TOTAL_LIMIT' : 1,
     'EARLY_STOPPING_PATIENCE' : 3,
     'REPORT':'none',

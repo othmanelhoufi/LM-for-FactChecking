@@ -570,20 +570,38 @@ weighted avg       0.51      0.53      0.50      1151
 
 ##########################################################################################
 
-####################  google/bigbird-roberta-base | MultiFC-4L | 2022-05-13 11:58:40  ####################
+####################  google/bigbird-roberta-base | MultiFC-4L | 2022-05-13 15:11:04  ####################
 ##########################################################################################
 
-{'MAX_SEQ_LEN': 128, 'TRAIN_BATCH_SIZE': 20, 'EVAL_BATCH_SIZE': 20, 'EPOCHS': 3, 'LR': 3e-05, 'OPTIM': 'adamw_hf', 'EVAL_STEPS': 100}
+{'MAX_SEQ_LEN': 128, 'TRAIN_BATCH_SIZE': 20, 'EVAL_BATCH_SIZE': 20, 'EPOCHS': 3, 'LR': 3e-05, 'OPTIM': 'adamw_hf', 'EVAL_STEPS': 50}
 
               precision    recall  f1-score   support
 
-        TRUE       0.56      0.14      0.22       261
-       FALSE       0.54      0.88      0.67       545
-MOSTLY-FALSE       0.75      0.02      0.03       168
- MOSTLY-TRUE       0.34      0.36      0.35       177
+        TRUE       0.47      0.27      0.35       261
+       FALSE       0.59      0.79      0.67       545
+MOSTLY-FALSE       0.35      0.09      0.14       168
+ MOSTLY-TRUE       0.31      0.41      0.36       177
 
     accuracy                           0.51      1151
-   macro avg       0.55      0.35      0.32      1151
-weighted avg       0.54      0.51      0.42      1151
+   macro avg       0.43      0.39      0.38      1151
+weighted avg       0.49      0.51      0.47      1151
+
+##########################################################################################
+
+####################  YituTech/conv-bert-base | MultiFC-4L | 2022-05-13 14:33:43  ####################
+##########################################################################################
+
+{'MAX_SEQ_LEN': 128, 'TRAIN_BATCH_SIZE': 20, 'EVAL_BATCH_SIZE': 20, 'EPOCHS': 3, 'LR': 3e-05, 'OPTIM': 'adamw_hf', 'EVAL_STEPS': 50}
+
+              precision    recall  f1-score   support
+
+        TRUE       0.58      0.47      0.52       261
+       FALSE       0.65      0.77      0.70       545
+MOSTLY-FALSE       0.32      0.21      0.25       168
+ MOSTLY-TRUE       0.43      0.45      0.44       177
+
+    accuracy                           0.57      1151
+   macro avg       0.50      0.47      0.48      1151
+weighted avg       0.55      0.57      0.56      1151
 
 ##########################################################################################
