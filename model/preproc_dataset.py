@@ -171,7 +171,7 @@ def preprocess_multifc(data_path, export_path):
         elif v in mostly_true : return 'MOSTLY-TRUE'
         elif v in mostly_false : return 'MOSTLY-FALSE'
         elif v in mixture : return 'IN-BETWEEN'
-        elif v in fiction : return float("NaN")
+        elif v in fiction : return 'FALSE'
         else: return float("NaN")
 
 
@@ -206,12 +206,19 @@ def preprocess_liar(data_path, export_path):
     df.replace("", nan_value, inplace=True)
     df.dropna(inplace=True)
 
-    # print(df.head(10))
-    # print(df['label'].unique())
+    #====================================================================#
+    #====================Maping labels to new space======================#
+    #====================================================================#
+    def map_label_values(v):
+        if v == 'MOSTLY-TRUE' : return 'MOSTLY-TRUE'
+        elif v == 'HALF-TRUE' : return 'HALF-TRUE'
+        elif v == 'BARELY-TRUE' : return 'BARELY-TRUE'
+        elif v == 'PANTS-FIRE' : return 'PANTS-FIRE'
+        else: return v
 
-    # df = df[(df.label == 'TRUE') | (df.label == 'FALSE') | (df.label == 'MOSTLY-TRUE') | (df.label == 'HALF-TRUE') | (df.label == 'BARELY-TRUE') | (df.label == 'PANTS-FIRE') ]
-    # print(df.head(10))
-    # print(df['label'].unique())
+
+    df['label'] = df['label'].map(lambda x: map_label_values(x))
+    #====================================================================#
 
     df.to_csv(export_path, index=False)
 
@@ -230,18 +237,6 @@ if __name__ == '__main__':
     # preprocess_liar('../dataset/Liar/dev_raw.tsv', '../dataset/Liar/dev-6L.jsonl')
 
     # dataset = Dataset(name='FEVER', split_dev=True, num_labels=3)
-    # dataset.get_describtion()
-    # dataset.print_data_example()
-    #
-    # dataset = Dataset(name='SciFact', split_dev=True)
-    # dataset.get_describtion()
-    # dataset.print_data_example()
-
-    dataset = Dataset(name='MultiFC', split_dev=True, num_labels=5)
-    dataset.get_describtion()
-    dataset.print_data_example()
-
-    # dataset = Dataset(name='Liar', split_dev=True, num_labels=6)
     # dataset.get_describtion()
     # dataset.print_data_example()
 
