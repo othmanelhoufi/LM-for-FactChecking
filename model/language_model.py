@@ -111,10 +111,6 @@ def model_training_loop(EXPERIMENT_NAME):
     test_dataset = dataset.get_test_dataset()
     labels, encoded_labels, decoded_labels = dataset.get_encodings()
 
-    train_dataset = train_dataset[:10]
-    val_dataset = val_dataset[:10]
-    test_dataset = test_dataset[:10]
-
     train_text, train_labels = split_dataset(train_dataset)
     val_text, val_labels = split_dataset(val_dataset)
     test_text, test_labels = split_dataset(test_dataset)
@@ -141,7 +137,6 @@ def model_training_loop(EXPERIMENT_NAME):
             dataset.print_data_example()
         elif(answer == 2):
             print("STARTING LEARNING ...\n")
-            print('POOOOOOP : ', type(DEFAULTS['DATA_NUM_LABEL']))
             model = init_model(DEFAULTS['DATA_NUM_LABEL'], name=DEFAULTS['MODEL_NAME'])
 
             train_dataset_torch = Dataset(tokens_train, train_labels)
@@ -255,6 +250,4 @@ def start():
 
 if __name__ == '__main__':
     init_args(DEFAULTS)
-    print(DEFAULTS)
     start()
-    print(DEFAULTS)

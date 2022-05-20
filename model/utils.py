@@ -47,23 +47,36 @@ def ask_user_for_tasks():
 import datetime
 def log_metrics(metrics, DEFAULTS):
     # Append-adds at last
-    f = open("log.txt", "a+")
+    f = open("log.md", "a+")
     now = datetime.datetime.now()
-    header = "#"*20 + "  " + DEFAULTS['MODEL_NAME'] + " | " + DEFAULTS['DATASET_NAME'] + '-' + str(DEFAULTS['DATA_NUM_LABEL']) + 'L' + " | " + now.strftime("%Y-%m-%d %H:%M:%S") + "  " + "#"*20 + "\n" + "#"*90 + "\n\n"
-    hyperparams = {
-        'MAX_SEQ_LEN' : DEFAULTS['MAX_SEQ_LEN'],
-        'TRAIN_BATCH_SIZE' : DEFAULTS['TRAIN_BATCH_SIZE'],
-        'EVAL_BATCH_SIZE' : DEFAULTS['EVAL_BATCH_SIZE'],
-        'EPOCHS' : DEFAULTS['EPOCHS'],
-        'LR' : DEFAULTS['LR'],
-        'OPTIM' : DEFAULTS['OPTIM'],
-        'EVAL_STEPS' : DEFAULTS['EVAL_STEPS']
-    }
 
-    f.write(header)
-    f.write(str(hyperparams) + "\n\n")
+    header_name = DEFAULTS['DATASET_NAME'] + '-' + str(DEFAULTS['DATA_NUM_LABEL']) + 'L'
+    title = f"## {header_name} | {DEFAULTS['MODEL_NAME']}"
+    subtitle = f"###### {now.strftime('%Y-%m-%d %H:%M:%S')}"
+    section1 = f"#### Hyperparameters"
+    table = f"""
+
+| **MAX_SEQ_LEN** | **TRAIN_BATCH_SIZE** | **EVAL_BATCH_SIZE** | **EPOCHS** | **LR** | **OPTIM** | **EVAL_STEPS** |
+|:---------------:|:--------------------:|:-------------------:|:----------:|:------:|:---------:|:--------------:|
+|        {DEFAULTS['MAX_SEQ_LEN']}       |          {DEFAULTS['TRAIN_BATCH_SIZE']}          |          {DEFAULTS['EVAL_BATCH_SIZE']}         |     {DEFAULTS['EPOCHS']}     |   {DEFAULTS['LR']}   |     {DEFAULTS['OPTIM']}    |       {DEFAULTS['EVAL_STEPS']}       |
+
+    """
+    section2 = f"#### Metrics"
+    metrics = f"""
+```
+{metrics}
+```
+    """
+    sep_line = "----"
+
+    f.write(title + "\n")
+    f.write(subtitle + "\n")
+    f.write(section1 + "\n")
+    f.write(table + "\n")
+    f.write(section2 + "\n")
     f.write(metrics + "\n")
-    f.write("#"*90 + "\n\n")
+    f.write(sep_line + "\n")
+    f.write(sep_line + "\n")
     f.close()
 
 
