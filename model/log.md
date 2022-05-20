@@ -20,3 +20,29 @@ weighted avg       0.36      0.60      0.45        10
 
 ----
 ----
+## Liar-2L | distilbert-base-uncased
+###### 2022-05-20 15:03:48
+#### Hyperparameters
+
+
+| **MAX_SEQ_LEN** | **TRAIN_BATCH_SIZE** | **EVAL_BATCH_SIZE** | **EPOCHS** | **LR** | **OPTIM** | **EVAL_STEPS** |
+|:---------------:|:--------------------:|:-------------------:|:----------:|:------:|:---------:|:--------------:|
+|        128       |          10          |          10         |     1     |   3e-05   |     adamw_hf    |       100       |
+
+    
+#### Metrics
+
+```
+              precision    recall  f1-score   support
+
+       FALSE       0.56      0.83      0.67         6
+        TRUE       0.00      0.00      0.00         4
+
+    accuracy                           0.50        10
+   macro avg       0.28      0.42      0.33        10
+weighted avg       0.33      0.50      0.40        10
+
+```
+    
+----
+----
