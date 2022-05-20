@@ -3,4 +3,8 @@
 # Ignore python cache files
 model/__pycache__/
 model/outputs/
+model/tmp_trainer/
+model/wandb/
+model/log_old.txt
 outputs/
+old_shit/
