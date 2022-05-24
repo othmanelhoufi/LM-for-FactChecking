@@ -317,3 +317,30 @@ NOT ENOUGH INFO       0.64      0.42      0.50      3333
 
 ----
 ----
+## FEVER-3L | google/bigbird-roberta-base
+###### 2022-05-24 20:01:59
+#### Hyperparameters
+
+
+| **MAX_SEQ_LEN** | **TRAIN_BATCH_SIZE** | **EVAL_BATCH_SIZE** | **EPOCHS** | **LR** | **OPTIM** | **EVAL_STEPS** |
+|:---------------:|:--------------------:|:-------------------:|:----------:|:------:|:---------:|:--------------:|
+|        128       |          30          |          30         |     3     |   3e-05   |     adamw_hf    |       400       |
+
+
+#### Metrics
+
+```
+                 precision    recall  f1-score   support
+
+       SUPPORTS       0.54      0.78      0.64      3333
+        REFUTES       0.75      0.57      0.65      3333
+NOT ENOUGH INFO       0.61      0.47      0.53      3333
+
+       accuracy                           0.61      9999
+      macro avg       0.63      0.61      0.61      9999
+   weighted avg       0.63      0.61      0.61      9999
+
+```
+
+----
+----
