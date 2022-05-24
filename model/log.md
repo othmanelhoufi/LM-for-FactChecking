@@ -344,3 +344,30 @@ NOT ENOUGH INFO       0.61      0.47      0.53      3333
 
 ----
 ----
+## FEVER-3L | YituTech/conv-bert-base
+###### 2022-05-24 21:35:32
+#### Hyperparameters
+
+
+| **MAX_SEQ_LEN** | **TRAIN_BATCH_SIZE** | **EVAL_BATCH_SIZE** | **EPOCHS** | **LR** | **OPTIM** | **EVAL_STEPS** |
+|:---------------:|:--------------------:|:-------------------:|:----------:|:------:|:---------:|:--------------:|
+|        128       |          30          |          30         |     3     |   3e-05   |     adamw_hf    |       400       |
+
+
+#### Metrics
+
+```
+                 precision    recall  f1-score   support
+
+       SUPPORTS       0.57      0.79      0.67      3333
+        REFUTES       0.76      0.62      0.68      3333
+NOT ENOUGH INFO       0.61      0.50      0.55      3333
+
+       accuracy                           0.64      9999
+      macro avg       0.65      0.64      0.63      9999
+   weighted avg       0.65      0.64      0.63      9999
+
+```
+
+----
+----
