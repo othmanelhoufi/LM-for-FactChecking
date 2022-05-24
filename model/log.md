@@ -182,3 +182,138 @@ weighted avg       0.82      0.81      0.81      6666
 
 ----
 ----
+## FEVER-3L | bert-base-uncased
+###### 2022-05-24 10:25:35
+#### Hyperparameters
+
+
+| **MAX_SEQ_LEN** | **TRAIN_BATCH_SIZE** | **EVAL_BATCH_SIZE** | **EPOCHS** | **LR** | **OPTIM** | **EVAL_STEPS** |
+|:---------------:|:--------------------:|:-------------------:|:----------:|:------:|:---------:|:--------------:|
+|        128       |          30          |          30         |     3     |   3e-05   |     adamw_hf    |       400       |
+
+
+#### Metrics
+
+```
+                 precision    recall  f1-score   support
+
+       SUPPORTS       0.54      0.79      0.65      3333
+        REFUTES       0.74      0.60      0.66      3333
+NOT ENOUGH INFO       0.62      0.46      0.53      3333
+
+       accuracy                           0.62      9999
+      macro avg       0.64      0.62      0.61      9999
+   weighted avg       0.64      0.62      0.61      9999
+
+```
+
+----
+----
+## FEVER-3L | roberta-base
+###### 2022-05-24 11:46:39
+#### Hyperparameters
+
+
+| **MAX_SEQ_LEN** | **TRAIN_BATCH_SIZE** | **EVAL_BATCH_SIZE** | **EPOCHS** | **LR** | **OPTIM** | **EVAL_STEPS** |
+|:---------------:|:--------------------:|:-------------------:|:----------:|:------:|:---------:|:--------------:|
+|        128       |          30          |          30         |     3     |   3e-05   |     adamw_hf    |       400       |
+
+
+#### Metrics
+
+```
+                 precision    recall  f1-score   support
+
+       SUPPORTS       0.54      0.81      0.65      3333
+        REFUTES       0.74      0.59      0.66      3333
+NOT ENOUGH INFO       0.63      0.44      0.52      3333
+
+       accuracy                           0.61      9999
+      macro avg       0.64      0.61      0.61      9999
+   weighted avg       0.64      0.61      0.61      9999
+
+```
+
+----
+----
+## FEVER-3L | albert-base-v2
+###### 2022-05-24 13:54:56
+#### Hyperparameters
+
+
+| **MAX_SEQ_LEN** | **TRAIN_BATCH_SIZE** | **EVAL_BATCH_SIZE** | **EPOCHS** | **LR** | **OPTIM** | **EVAL_STEPS** |
+|:---------------:|:--------------------:|:-------------------:|:----------:|:------:|:---------:|:--------------:|
+|        128       |          30          |          30         |     3     |   3e-05   |     adamw_hf    |       400       |
+
+
+#### Metrics
+
+```
+                 precision    recall  f1-score   support
+
+       SUPPORTS       0.53      0.76      0.63      3333
+        REFUTES       0.75      0.55      0.63      3333
+NOT ENOUGH INFO       0.57      0.48      0.52      3333
+
+       accuracy                           0.60      9999
+      macro avg       0.62      0.60      0.59      9999
+   weighted avg       0.62      0.60      0.59      9999
+
+```
+
+----
+----
+## FEVER-3L | distilbert-base-uncased
+###### 2022-05-24 15:08:05
+#### Hyperparameters
+
+
+| **MAX_SEQ_LEN** | **TRAIN_BATCH_SIZE** | **EVAL_BATCH_SIZE** | **EPOCHS** | **LR** | **OPTIM** | **EVAL_STEPS** |
+|:---------------:|:--------------------:|:-------------------:|:----------:|:------:|:---------:|:--------------:|
+|        128       |          30          |          30         |     3     |   3e-05   |     adamw_hf    |       400       |
+
+
+#### Metrics
+
+```
+                 precision    recall  f1-score   support
+
+       SUPPORTS       0.54      0.80      0.65      3333
+        REFUTES       0.75      0.59      0.66      3333
+NOT ENOUGH INFO       0.62      0.45      0.52      3333
+
+       accuracy                           0.61      9999
+      macro avg       0.63      0.61      0.61      9999
+   weighted avg       0.63      0.61      0.61      9999
+
+```
+
+----
+----
+## FEVER-3L | xlnet-base-cased
+###### 2022-05-24 16:57:21
+#### Hyperparameters
+
+
+| **MAX_SEQ_LEN** | **TRAIN_BATCH_SIZE** | **EVAL_BATCH_SIZE** | **EPOCHS** | **LR** | **OPTIM** | **EVAL_STEPS** |
+|:---------------:|:--------------------:|:-------------------:|:----------:|:------:|:---------:|:--------------:|
+|        128       |          30          |          30         |     3     |   3e-05   |     adamw_hf    |       400       |
+
+
+#### Metrics
+
+```
+                 precision    recall  f1-score   support
+
+       SUPPORTS       0.53      0.82      0.64      3333
+        REFUTES       0.74      0.59      0.66      3333
+NOT ENOUGH INFO       0.64      0.42      0.50      3333
+
+       accuracy                           0.61      9999
+      macro avg       0.64      0.61      0.60      9999
+   weighted avg       0.64      0.61      0.60      9999
+
+```
+
+----
+----
