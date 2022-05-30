@@ -374,61 +374,61 @@ NOT ENOUGH INFO       0.61      0.50      0.55      3333
 ## MultiFC-2L | bert-base-uncased                                                                              
 ###### 2022-05-27 17:06:24                                                                                     
 #### Hyperparameters                                                                                           
-                                                                                                               
-                                                                                                               
+
+
 | **MAX_SEQ_LEN** | **TRAIN_BATCH_SIZE** | **EVAL_BATCH_SIZE** | **EPOCHS** | **LR** | **OPTIM** | **EVAL_STEPS
 ** |                                                                                                           
 |:---------------:|:--------------------:|:-------------------:|:----------:|:------:|:---------:|:------------
 --:|                                                                                                           
 |        128       |          20          |          20         |     3     |   3e-05   |     adamw_hf    |    
    300       |                                                                                                 
-                                                                                                               
-                                                                                                               
+
+
 #### Metrics                                                                                                   
-                                                                                                               
+
 ```                                                                                                            
               precision    recall  f1-score   support                                                          
-                                                                                                               
+
         TRUE       0.52      0.44      0.47       438                                                          
        FALSE       0.77      0.82      0.80      1010                                                          
-                                                                                                               
+
     accuracy                           0.71      1448                                                          
    macro avg       0.64      0.63      0.63      1448                                                          
 weighted avg       0.69      0.71      0.70      1448                                                          
-                                                                                                               
+
 ```                                                                                                            
-                                                                                                               
+
 ----                                                                                                           
 ----   
 ## MultiFC-2L | roberta-base                                                                                   
 ###### 2022-05-27 17:21:51                                                                                     
 #### Hyperparameters                                                                                           
-                                                                                                               
-                                                                                                               
+
+
 | **MAX_SEQ_LEN** | **TRAIN_BATCH_SIZE** | **EVAL_BATCH_SIZE** | **EPOCHS** | **LR** | **OPTIM** | **EVAL_STEPS
 ** |                                                                                                           
 |:---------------:|:--------------------:|:-------------------:|:----------:|:------:|:---------:|:------------
 --:|                                                                                                           
 |        128       |          20          |          20         |     3     |   3e-05   |     adamw_hf    |    
    300       |                                                                                                 
-                                                                                                               
-                                                                                                               
+
+
 #### Metrics                                                                                                   
-                                                                                                               
+
 ```                                                                                                            
               precision    recall  f1-score   support                                                          
-                                                                                                               
+
         TRUE       0.54      0.43      0.48       438                                                          
        FALSE       0.77      0.84      0.81      1010                                                          
-                                                                                                               
+
     accuracy                           0.72      1448                                                          
    macro avg       0.66      0.63      0.64      1448                                                          
 weighted avg       0.70      0.72      0.71      1448                                                          
-                                                                                                               
+
 ```                                                                                                            
-                                                                                                               
+
 ----                                                                                                           
----- 
+----
 ## MultiFC-2L | albert-base-v2
 ###### 2022-05-29 01:54:36
 #### Hyperparameters
@@ -438,7 +438,7 @@ weighted avg       0.70      0.72      0.71      1448
 |:---------------:|:--------------------:|:-------------------:|:----------:|:------:|:---------:|:--------------:|
 |        128       |          20          |          20         |     3     |   3e-05   |     adamw_hf    |       300       |
 
-    
+
 #### Metrics
 
 ```
@@ -452,85 +452,85 @@ weighted avg       0.70      0.72      0.71      1448
 weighted avg       0.67      0.70      0.66      1448
 
 ```
-    
+
 ----
 ----
 ## MultiFC-2L | distilbert-base-uncased                                                                        
 ###### 2022-05-27 17:48:32                                                                                     
 #### Hyperparameters                                                                                           
-                                                                                                               
-                                                                                                               
+
+
 | **MAX_SEQ_LEN** | **TRAIN_BATCH_SIZE** | **EVAL_BATCH_SIZE** | **EPOCHS** | **LR** | **OPTIM** | **EVAL_STEPS
 ** |                                                                                                           
 |:---------------:|:--------------------:|:-------------------:|:----------:|:------:|:---------:|:------------
 --:|                                                                                                           
 |        128       |          20          |          20         |     3     |   3e-05   |     adamw_hf    |    
    300       |                                                                                                 
-                                                                                                               
-                                                                                                               
+
+
 #### Metrics                                                                                                   
-                                                                                                               
+
 ```                                                                                                            
               precision    recall  f1-score   support                                                          
-                                                                                                               
+
         TRUE       0.54      0.42      0.47       438                                                          
        FALSE       0.77      0.84      0.81      1010                                                          
-                                                                                                               
+
     accuracy                           0.72      1448                                                          
    macro avg       0.66      0.63      0.64      1448                                                          
 weighted avg       0.70      0.72      0.71      1448                                                          
-                                                                                                               
+
 ```                                                                                                            
-                                                                                                               
+
 ----                                                                                                           
 ----  
 ## MultiFC-2L | xlnet-base-cased                                                                               
 ###### 2022-05-27 18:09:49                                                                                     
 #### Hyperparameters                                                                                           
-                                                                                                               
-                                                                                                               
+
+
 | **MAX_SEQ_LEN** | **TRAIN_BATCH_SIZE** | **EVAL_BATCH_SIZE** | **EPOCHS** | **LR** | **OPTIM** | **EVAL_STEPS
 ** |                                                                                                           
 |:---------------:|:--------------------:|:-------------------:|:----------:|:------:|:---------:|:------------
 --:|                                                                                                           
 |        128       |          20          |          20         |     3     |   3e-05   |     adamw_hf    |    
    300       |                                                                                                 
-                                                                                                               
-                                                                                                               
+
+
 #### Metrics                                                                                                   
-                                                                                                               
+
 ```                                                                                                            
               precision    recall  f1-score   support                                                          
-                                                                                                               
+
         TRUE       0.53      0.47      0.50       438                                                          
        FALSE       0.78      0.82      0.80      1010                                                          
-                                                                                                               
+
     accuracy                           0.71      1448                                                          
    macro avg       0.65      0.64      0.65      1448                                                          
 weighted avg       0.70      0.71      0.71      1448                                                          
-                                                                                                               
+
 ```                                                                                                            
-                                                                                                               
+
 ----                                                                                                           
 ----  
 ## MultiFC-2L | google/bigbird-roberta-base                                                                    
 ###### 2022-05-28 14:47:48                                                                                     
 #### Hyperparameters                                                                                           
-                                                                                                               
-                                                                                                               
+
+
 | **MAX_SEQ_LEN** | **TRAIN_BATCH_SIZE** | **EVAL_BATCH_SIZE** | **EPOCHS** | **LR** | **OPTIM** | **EVAL_STEPS
 ** |                                                                                                           
 |:---------------:|:--------------------:|:-------------------:|:----------:|:------:|:---------:|:------------
 --:|                                                                                                           
 |        128       |          20          |          20         |     3     |   3e-05   |     adamw_hf    |    
    300       |                                                                                                 
-                                                                                                               
-                                                                                                               
+
+
 #### Metrics                                                                                                   
-                                                                                                               
+
 ```                                                                                                            
               precision    recall  f1-score   support                                                          
-                                                                                                               
+
         TRUE       0.51      0.38      0.43       438                                                          
        FALSE       0.76      0.84      0.80      1010                                                          
 
@@ -539,7 +539,7 @@ weighted avg       0.70      0.71      0.71      1448
 weighted avg       0.68      0.70      0.69      1448
 
 ```
-     
+
 ----
 ----
 ## MultiFC-2L | YituTech/conv-bert-base
@@ -552,7 +552,7 @@ weighted avg       0.68      0.70      0.69      1448
 |        128       |          20          |          20         |     3     |   3e-05   |     adamw_hf    |    
    300       |
 
-     
+
 #### Metrics
 
 ```
@@ -566,7 +566,7 @@ weighted avg       0.68      0.70      0.69      1448
 weighted avg       0.69      0.72      0.70      1448
 
 ```
-     
+
 ----
 ----
 ## Liar-2L | bert-base-uncased
@@ -578,7 +578,7 @@ weighted avg       0.69      0.72      0.70      1448
 |:---------------:|:--------------------:|:-------------------:|:----------:|:------:|:---------:|:--------------:|
 |        128       |          10          |          10         |     2     |   2e-05   |     adamw_hf    |       100       |
 
-    
+
 #### Metrics
 
 ```
@@ -592,7 +592,7 @@ weighted avg       0.69      0.72      0.70      1448
 weighted avg       0.67      0.69      0.66      1283
 
 ```
-    
+
 ----
 ----
 ## Liar-2L | roberta-base
@@ -604,7 +604,7 @@ weighted avg       0.67      0.69      0.66      1283
 |:---------------:|:--------------------:|:-------------------:|:----------:|:------:|:---------:|:--------------:|
 |        128       |          10          |          10         |     2     |   2e-05   |     adamw_hf    |       100       |
 
-    
+
 #### Metrics
 
 ```
@@ -618,7 +618,7 @@ weighted avg       0.67      0.69      0.66      1283
 weighted avg       0.67      0.68      0.67      1283
 
 ```
-    
+
 ----
 ----
 ## Liar-2L | albert-base-v2
@@ -630,7 +630,7 @@ weighted avg       0.67      0.68      0.67      1283
 |:---------------:|:--------------------:|:-------------------:|:----------:|:------:|:---------:|:--------------:|
 |        128       |          10          |          10         |     2     |   2e-05   |     adamw_hf    |       100       |
 
-    
+
 #### Metrics
 
 ```
@@ -644,7 +644,7 @@ weighted avg       0.67      0.68      0.67      1283
 weighted avg       0.65      0.67      0.62      1283
 
 ```
-    
+
 ----
 ----
 ## Liar-2L | distilbert-base-uncased
@@ -656,7 +656,7 @@ weighted avg       0.65      0.67      0.62      1283
 |:---------------:|:--------------------:|:-------------------:|:----------:|:------:|:---------:|:--------------:|
 |        128       |          10          |          10         |     2     |   2e-05   |     adamw_hf    |       100       |
 
-    
+
 #### Metrics
 
 ```
@@ -670,7 +670,7 @@ weighted avg       0.65      0.67      0.62      1283
 weighted avg       0.65      0.66      0.65      1283
 
 ```
-    
+
 ----
 ----
 ## Liar-2L | xlnet-base-cased
@@ -682,7 +682,7 @@ weighted avg       0.65      0.66      0.65      1283
 |:---------------:|:--------------------:|:-------------------:|:----------:|:------:|:---------:|:--------------:|
 |        128       |          10          |          10         |     2     |   2e-05   |     adamw_hf    |       100       |
 
-    
+
 #### Metrics
 
 ```
@@ -696,7 +696,7 @@ weighted avg       0.65      0.66      0.65      1283
 weighted avg       0.65      0.67      0.64      1283
 
 ```
-    
+
 ----
 ----
 ## Liar-2L | google/bigbird-roberta-base
@@ -708,7 +708,7 @@ weighted avg       0.65      0.67      0.64      1283
 |:---------------:|:--------------------:|:-------------------:|:----------:|:------:|:---------:|:--------------:|
 |        128       |          10          |          10         |     2     |   2e-05   |     adamw_hf    |       100       |
 
-    
+
 #### Metrics
 
 ```
@@ -722,7 +722,7 @@ weighted avg       0.65      0.67      0.64      1283
 weighted avg       0.67      0.68      0.63      1283
 
 ```
-    
+
 ----
 ----
 ## Liar-2L | YituTech/conv-bert-base
@@ -734,7 +734,7 @@ weighted avg       0.67      0.68      0.63      1283
 |:---------------:|:--------------------:|:-------------------:|:----------:|:------:|:---------:|:--------------:|
 |        128       |          10          |          10         |     2     |   2e-05   |     adamw_hf    |       100       |
 
-    
+
 #### Metrics
 
 ```
@@ -748,6 +748,269 @@ weighted avg       0.67      0.68      0.63      1283
 weighted avg       0.66      0.67      0.67      1283
 
 ```
-    
+
+----
+----
+## MultiFC-5L | bert-base-uncased
+###### 2022-05-30 09:25:03
+#### Hyperparameters
+
+
+| **MAX_SEQ_LEN** | **TRAIN_BATCH_SIZE** | **EVAL_BATCH_SIZE** | **EPOCHS** | **LR** | **OPTIM** | **EVAL_STEPS** |
+|:---------------:|:--------------------:|:-------------------:|:----------:|:------:|:---------:|:--------------:|
+|        128       |          20          |          10         |     2     |   3e-05   |     adamw_hf    |       100       |
+
+
+#### Metrics
+
+```
+              precision    recall  f1-score   support
+
+        TRUE       0.42      0.38      0.40       261
+       FALSE       0.63      0.71      0.67       633
+MOSTLY-FALSE       0.35      0.10      0.15       168
+ MOSTLY-TRUE       0.28      0.28      0.28       177
+  IN-BETWEEN       0.28      0.38      0.32       209
+
+    accuracy                           0.48      1448
+   macro avg       0.39      0.37      0.36      1448
+weighted avg       0.47      0.48      0.46      1448
+
+```
+
+----
+----
+## MultiFC-5L | roberta-base
+###### 2022-05-30 09:47:19
+#### Hyperparameters
+
+
+| **MAX_SEQ_LEN** | **TRAIN_BATCH_SIZE** | **EVAL_BATCH_SIZE** | **EPOCHS** | **LR** | **OPTIM** | **EVAL_STEPS** |
+|:---------------:|:--------------------:|:-------------------:|:----------:|:------:|:---------:|:--------------:|
+|        128       |          20          |          10         |     2     |   3e-05   |     adamw_hf    |       100       |
+
+
+#### Metrics
+
+```
+              precision    recall  f1-score   support
+
+        TRUE       0.49      0.38      0.43       261
+       FALSE       0.63      0.74      0.68       633
+MOSTLY-FALSE       0.27      0.07      0.11       168
+ MOSTLY-TRUE       0.30      0.32      0.31       177
+  IN-BETWEEN       0.28      0.36      0.32       209
+
+    accuracy                           0.49      1448
+   macro avg       0.39      0.37      0.37      1448
+weighted avg       0.47      0.49      0.47      1448
+
+```
+
+----
+----
+## MultiFC-5L | albert-base-v2
+###### 2022-05-30 10:23:43
+#### Hyperparameters
+
+
+| **MAX_SEQ_LEN** | **TRAIN_BATCH_SIZE** | **EVAL_BATCH_SIZE** | **EPOCHS** | **LR** | **OPTIM** | **EVAL_STEPS** |
+|:---------------:|:--------------------:|:-------------------:|:----------:|:------:|:---------:|:--------------:|
+|        128       |          20          |          10         |     2     |   3e-05   |     adamw_hf    |       100       |
+
+
+#### Metrics
+
+```
+              precision    recall  f1-score   support
+
+        TRUE       0.54      0.12      0.20       261
+       FALSE       0.51      0.88      0.65       633
+MOSTLY-FALSE       0.00      0.00      0.00       168
+ MOSTLY-TRUE       0.27      0.41      0.33       177
+  IN-BETWEEN       0.35      0.07      0.11       209
+
+    accuracy                           0.47      1448
+   macro avg       0.34      0.29      0.26      1448
+weighted avg       0.41      0.47      0.38      1448
+
+```
+
+----
+----
+## MultiFC-5L | distilbert-base-uncased
+###### 2022-05-30 10:40:16
+#### Hyperparameters
+
+
+| **MAX_SEQ_LEN** | **TRAIN_BATCH_SIZE** | **EVAL_BATCH_SIZE** | **EPOCHS** | **LR** | **OPTIM** | **EVAL_STEPS** |
+|:---------------:|:--------------------:|:-------------------:|:----------:|:------:|:---------:|:--------------:|
+|        128       |          20          |          10         |     2     |   3e-05   |     adamw_hf    |       100       |
+
+
+#### Metrics
+
+```
+              precision    recall  f1-score   support
+
+        TRUE       0.49      0.33      0.39       261
+       FALSE       0.61      0.74      0.67       633
+MOSTLY-FALSE       0.29      0.05      0.09       168
+ MOSTLY-TRUE       0.27      0.32      0.30       177
+  IN-BETWEEN       0.24      0.30      0.27       209
+
+    accuracy                           0.47      1448
+   macro avg       0.38      0.35      0.34      1448
+weighted avg       0.46      0.47      0.45      1448
+
+```
+
+----
+----
+## MultiFC-5L | xlnet-base-cased
+###### 2022-05-30 11:10:58
+#### Hyperparameters
+
+
+| **MAX_SEQ_LEN** | **TRAIN_BATCH_SIZE** | **EVAL_BATCH_SIZE** | **EPOCHS** | **LR** | **OPTIM** | **EVAL_STEPS** |
+|:---------------:|:--------------------:|:-------------------:|:----------:|:------:|:---------:|:--------------:|
+|        128       |          20          |          10         |     2     |   3e-05   |     adamw_hf    |       100       |
+
+
+#### Metrics
+
+```
+              precision    recall  f1-score   support
+
+        TRUE       0.42      0.37      0.39       261
+       FALSE       0.62      0.73      0.67       633
+MOSTLY-FALSE       0.33      0.08      0.13       168
+ MOSTLY-TRUE       0.26      0.23      0.24       177
+  IN-BETWEEN       0.25      0.33      0.29       209
+
+    accuracy                           0.47      1448
+   macro avg       0.38      0.35      0.34      1448
+weighted avg       0.45      0.47      0.45      1448
+
+```
+
+----
+----
+## MultiFC-5L | google/bigbird-roberta-base
+###### 2022-05-30 11:35:55
+#### Hyperparameters
+
+
+| **MAX_SEQ_LEN** | **TRAIN_BATCH_SIZE** | **EVAL_BATCH_SIZE** | **EPOCHS** | **LR** | **OPTIM** | **EVAL_STEPS** |
+|:---------------:|:--------------------:|:-------------------:|:----------:|:------:|:---------:|:--------------:|
+|        128       |          20          |          10         |     2     |   3e-05   |     adamw_hf    |       100       |
+
+
+#### Metrics
+
+```
+              precision    recall  f1-score   support
+
+        TRUE       0.46      0.15      0.22       261
+       FALSE       0.59      0.78      0.67       633
+MOSTLY-FALSE       0.26      0.07      0.10       168
+ MOSTLY-TRUE       0.25      0.32      0.28       177
+  IN-BETWEEN       0.26      0.32      0.29       209
+
+    accuracy                           0.46      1448
+   macro avg       0.36      0.33      0.31      1448
+weighted avg       0.44      0.46      0.42      1448
+
+```
+
+----
+----
+## MultiFC-5L | YituTech/conv-bert-base
+###### 2022-05-30 11:58:11
+#### Hyperparameters
+
+
+| **MAX_SEQ_LEN** | **TRAIN_BATCH_SIZE** | **EVAL_BATCH_SIZE** | **EPOCHS** | **LR** | **OPTIM** | **EVAL_STEPS** |
+|:---------------:|:--------------------:|:-------------------:|:----------:|:------:|:---------:|:--------------:|
+|        128       |          20          |          10         |     2     |   3e-05   |     adamw_hf    |       100       |
+
+
+#### Metrics
+
+```
+              precision    recall  f1-score   support
+
+        TRUE       0.48      0.48      0.48       261
+       FALSE       0.65      0.70      0.68       633
+MOSTLY-FALSE       0.33      0.19      0.24       168
+ MOSTLY-TRUE       0.33      0.41      0.36       177
+  IN-BETWEEN       0.27      0.24      0.25       209
+
+    accuracy                           0.50      1448
+   macro avg       0.41      0.40      0.40      1448
+weighted avg       0.49      0.50      0.49      1448
+
+```
+
+----
+----
+## Liar-6L | bert-base-uncased
+###### 2022-05-30 14:14:24
+#### Hyperparameters
+
+
+| **MAX_SEQ_LEN** | **TRAIN_BATCH_SIZE** | **EVAL_BATCH_SIZE** | **EPOCHS** | **LR** | **OPTIM** | **EVAL_STEPS** |
+|:---------------:|:--------------------:|:-------------------:|:----------:|:------:|:---------:|:--------------:|
+|        128       |          20          |          10         |     2     |   3e-05   |     adamw_hf    |       100       |
+
+
+#### Metrics
+
+```
+              precision    recall  f1-score   support
+
+   HALF-TRUE       0.28      0.36      0.31       267
+ MOSTLY-TRUE       0.28      0.34      0.31       249
+       FALSE       0.30      0.38      0.33       250
+        TRUE       0.34      0.17      0.22       211
+ BARELY-TRUE       0.29      0.18      0.22       214
+  PANTS-FIRE       0.34      0.29      0.31        92
+
+    accuracy                           0.29      1283
+   macro avg       0.30      0.29      0.29      1283
+weighted avg       0.30      0.29      0.29      1283
+
+```
+
+----
+----
+## Liar-6L | roberta-base
+###### 2022-05-30 14:44:13
+#### Hyperparameters
+
+
+| **MAX_SEQ_LEN** | **TRAIN_BATCH_SIZE** | **EVAL_BATCH_SIZE** | **EPOCHS** | **LR** | **OPTIM** | **EVAL_STEPS** |
+|:---------------:|:--------------------:|:-------------------:|:----------:|:------:|:---------:|:--------------:|
+|        128       |          20          |          10         |     2     |   3e-05   |     adamw_hf    |       100       |
+
+
+#### Metrics
+
+```
+              precision    recall  f1-score   support
+
+   HALF-TRUE       0.29      0.33      0.31       267
+ MOSTLY-TRUE       0.30      0.43      0.35       249
+       FALSE       0.31      0.34      0.32       250
+        TRUE       0.33      0.20      0.25       211
+ BARELY-TRUE       0.36      0.27      0.31       214
+  PANTS-FIRE       0.34      0.20      0.25        92
+
+    accuracy                           0.31      1283
+   macro avg       0.32      0.29      0.30      1283
+weighted avg       0.32      0.31      0.31      1283
+
+```
+
 ----
 ----
