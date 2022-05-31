@@ -5,6 +5,8 @@ import numpy as np
 import json
 from texttable import Texttable
 
+dataset_repo = '../../dataset/'
+
 # Encode labels: from string to int
 def encode_labels(labels):
     encoded_labels = {}
@@ -22,7 +24,7 @@ class Dataset:
         self.val_dataset, self.test_dataset = self.__init_dev_data__(name, num_labels, split_dev)
 
     def __init_train_data__(self, name, num_labels):
-        df = pd.read_csv ('../dataset/'+ name +'/train-' + str(num_labels) +'L.jsonl', dtype={'label': str})
+        df = pd.read_csv (dataset_repo + name +'/train-' + str(num_labels) +'L.jsonl', dtype={'label': str})
         self.labels = df['label'].unique()
         self.encoded_labels, self.decoded_labels = encode_labels(self.labels)
 
@@ -30,7 +32,7 @@ class Dataset:
         return df
 
     def __init_dev_data__(self,name, num_labels, split_dev):
-        df = pd.read_csv ('../dataset/'+ name +'/dev-' + str(num_labels) +'L.jsonl', dtype={'label': str})
+        df = pd.read_csv (dataset_repo + name +'/dev-' + str(num_labels) +'L.jsonl', dtype={'label': str})
         df['label'] = df.label.replace(self.encoded_labels)
         if split_dev:
             half_df = len(df) // 2
@@ -192,7 +194,6 @@ def preprocess_multifc(data_path, export_path):
     df.to_csv(export_path, index=False)
 
 
-
 def preprocess_liar(data_path, export_path):
     df = pd.read_csv(data_path, sep='\t')
     df.columns = [str(i) for i in range(0, 14)]
@@ -222,23 +223,43 @@ def preprocess_liar(data_path, export_path):
 
     df.to_csv(export_path, index=False)
 
+def preprocess_covid19(data_path, export_path):
+    relevant_col = ['tweet', 'label']
+    df_raw = pd.read_csv(data_path, sep='\t')
+    df = df_raw.filter(items=relevant_col)
+
+    nan_value = float("NaN")
+    df.replace("", nan_value, inplace=True)
+    df.columns = ['text', 'label']
+    df.dropna(inplace=True)
+
+    df['label'] = df['label'].str.upper()
+
+    print(df.head(10))
+    print(df['label'].unique())
+
+    df.to_csv(export_path, index=False)
+
 if __name__ == '__main__':
+    root = '../../dataset/'
+    # preprocess_scifact(root+'SciFact/train_raw.jsonl', root+'SciFact/train.jsonl')
+    # preprocess_scifact(root+'SciFact/dev_raw.jsonl', root+'SciFact/dev.jsonl')
 
-    # preprocess_scifact('../dataset/SciFact/train_raw.jsonl', '../dataset/SciFact/train.jsonl')
-    # preprocess_scifact('../dataset/SciFact/dev_raw.jsonl', '../dataset/SciFact/dev.jsonl')
+    # preprocess_fever(root+'FEVER/train_raw.jsonl', root+'FEVER/train-2L.jsonl')
+    # preprocess_fever(root+'FEVER/dev_raw.jsonl', root+'FEVER/dev-2L.jsonl')
 
-    # preprocess_fever('../dataset/FEVER/train_raw.jsonl', '../dataset/FEVER/train-2L.jsonl')
-    # preprocess_fever('../dataset/FEVER/dev_raw.jsonl', '../dataset/FEVER/dev-2L.jsonl')
+    # preprocess_multifc(root+'MultiFC/train_raw.tsv', root+'MultiFC/train-5L.jsonl')
+    # preprocess_multifc(root+'MultiFC/dev_raw.tsv', root+'MultiFC/dev-5L.jsonl')
 
-    # preprocess_multifc('../dataset/MultiFC/train_raw.tsv', '../dataset/MultiFC/train-5L.jsonl')
-    # preprocess_multifc('../dataset/MultiFC/dev_raw.tsv', '../dataset/MultiFC/dev-5L.jsonl')
+    # preprocess_liar(root+'Liar/train_raw.tsv', root+'Liar/train-6L.jsonl')
+    # preprocess_liar(root+'Liar/dev_raw.tsv', root+'Liar/dev-6L.jsonl')
 
-    # preprocess_liar('../dataset/Liar/train_raw.tsv', '../dataset/Liar/train-6L.jsonl')
-    # preprocess_liar('../dataset/Liar/dev_raw.tsv', '../dataset/Liar/dev-6L.jsonl')
+    # preprocess_covid19(root+'COVID-19/train_raw.tsv', root+'COVID-19/train-2L.jsonl')
+    # preprocess_covid19(root+'COVID-19/dev_raw.tsv', root+'COVID-19/dev-2L.jsonl')
 
-    # dataset = Dataset(name='FEVER', split_dev=True, num_labels=3)
-    # dataset.get_describtion()
-    # dataset.print_data_example()
+    dataset = Dataset(name='COVID-19', split_dev=True, num_labels=2)
+    dataset.get_describtion()
+    dataset.print_data_example()
 
 
     pass

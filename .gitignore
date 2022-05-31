@@ -2,9 +2,11 @@
 # code/dataset
 # Ignore python cache files
 model/__pycache__/
+model/tools/__pycache__/
 model/outputs/
 model/tmp_trainer/
 model/wandb/
 model/log_old.txt
+dataset/COVID-19/
 outputs/
 old_shit/

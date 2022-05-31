@@ -11,13 +11,13 @@ from transformers import AutoTokenizer, AutoModelForSequenceClassification
 from transformers import EarlyStoppingCallback
 from transformers.utils import logging
 from sklearn.metrics import classification_report, confusion_matrix
-import preproc_dataset
+import tools.preproc_dataset as preproc_dataset
 import wandb
 import pathlib
 import warnings
 from torchinfo import summary
 from conf import DEFAULT_PARAMS, MODEL_LIST, WANDB_PARAMS
-from utils import *
+from tools.utils import *
 
 #**************************************************************************************************#
 """ Logging GPU specs if it exists """
