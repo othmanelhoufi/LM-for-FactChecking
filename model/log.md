@@ -1014,3 +1014,153 @@ weighted avg       0.32      0.31      0.31      1283
 
 ----
 ----
+## Liar-6L | albert-base-v2
+###### 2022-05-30 14:53:15
+#### Hyperparameters
+
+
+| **MAX_SEQ_LEN** | **TRAIN_BATCH_SIZE** | **EVAL_BATCH_SIZE** | **EPOCHS** | **LR** | **OPTIM** | **EVAL_STEPS** |
+|:---------------:|:--------------------:|:-------------------:|:----------:|:------:|:---------:|:--------------:|
+|        128       |          20          |          10         |     2     |   3e-05   |     adamw_hf    |       100       |
+
+
+#### Metrics
+
+```
+              precision    recall  f1-score   support
+
+   HALF-TRUE       0.20      0.28      0.24       267
+ MOSTLY-TRUE       0.28      0.41      0.33       249
+       FALSE       0.25      0.53      0.34       250
+        TRUE       0.00      0.00      0.00       211
+ BARELY-TRUE       0.25      0.01      0.03       214
+  PANTS-FIRE       0.00      0.00      0.00        92
+
+    accuracy                           0.24      1283
+   macro avg       0.16      0.21      0.16      1283
+weighted avg       0.19      0.24      0.18      1283
+
+```
+
+----
+----
+## Liar-6L | distilbert-base-uncased
+###### 2022-05-30 15:01:37
+#### Hyperparameters
+
+
+| **MAX_SEQ_LEN** | **TRAIN_BATCH_SIZE** | **EVAL_BATCH_SIZE** | **EPOCHS** | **LR** | **OPTIM** | **EVAL_STEPS** |
+|:---------------:|:--------------------:|:-------------------:|:----------:|:------:|:---------:|:--------------:|
+|        128       |          20          |          10         |     2     |   3e-05   |     adamw_hf    |       100       |
+
+
+#### Metrics
+
+```
+              precision    recall  f1-score   support
+
+   HALF-TRUE       0.28      0.34      0.31       267
+ MOSTLY-TRUE       0.28      0.36      0.32       249
+       FALSE       0.27      0.32      0.30       250
+        TRUE       0.34      0.23      0.28       211
+ BARELY-TRUE       0.30      0.23      0.26       214
+  PANTS-FIRE       0.22      0.09      0.12        92
+
+    accuracy                           0.29      1283
+   macro avg       0.28      0.26      0.26      1283
+weighted avg       0.29      0.29      0.28      1283
+
+```
+
+----
+----
+## Liar-6L | xlnet-base-cased
+###### 2022-05-30 15:21:10
+#### Hyperparameters
+
+
+| **MAX_SEQ_LEN** | **TRAIN_BATCH_SIZE** | **EVAL_BATCH_SIZE** | **EPOCHS** | **LR** | **OPTIM** | **EVAL_STEPS** |
+|:---------------:|:--------------------:|:-------------------:|:----------:|:------:|:---------:|:--------------:|
+|        128       |          20          |          10         |     2     |   3e-05   |     adamw_hf    |       100       |
+
+
+#### Metrics
+
+```
+              precision    recall  f1-score   support
+
+   HALF-TRUE       0.26      0.30      0.28       267
+ MOSTLY-TRUE       0.28      0.40      0.33       249
+       FALSE       0.28      0.41      0.33       250
+        TRUE       0.30      0.10      0.15       211
+ BARELY-TRUE       0.23      0.18      0.21       214
+  PANTS-FIRE       0.45      0.05      0.10        92
+
+    accuracy                           0.27      1283
+   macro avg       0.30      0.24      0.23      1283
+weighted avg       0.28      0.27      0.25      1283
+
+```
+
+----
+----
+## Liar-6L | google/bigbird-roberta-base
+###### 2022-05-30 15:33:22
+#### Hyperparameters
+
+
+| **MAX_SEQ_LEN** | **TRAIN_BATCH_SIZE** | **EVAL_BATCH_SIZE** | **EPOCHS** | **LR** | **OPTIM** | **EVAL_STEPS** |
+|:---------------:|:--------------------:|:-------------------:|:----------:|:------:|:---------:|:--------------:|
+|        128       |          20          |          10         |     2     |   3e-05   |     adamw_hf    |       100       |
+
+
+#### Metrics
+
+```
+              precision    recall  f1-score   support
+
+   HALF-TRUE       0.25      0.40      0.31       267
+ MOSTLY-TRUE       0.28      0.36      0.32       249
+       FALSE       0.30      0.36      0.33       250
+        TRUE       0.29      0.16      0.21       211
+ BARELY-TRUE       0.25      0.10      0.14       214
+  PANTS-FIRE       0.44      0.12      0.19        92
+
+    accuracy                           0.28      1283
+   macro avg       0.30      0.25      0.25      1283
+weighted avg       0.28      0.28      0.26      1283
+
+```
+
+----
+----
+## Liar-6L | YituTech/conv-bert-base
+###### 2022-05-30 15:43:11
+#### Hyperparameters
+
+
+| **MAX_SEQ_LEN** | **TRAIN_BATCH_SIZE** | **EVAL_BATCH_SIZE** | **EPOCHS** | **LR** | **OPTIM** | **EVAL_STEPS** |
+|:---------------:|:--------------------:|:-------------------:|:----------:|:------:|:---------:|:--------------:|
+|        128       |          20          |          10         |     2     |   3e-05   |     adamw_hf    |       100       |
+
+
+#### Metrics
+
+```
+              precision    recall  f1-score   support
+
+   HALF-TRUE       0.26      0.30      0.28       267
+ MOSTLY-TRUE       0.28      0.34      0.31       249
+       FALSE       0.31      0.38      0.34       250
+        TRUE       0.30      0.23      0.26       211
+ BARELY-TRUE       0.31      0.23      0.26       214
+  PANTS-FIRE       0.31      0.16      0.21        92
+
+    accuracy                           0.29      1283
+   macro avg       0.30      0.27      0.28      1283
+weighted avg       0.29      0.29      0.29      1283
+
+```
+
+----
+----
