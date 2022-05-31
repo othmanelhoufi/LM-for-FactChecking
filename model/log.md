@@ -1164,3 +1164,211 @@ weighted avg       0.29      0.29      0.29      1283
 
 ----
 ----
+## COVID19-2L | bert-base-uncased
+###### 2022-05-31 11:42:32
+#### Hyperparameters
+
+
+| **MAX_SEQ_LEN** | **TRAIN_BATCH_SIZE** | **EVAL_BATCH_SIZE** | **EPOCHS** | **LR** | **OPTIM** | **EVAL_STEPS** |
+|:---------------:|:--------------------:|:-------------------:|:----------:|:------:|:---------:|:--------------:|
+|        128       |          20          |          20         |     3     |   3e-05   |     adamw_hf    |       100       |
+
+
+#### Metrics
+
+```
+              precision    recall  f1-score   support
+
+        REAL       0.97      0.99      0.98       552
+        FAKE       0.99      0.96      0.97       518
+
+    accuracy                           0.98      1070
+   macro avg       0.98      0.98      0.98      1070
+weighted avg       0.98      0.98      0.98      1070
+
+```
+
+----
+----
+## COVID19-2L | roberta-base
+###### 2022-05-31 11:53:06
+#### Hyperparameters
+
+
+| **MAX_SEQ_LEN** | **TRAIN_BATCH_SIZE** | **EVAL_BATCH_SIZE** | **EPOCHS** | **LR** | **OPTIM** | **EVAL_STEPS** |
+|:---------------:|:--------------------:|:-------------------:|:----------:|:------:|:---------:|:--------------:|
+|        128       |          20          |          20         |     3     |   3e-05   |     adamw_hf    |       100       |
+
+
+#### Metrics
+
+```
+              precision    recall  f1-score   support
+
+        REAL       0.96      0.99      0.98       552
+        FAKE       0.99      0.96      0.97       518
+
+    accuracy                           0.97      1070
+   macro avg       0.97      0.97      0.97      1070
+weighted avg       0.97      0.97      0.97      1070
+
+```
+
+----
+----
+## COVID19-2L | albert-base-v2                                                                                                                               
+###### 2022-05-31 12:50:27                                                                                                                                   
+#### Hyperparameters                                                                                                                                         
+
+
+| **MAX_SEQ_LEN** | **TRAIN_BATCH_SIZE** | **EVAL_BATCH_SIZE** | **EPOCHS** | **LR** | **OPTIM** | **EVAL_STEPS** |                                          
+|:---------------:|:--------------------:|:-------------------:|:----------:|:------:|:---------:|:--------------:|                                          
+|        128       |          20          |          20         |     3     |   3e-05   |     adamw_hf    |       100       |                                
+
+
+#### Metrics
+
+```
+              precision    recall  f1-score   support
+
+        REAL       0.96      0.99      0.97       552
+        FAKE       0.99      0.96      0.97       518
+
+    accuracy                           0.97      1070
+   macro avg       0.97      0.97      0.97      1070
+weighted avg       0.97      0.97      0.97      1070
+
+```
+
+----
+----
+## COVID19-2L | distilbert-base-uncased
+###### 2022-05-31 12:55:12
+#### Hyperparameters
+
+
+| **MAX_SEQ_LEN** | **TRAIN_BATCH_SIZE** | **EVAL_BATCH_SIZE** | **EPOCHS** | **LR** | **OPTIM** | **EVAL_STEPS** |
+|:---------------:|:--------------------:|:-------------------:|:----------:|:------:|:---------:|:--------------:|
+|        128       |          20          |          20         |     3     |   3e-05   |     adamw_hf    |       100       |
+
+
+#### Metrics
+
+```
+              precision    recall  f1-score   support
+
+        REAL       0.96      0.99      0.98       552
+        FAKE       0.99      0.96      0.97       518
+
+    accuracy                           0.98      1070
+   macro avg       0.98      0.98      0.98      1070
+weighted avg       0.98      0.98      0.98      1070
+
+```
+
+----
+----
+## COVID19-2L | xlnet-base-cased
+###### 2022-05-31 13:03:20
+#### Hyperparameters
+
+
+| **MAX_SEQ_LEN** | **TRAIN_BATCH_SIZE** | **EVAL_BATCH_SIZE** | **EPOCHS** | **LR** | **OPTIM** | **EVAL_STEPS** |
+|:---------------:|:--------------------:|:-------------------:|:----------:|:------:|:---------:|:--------------:|
+|        128       |          20          |          20         |     3     |   3e-05   |     adamw_hf    |       100       |
+
+
+#### Metrics
+
+```
+              precision    recall  f1-score   support
+
+        REAL       0.98      0.97      0.98       552
+        FAKE       0.97      0.98      0.98       518
+
+    accuracy                           0.98      1070
+   macro avg       0.98      0.98      0.98      1070
+weighted avg       0.98      0.98      0.98      1070
+
+```
+
+----
+----
+## COVID19-2L | google/bigbird-roberta-base
+###### 2022-05-31 13:22:55
+#### Hyperparameters
+
+
+| **MAX_SEQ_LEN** | **TRAIN_BATCH_SIZE** | **EVAL_BATCH_SIZE** | **EPOCHS** | **LR** | **OPTIM** | **EVAL_STEPS** |
+|:---------------:|:--------------------:|:-------------------:|:----------:|:------:|:---------:|:--------------:|
+|        128       |          20          |          20         |     3     |   3e-05   |     adamw_hf    |       100       |
+
+
+#### Metrics
+
+```
+              precision    recall  f1-score   support
+
+        REAL       0.96      0.98      0.97       552
+        FAKE       0.98      0.95      0.97       518
+
+    accuracy                           0.97      1070
+   macro avg       0.97      0.97      0.97      1070
+weighted avg       0.97      0.97      0.97      1070
+
+```
+
+----
+----
+## COVID19-2L | YituTech/conv-bert-base
+###### 2022-05-31 13:31:19
+#### Hyperparameters
+
+
+| **MAX_SEQ_LEN** | **TRAIN_BATCH_SIZE** | **EVAL_BATCH_SIZE** | **EPOCHS** | **LR** | **OPTIM** | **EVAL_STEPS** |
+|:---------------:|:--------------------:|:-------------------:|:----------:|:------:|:---------:|:--------------:|
+|        128       |          20          |          20         |     3     |   3e-05   |     adamw_hf    |       100       |
+
+
+#### Metrics
+
+```
+              precision    recall  f1-score   support
+
+        REAL       0.96      0.98      0.97       552
+        FAKE       0.98      0.96      0.97       518
+
+    accuracy                           0.97      1070
+   macro avg       0.97      0.97      0.97      1070
+weighted avg       0.97      0.97      0.97      1070
+
+```
+
+----
+----
+<!-- ## COVID19-2L | bert-base-uncased
+###### 2022-05-31 14:09:32
+#### Hyperparameters
+
+
+| **MAX_SEQ_LEN** | **TRAIN_BATCH_SIZE** | **EVAL_BATCH_SIZE** | **EPOCHS** | **LR** | **OPTIM** | **EVAL_STEPS** |
+|:---------------:|:--------------------:|:-------------------:|:----------:|:------:|:---------:|:--------------:|
+|        128       |          20          |          20         |     3     |   3e-05   |     adamw_hf    |       100       |
+
+
+#### Metrics
+
+```
+              precision    recall  f1-score   support
+
+        REAL    0.97776   0.98125   0.97950      1120
+        FAKE    0.97933   0.97549   0.97741      1020
+
+    accuracy                        0.97850      2140
+   macro avg    0.97854   0.97837   0.97845      2140
+weighted avg    0.97851   0.97850   0.97850      2140
+
+```
+
+----
+---- -->

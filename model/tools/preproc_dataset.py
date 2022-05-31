@@ -5,7 +5,7 @@ import numpy as np
 import json
 from texttable import Texttable
 
-dataset_repo = '../../dataset/'
+dataset_repo = '../dataset/'
 
 # Encode labels: from string to int
 def encode_labels(labels):
@@ -254,10 +254,10 @@ if __name__ == '__main__':
     # preprocess_liar(root+'Liar/train_raw.tsv', root+'Liar/train-6L.jsonl')
     # preprocess_liar(root+'Liar/dev_raw.tsv', root+'Liar/dev-6L.jsonl')
 
-    # preprocess_covid19(root+'COVID-19/train_raw.tsv', root+'COVID-19/train-2L.jsonl')
-    # preprocess_covid19(root+'COVID-19/dev_raw.tsv', root+'COVID-19/dev-2L.jsonl')
+    # preprocess_covid19(root+'COVID19/train_raw.tsv', root+'COVID19/train-2L.jsonl')
+    # preprocess_covid19(root+'COVID19/dev_raw.tsv', root+'COVID19/dev-2L.jsonl')
 
-    dataset = Dataset(name='COVID-19', split_dev=True, num_labels=2)
+    dataset = Dataset(name='COVID19', split_dev=True, num_labels=2)
     dataset.get_describtion()
     dataset.print_data_example()
 
