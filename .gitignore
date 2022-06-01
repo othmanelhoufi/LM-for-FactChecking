@@ -3,10 +3,12 @@
 # Ignore python cache files
 model/__pycache__/
 model/tools/__pycache__/
+model/tools/twitter_conf.py
 model/outputs/
 model/tmp_trainer/
 model/wandb/
 model/log_old.txt
 dataset/COVID19/
+dataset/ANTiVax/
 outputs/
 old_shit/

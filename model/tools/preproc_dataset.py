@@ -35,9 +35,11 @@ class Dataset:
         df = pd.read_csv (dataset_repo + name +'/dev-' + str(num_labels) +'L.jsonl', dtype={'label': str})
         df['label'] = df.label.replace(self.encoded_labels)
         if split_dev:
-            half_df = len(df) // 2
-            df_val = df[:half_df]
-            df_test = df[half_df:]
+            df_val = df.sample(frac=0.5, random_state=1)
+            df_test = df.drop(df_val.index)
+            # half_df = len(df) // 2
+            # df_val = df[:half_df]
+            # df_test = df[half_df:]
             return df_val, df_test
 
         return df, df
@@ -240,6 +242,27 @@ def preprocess_covid19(data_path, export_path):
 
     df.to_csv(export_path, index=False)
 
+
+def preprocess_antivax(data_path, export_path):
+    relevant_col = ['text', 'is_misinfo']
+    df_raw = pd.read_csv(data_path)
+    df = df_raw.filter(items=relevant_col)
+
+    nan_value = float("NaN")
+    df.replace("", nan_value, inplace=True)
+    df.columns = ['text', 'label']
+    df.dropna(inplace=True)
+
+    def map_label_values(x):
+        if x == 0: return 'NOT_MISINFO'
+        else: return 'MISINFO'
+    df['label'] = df['label'].map(lambda x: map_label_values(x))
+
+    print(df.head(10))
+    print(df['label'].unique())
+
+    df.to_csv(export_path, index=False)
+
 if __name__ == '__main__':
     root = '../../dataset/'
     # preprocess_scifact(root+'SciFact/train_raw.jsonl', root+'SciFact/train.jsonl')
@@ -257,7 +280,10 @@ if __name__ == '__main__':
     # preprocess_covid19(root+'COVID19/train_raw.tsv', root+'COVID19/train-2L.jsonl')
     # preprocess_covid19(root+'COVID19/dev_raw.tsv', root+'COVID19/dev-2L.jsonl')
 
-    dataset = Dataset(name='COVID19', split_dev=True, num_labels=2)
+    # preprocess_antivax(root+'ANTiVax/train_raw.csv', root+'ANTiVax/train-2L.jsonl')
+    # preprocess_antivax(root+'ANTiVax/dev_raw.csv', root+'ANTiVax/dev-2L.jsonl')
+
+    dataset = Dataset(name='ANTiVax', split_dev=True, num_labels=2)
     dataset.get_describtion()
     dataset.print_data_example()
 
