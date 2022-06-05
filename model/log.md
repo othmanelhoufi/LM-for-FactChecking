@@ -376,12 +376,9 @@ NOT ENOUGH INFO       0.61      0.50      0.55      3333
 #### Hyperparameters                                                                                           
 
 
-| **MAX_SEQ_LEN** | **TRAIN_BATCH_SIZE** | **EVAL_BATCH_SIZE** | **EPOCHS** | **LR** | **OPTIM** | **EVAL_STEPS
-** |                                                                                                           
-|:---------------:|:--------------------:|:-------------------:|:----------:|:------:|:---------:|:------------
---:|                                                                                                           
-|        128       |          20          |          20         |     3     |   3e-05   |     adamw_hf    |    
-   300       |                                                                                                 
+| **MAX_SEQ_LEN** | **TRAIN_BATCH_SIZE** | **EVAL_BATCH_SIZE** | **EPOCHS** | **LR** | **OPTIM** | **EVAL_STEPS**|                                                                                                           
+|:---------------:|:--------------------:|:-------------------:|:----------:|:------:|:---------:|:-------------:|                                                                                                           
+|        128       |          20          |          20         |     3     |   3e-05   |     adamw_hf    |    300       |                                                                                                 
 
 
 #### Metrics                                                                                                   
@@ -405,12 +402,9 @@ weighted avg       0.69      0.71      0.70      1448
 #### Hyperparameters                                                                                           
 
 
-| **MAX_SEQ_LEN** | **TRAIN_BATCH_SIZE** | **EVAL_BATCH_SIZE** | **EPOCHS** | **LR** | **OPTIM** | **EVAL_STEPS
-** |                                                                                                           
-|:---------------:|:--------------------:|:-------------------:|:----------:|:------:|:---------:|:------------
---:|                                                                                                           
-|        128       |          20          |          20         |     3     |   3e-05   |     adamw_hf    |    
-   300       |                                                                                                 
+| **MAX_SEQ_LEN** | **TRAIN_BATCH_SIZE** | **EVAL_BATCH_SIZE** | **EPOCHS** | **LR** | **OPTIM** | **EVAL_STEPS** |                                                                                                           
+|:---------------:|:--------------------:|:-------------------:|:----------:|:------:|:---------:|:-------------:|                                                                                                           
+|        128       |          20          |          20         |     3     |   3e-05   |     adamw_hf    |       300       |                                                                                                 
 
 
 #### Metrics                                                                                                   
@@ -460,12 +454,9 @@ weighted avg       0.67      0.70      0.66      1448
 #### Hyperparameters                                                                                           
 
 
-| **MAX_SEQ_LEN** | **TRAIN_BATCH_SIZE** | **EVAL_BATCH_SIZE** | **EPOCHS** | **LR** | **OPTIM** | **EVAL_STEPS
-** |                                                                                                           
-|:---------------:|:--------------------:|:-------------------:|:----------:|:------:|:---------:|:------------
---:|                                                                                                           
-|        128       |          20          |          20         |     3     |   3e-05   |     adamw_hf    |    
-   300       |                                                                                                 
+| **MAX_SEQ_LEN** | **TRAIN_BATCH_SIZE** | **EVAL_BATCH_SIZE** | **EPOCHS** | **LR** | **OPTIM** | **EVAL_STEPS** |                                                                                                           
+|:---------------:|:--------------------:|:-------------------:|:----------:|:------:|:---------:|:------------- :|                                                                                                           
+|        128       |          20          |          20         |     3     |   3e-05   |     adamw_hf    |       300       |                                                                                                 
 
 
 #### Metrics                                                                                                   
@@ -489,12 +480,9 @@ weighted avg       0.70      0.72      0.71      1448
 #### Hyperparameters                                                                                           
 
 
-| **MAX_SEQ_LEN** | **TRAIN_BATCH_SIZE** | **EVAL_BATCH_SIZE** | **EPOCHS** | **LR** | **OPTIM** | **EVAL_STEPS
-** |                                                                                                           
-|:---------------:|:--------------------:|:-------------------:|:----------:|:------:|:---------:|:------------
---:|                                                                                                           
-|        128       |          20          |          20         |     3     |   3e-05   |     adamw_hf    |    
-   300       |                                                                                                 
+| **MAX_SEQ_LEN** | **TRAIN_BATCH_SIZE** | **EVAL_BATCH_SIZE** | **EPOCHS** | **LR** | **OPTIM** | **EVAL_STEPS** |                                                                                                           
+|:---------------:|:--------------------:|:-------------------:|:----------:|:------:|:---------:|:------------- :|                                                                                                           
+|        128       |          20          |          20         |     3     |   3e-05   |     adamw_hf    |       300       |                                                                                                 
 
 
 #### Metrics                                                                                                   
@@ -518,12 +506,9 @@ weighted avg       0.70      0.71      0.71      1448
 #### Hyperparameters                                                                                           
 
 
-| **MAX_SEQ_LEN** | **TRAIN_BATCH_SIZE** | **EVAL_BATCH_SIZE** | **EPOCHS** | **LR** | **OPTIM** | **EVAL_STEPS
-** |                                                                                                           
-|:---------------:|:--------------------:|:-------------------:|:----------:|:------:|:---------:|:------------
---:|                                                                                                           
-|        128       |          20          |          20         |     3     |   3e-05   |     adamw_hf    |    
-   300       |                                                                                                 
+| **MAX_SEQ_LEN** | **TRAIN_BATCH_SIZE** | **EVAL_BATCH_SIZE** | **EPOCHS** | **LR** | **OPTIM** | **EVAL_STEPS** |                                                                                                           
+|:---------------:|:--------------------:|:-------------------:|:----------:|:------:|:---------:|:--------------:|                                                                                                           
+|        128       |          20          |          20         |     3     |   3e-05   |     adamw_hf    |       300       |                                                                                                 
 
 
 #### Metrics                                                                                                   
@@ -549,8 +534,7 @@ weighted avg       0.68      0.70      0.69      1448
 
 | **MAX_SEQ_LEN** | **TRAIN_BATCH_SIZE** | **EVAL_BATCH_SIZE** | **EPOCHS** | **LR** | **OPTIM** | **EVAL_STEPS** |
 |:---------------:|:--------------------:|:-------------------:|:----------:|:------:|:---------:|:--------------:|
-|        128       |          20          |          20         |     3     |   3e-05   |     adamw_hf    |    
-   300       |
+|        128       |          20          |          20         |     3     |   3e-05   |     adamw_hf    |       300       |
 
 
 #### Metrics
@@ -1372,3 +1356,185 @@ weighted avg    0.97851   0.97850   0.97850      2140
 
 ----
 ---- -->
+## ANTiVax-2L | bert-base-uncased
+###### 2022-06-01 12:30:19
+#### Hyperparameters
+
+
+| **MAX_SEQ_LEN** | **TRAIN_BATCH_SIZE** | **EVAL_BATCH_SIZE** | **EPOCHS** | **LR** | **OPTIM** | **EVAL_STEPS** |
+|:---------------:|:--------------------:|:-------------------:|:----------:|:------:|:---------:|:--------------:|
+|        128       |          20          |          20         |     3     |   3e-05   |     adamw_hf    |       100       |
+
+
+#### Metrics
+
+```
+              precision    recall  f1-score   support
+
+     MISINFO       0.97      0.99      0.98       669
+ NOT_MISINFO       0.99      0.98      0.99      1196
+
+    accuracy                           0.99      1865
+   macro avg       0.98      0.99      0.99      1865
+weighted avg       0.99      0.99      0.99      1865
+
+```
+
+----
+----
+## ANTiVax-2L | roberta-base
+###### 2022-06-01 13:40:56
+#### Hyperparameters
+
+
+| **MAX_SEQ_LEN** | **TRAIN_BATCH_SIZE** | **EVAL_BATCH_SIZE** | **EPOCHS** | **LR** | **OPTIM** | **EVAL_STEPS** |
+|:---------------:|:--------------------:|:-------------------:|:----------:|:------:|:---------:|:--------------:|
+|        128       |          20          |          20         |     3     |   3e-05   |     adamw_hf    |       100       |
+
+
+#### Metrics
+
+```
+              precision    recall  f1-score   support
+
+     MISINFO       0.98      0.99      0.98       669
+ NOT_MISINFO       0.99      0.99      0.99      1196
+
+    accuracy                           0.99      1865
+   macro avg       0.99      0.99      0.99      1865
+weighted avg       0.99      0.99      0.99      1865
+
+```
+
+----
+----
+## ANTiVax-2L | albert-base-v2
+###### 2022-06-01 14:42:32
+#### Hyperparameters
+
+
+| **MAX_SEQ_LEN** | **TRAIN_BATCH_SIZE** | **EVAL_BATCH_SIZE** | **EPOCHS** | **LR** | **OPTIM** | **EVAL_STEPS** |
+|:---------------:|:--------------------:|:-------------------:|:----------:|:------:|:---------:|:--------------:|
+|        128       |          20          |          20         |     3     |   3e-05   |     adamw_hf    |       100       |
+
+
+#### Metrics
+
+```
+              precision    recall  f1-score   support
+
+     MISINFO       0.97      0.98      0.97       669
+ NOT_MISINFO       0.99      0.98      0.98      1196
+
+    accuracy                           0.98      1865
+   macro avg       0.98      0.98      0.98      1865
+weighted avg       0.98      0.98      0.98      1865
+
+```
+
+----
+----
+## ANTiVax-2L | distilbert-base-uncased
+###### 2022-06-01 14:50:57
+#### Hyperparameters
+
+
+| **MAX_SEQ_LEN** | **TRAIN_BATCH_SIZE** | **EVAL_BATCH_SIZE** | **EPOCHS** | **LR** | **OPTIM** | **EVAL_STEPS** |
+|:---------------:|:--------------------:|:-------------------:|:----------:|:------:|:---------:|:--------------:|
+|        128       |          20          |          20         |     3     |   3e-05   |     adamw_hf    |       100       |
+
+
+#### Metrics
+
+```
+              precision    recall  f1-score   support
+
+     MISINFO       0.97      0.99      0.98       669
+ NOT_MISINFO       0.99      0.99      0.99      1196
+
+    accuracy                           0.99      1865
+   macro avg       0.98      0.99      0.98      1865
+weighted avg       0.99      0.99      0.99      1865
+
+```
+
+----
+----
+## ANTiVax-2L | xlnet-base-cased
+###### 2022-06-01 15:09:10
+#### Hyperparameters
+
+
+| **MAX_SEQ_LEN** | **TRAIN_BATCH_SIZE** | **EVAL_BATCH_SIZE** | **EPOCHS** | **LR** | **OPTIM** | **EVAL_STEPS** |
+|:---------------:|:--------------------:|:-------------------:|:----------:|:------:|:---------:|:--------------:|
+|        128       |          20          |          20         |     3     |   3e-05   |     adamw_hf    |       100       |
+
+
+#### Metrics
+
+```
+              precision    recall  f1-score   support
+
+     MISINFO       0.97      0.98      0.98       669
+ NOT_MISINFO       0.99      0.98      0.99      1196
+
+    accuracy                           0.98      1865
+   macro avg       0.98      0.98      0.98      1865
+weighted avg       0.98      0.98      0.98      1865
+
+```
+
+----
+----
+## ANTiVax-2L | google/bigbird-roberta-base
+###### 2022-06-01 15:21:31
+#### Hyperparameters
+
+
+| **MAX_SEQ_LEN** | **TRAIN_BATCH_SIZE** | **EVAL_BATCH_SIZE** | **EPOCHS** | **LR** | **OPTIM** | **EVAL_STEPS** |
+|:---------------:|:--------------------:|:-------------------:|:----------:|:------:|:---------:|:--------------:|
+|        128       |          20          |          20         |     3     |   3e-05   |     adamw_hf    |       100       |
+
+
+#### Metrics
+
+```
+              precision    recall  f1-score   support
+
+     MISINFO       0.96      0.99      0.98       669
+ NOT_MISINFO       0.99      0.98      0.99      1196
+
+    accuracy                           0.98      1865
+   macro avg       0.98      0.98      0.98      1865
+weighted avg       0.98      0.98      0.98      1865
+
+```
+
+----
+----
+## ANTiVax-2L | YituTech/conv-bert-base
+###### 2022-06-01 15:32:30
+#### Hyperparameters
+
+
+| **MAX_SEQ_LEN** | **TRAIN_BATCH_SIZE** | **EVAL_BATCH_SIZE** | **EPOCHS** | **LR** | **OPTIM** | **EVAL_STEPS** |
+|:---------------:|:--------------------:|:-------------------:|:----------:|:------:|:---------:|:--------------:|
+|        128       |          20          |          20         |     3     |   3e-05   |     adamw_hf    |       100       |
+
+
+#### Metrics
+
+```
+              precision    recall  f1-score   support
+
+     MISINFO       0.97      0.99      0.98       669
+ NOT_MISINFO       1.00      0.98      0.99      1196
+
+    accuracy                           0.99      1865
+   macro avg       0.98      0.99      0.99      1865
+weighted avg       0.99      0.99      0.99      1865
+
+```
+
+----
+----
