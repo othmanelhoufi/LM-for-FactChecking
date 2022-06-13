@@ -1,5 +1,0 @@
-site_name: LM for fact-checking
-site_url: https://othmanelhoufi.github.io/LM_for_fact_checking
-nav:
-   - Home: index.md
-   - About: about.md
