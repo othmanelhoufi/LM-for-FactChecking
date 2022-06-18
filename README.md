@@ -42,7 +42,7 @@ $ ./language_model.py    or    $ python3 language_model.py
 
 For more controllability you can add options to this command line, here is the list of options:
 
-```shell
+```
 $ ./language_model.py --help                                              
 
 usage: language_model.py [-h] [-r] [-d DATASET] [-n NUM_LABELS] [-e EPOCH] [-t TRAIN_BATCH] [-v EVAL_BATCH]
@@ -142,4 +142,4 @@ MODEL_LIST = [
 ]
 ```
 
-> If you want to use a different dataset, just follow the same architecture used for the existing datasets in this repository. 
+> If you want to use a different dataset, just follow the same architecture used for the existing datasets in this repository.
