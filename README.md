@@ -1,6 +1,6 @@
 # Language Models for Fact-Checking & Claim Assessment
 > This research study was conducted by Othman EL HOUFI and Dimitris KOTZINOS.
-> A detailed article is published here:
+> A detailed article is published here: [https://bit.ly/3mZvDup](https://bit.ly/3mZvDup)
 ### Abstract
 
 As false information and fake news are propagating throughout the internet and social networks, the need of fact-checking operations becomes necessary in order to maintain a truthful digital environment where general information can be reliably exploited whether in politics, finance or other domains. The need of this online claim assessment comes from the fact that fake news and false information can have a big negative impact on politics, economy (2016 USA Elections) and public health (COVID-19).
