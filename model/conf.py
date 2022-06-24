@@ -19,7 +19,7 @@ DEFAULT_PARAMS = {
     'SAVE_STEPS' : 100,
     'LOGGING_STEPS' : 100,
     'SAVE_TOTAL_LIMIT' : 1,
-    'EARLY_STOPPING_PATIENCE' : 3,
+    'EARLY_STOPPING_PATIENCE' : 1000, # High number avoids early stopping
     'REPORT':'none',
 }
 
