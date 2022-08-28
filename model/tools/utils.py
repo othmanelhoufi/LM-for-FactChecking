@@ -18,7 +18,7 @@ def ask_user_for_model(MODEL_LIST):
 
 def models_initiation_loop(MODEL_LIST, DEFAULTS):
     answer = -1
-    while answer not in [i for i in range(0, 8)] :
+    while answer not in [i for i in range(0, len(MODEL_LIST) + 1)] :
         answer = ask_user_for_model(MODEL_LIST)
 
     if answer == 0: return answer
