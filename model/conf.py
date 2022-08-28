@@ -24,7 +24,7 @@ DEFAULT_PARAMS = {
 }
 
 WANDB_PARAMS = {
-    'project' : 'LM-for-fact-checking',
+    'project' : 'FactChecking-For-Complex-Networks',
     'entity' : 'othmanelhoufi',
 }
 
@@ -36,5 +36,6 @@ MODEL_LIST = [
     'distilbert-base-uncased',
     'xlnet-base-cased',
     'google/bigbird-roberta-base',
-    'YituTech/conv-bert-base'
+    'YituTech/conv-bert-base',
+    'vinai/bertweet-base'
 ]

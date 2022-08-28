@@ -262,6 +262,26 @@ def preprocess_antivax(data_path, export_path):
     print(df['label'].unique())
 
     df.to_csv(export_path, index=False)
+    
+def preprocess_politifact(data_path, export_path):
+    relevant_col = ['text', 'label']
+    df_raw = pd.read_csv(data_path)
+    df = df_raw.filter(items=relevant_col)
+
+    nan_value = float("NaN")
+    df.replace("", nan_value, inplace=True)
+    df.columns = ['text', 'label']
+    df.dropna(inplace=True)
+
+    def map_label_values(x):
+        if x == 0: return 'REAL'
+        else: return 'FAKE'
+    df['label'] = df['label'].map(lambda x: map_label_values(x))
+
+    print(df.head(10))
+    print(df['label'].unique())
+
+    df.to_csv(export_path, index=False)
 
 if __name__ == '__main__':
     root = '../../dataset/'
@@ -282,8 +302,14 @@ if __name__ == '__main__':
 
     # preprocess_antivax(root+'ANTiVax/train_raw.csv', root+'ANTiVax/train-2L.jsonl')
     # preprocess_antivax(root+'ANTiVax/dev_raw.csv', root+'ANTiVax/dev-2L.jsonl')
+    
+    # preprocess_politifact(root+'Politifact/politifact_train_raw.csv', root+'Politifact/train-2L.jsonl')
+    # preprocess_politifact(root+'Politifact/politifact_dev_raw.csv', root+'Politifact/dev-2L.jsonl')
+    
+    # preprocess_politifact(root+'Gossipcop/gossipcop_train_raw.csv', root+'Gossipcop/train-2L.jsonl')
+    # preprocess_politifact(root+'Gossipcop/gossipcop_dev_raw.csv', root+'Gossipcop/dev-2L.jsonl')
 
-    dataset = Dataset(name='ANTiVax', split_dev=True, num_labels=2)
+    dataset = Dataset(name='Gossipcop', split_dev=True, num_labels=2)
     dataset.get_describtion()
     dataset.print_data_example()
 

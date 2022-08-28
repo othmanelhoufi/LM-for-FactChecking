@@ -10,5 +10,7 @@ model/wandb/
 model/log_old.txt
 dataset/COVID19/
 dataset/ANTiVax/
+dataset/Politifact/
+dataset/Gossipcop/
 outputs/
 old_shit/
